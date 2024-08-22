@@ -1,4 +1,3 @@
-
 import { useImperativeHandle, forwardRef, useRef } from 'react';
 import confetti from 'canvas-confetti';
 
@@ -36,8 +35,10 @@ const ConfettiButton = forwardRef<ConfettiButtonHandle>((_, ref) => {
   return null; // This component does not render any UI
 });
 
-export default ConfettiButton;
+// Set the display name for better debugging
+ConfettiButton.displayName = 'ConfettiButton';
 
+export default ConfettiButton;
 
 
 // https://codepen.io/jonathanbell/pen/OvYVYw

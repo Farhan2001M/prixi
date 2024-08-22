@@ -9,7 +9,7 @@ const LPTestimonials = () => {
   return (
     <section className='w-full max-w-[1920px] mx-auto relative'>
         <h1 className='text-center text-5xl font-bold mt-16 text-slate-700'>
-          "Client Testimonials"
+          &quot;Client Testimonials&quot;
         </h1>
         
         <div className="relative">
@@ -31,7 +31,7 @@ const LPTestimonials = () => {
             <SwiperSlide>
               <div className="flex flex-col items-center p-10 text-center bg-white">
                 <p className="text-3xl font-semibold text-black mb-6 max-w-[1300px] leading-snug">
-                  "My Prixi experience was nothing short of incredible. The pristine car and impeccable service made my trip unforgettable. I'll be back for more."
+                  &quot;My Prixi experience was nothing short of incredible. The pristine car and impeccable service made my trip unforgettable. I'll be back for more.&quot;
                 </p>
                 <div className="flex flex-col items-center">
                   <img src="./images/clientTestimonial/customer.png" alt="James Bond" className="h-72 mb-5 rounded-full" />
@@ -43,7 +43,7 @@ const LPTestimonials = () => {
             <SwiperSlide>
               <div className="flex flex-col items-center p-10 text-center bg-white">
                 <p className="text-3xl font-semibold text-black mb-6 max-w-[1300px] leading-snug">
-                  "Another testimonial here. The service was fantastic, and I highly recommend it to anyone looking for a reliable car rental."
+                  &quot;Another testimonial here. The service was fantastic, and I highly recommend it to anyone looking for a reliable car rental.&quot;
                 </p>
                 <div className="flex flex-col items-center">
                   <img src="./images/clientTestimonial/customerfemale.png" alt="Alexa Baji" className="h-72 mb-5 rounded-full" />
@@ -55,7 +55,7 @@ const LPTestimonials = () => {
             <SwiperSlide>
               <div className="flex flex-col items-center p-10 text-center bg-white">
                 <p className="text-3xl font-semibold text-black mb-6 max-w-[1300px] leading-snug">
-                  "Another testimonial here. The service was fantastic, and I highly recommend it to anyone looking for a reliable car rental."
+                  &quot;Another testimonial here. The service was fantastic, and I highly recommend it to anyone looking for a reliable car rental.&quot;
                 </p>
                 <div className="flex flex-col items-center">
                   <img src="./images/clientTestimonial/tommy.jpg" alt="Tom Bhai" className="h-72 mb-5 rounded-full" />
@@ -83,7 +83,7 @@ const LPTestimonials = () => {
           </div>
         </div>
     </section>
-  )
+  );
 }
 
 export default LPTestimonials;

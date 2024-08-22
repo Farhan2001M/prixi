@@ -14,7 +14,11 @@
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@mui/material": "^5.16.7",
     "canvas-confetti": "^1.9.3",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.3.29",
     "input-otp": "^1.2.4",
+    "lucide-react": "^0.429.0",
     "next": "14.2.5",
     "otp-input-react": "^0.3.0",
     "react": "^18",
@@ -24,6 +28,8 @@
     "react-number-formatter": "^1.0.29",
     "react-otp-input": "^3.1.1",
     "swiper": "^11.1.9",
+    "tailwind-merge": "^2.5.2",
+    "tailwindcss-animate": "^1.0.7",
     "tsparticles-confetti": "^2.12.0"
   },
   "devDependencies": {

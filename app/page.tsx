@@ -13,6 +13,7 @@ import Footer from './components/LandingPage/Footer';
 const MainPage: React.FC = () => {
 
   const nextSectionRef = useRef<HTMLDivElement>(null);
+    
     const [showContent, setShowContent] = useState(false);
     const handleScroll = () => {
         setShowContent(true);
@@ -41,9 +42,6 @@ const MainPage: React.FC = () => {
                 </div>
             </div>
         </header>
-
-
-        
 
         <div ref={nextSectionRef} id="next-section" className="h-0"></div>
 

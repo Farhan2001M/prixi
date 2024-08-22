@@ -12,8 +12,6 @@ import { TbReport } from "react-icons/tb";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { MdOutlineRecommend } from "react-icons/md";
 import { TbReceiptTax } from "react-icons/tb";
-import { GiReceiveMoney } from "react-icons/gi";
-import { SlCalculator } from "react-icons/sl";
 import { BsCalculator } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { GiTakeMyMoney } from "react-icons/gi";
