@@ -200,14 +200,14 @@ const ForgetScreen = () => {
           <RxCrossCircled onClick={gettingOTP} className='absolute top-1 right-1 text-black hover:text-red-500 cursor-pointer' size={40}  />
           <div>
             <h2 className="text-3xl font-bold text-center mb-4">OTP Verification</h2>
-            <h1 className="text-xl text-center">Enter the OTP code sent to the "{Femail}"</h1>
+            <h1 className="text-xl text-center">Enter the OTP code sent to the &quot;{Femail}&quot;</h1>
           </div>
           <div className='flex justify-center items-center w-[95%] h-[65%] border-2 border-black rounded-2xl'>
             <div className='flex flex-col justify-around w-[95%] h-[95%]'>
               <OtpInput onOtpChange={handleOtpChange} onOtpComplete={handleOtpComplete} />
               {/* <Link href="" className="text-base text-center text-blue-600 hover:underline" >Resend Code</Link> */}
               <div className='text-center'>
-                <p className="text-lg  ">Didn't receive OTP Code</p>
+                <p className="text-lg  ">Didn&apos;t receive OTP Code</p>
                 
                 {isTimerActive && (
                   <p className="text-lg mt-3">

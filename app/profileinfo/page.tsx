@@ -571,7 +571,7 @@ const Page = () => {
             <div className=' flex flex-col justify-around items-center w-[95%] h-[85%]  bg-white'>
 
               <div>
-                <h2 className="text-3xl leading-10 font-bold text-center my-4 w-5/6 mx-auto">Congratulations! "{firstName}" Your Account Details Has Been Successfully Edited...!</h2>
+                <h2 className="text-3xl leading-10 font-bold text-center my-4 w-5/6 mx-auto">Congratulations! &quot;{firstName}&quot; Your Account Details Has Been Successfully Edited...!</h2>
               </div>
               
               <div className='flex flex-col justify-center  w-[95%] h-[95%] '>
@@ -645,7 +645,7 @@ const Page = () => {
               <RxCrossCircled onClick={toggleDeleteAccountScreen} className='absolute top-1 right-1 text-black hover:text-red-500 cursor-pointer' size={40}  />
 
               <div>
-                <h2 className="text-3xl leading-10 font-bold text-center mt-4 mb-2 w-4/6 mx-auto">We're sorry to see you go.</h2>
+                <h2 className="text-3xl leading-10 font-bold text-center mt-4 mb-2 w-4/6 mx-auto">We&apos;re sorry to see you go.</h2>
                 <p className=" text-center text-xl w-5/6 mx-auto mb-2" >Deleting your account is permanent & it will remove all of your information from our database. This action cannot be undone⚠️</p>
                 {/* <p className=" text-center" >Deleting your account will remove all of your information from our database. This action cannot be undone.</p> */}
               </div>

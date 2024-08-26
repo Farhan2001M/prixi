@@ -336,7 +336,7 @@ const SignUpForm = () => {
         <div className=' flex flex-col justify-around items-center w-[95%] h-[85%]  bg-white'>
 
           <div>
-            <h2 className="text-3xl leading-10 font-bold text-center my-4">Congratulations! "{firstName}" You Prixi Account Has Been Registered Successfully...!</h2>
+            <h2 className="text-3xl leading-10 font-bold text-center my-4">Congratulations! &quot;{firstName}&quot; You Prixi Account Has Been Registered Successfully...!</h2>
             <p className=" text-center">Now you can log in and start exploring Prixi and its services.!</p>
           </div>
           

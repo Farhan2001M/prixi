@@ -31,7 +31,7 @@ const LPTestimonials = () => {
             <SwiperSlide>
               <div className="flex flex-col items-center p-10 text-center bg-white">
                 <p className="text-3xl font-semibold text-black mb-6 max-w-[1300px] leading-snug">
-                  &quot;My Prixi experience was nothing short of incredible. The pristine car and impeccable service made my trip unforgettable. I'll be back for more.&quot;
+                  &quot;My Prixi experience was nothing short of incredible. The pristine car and impeccable service made my trip unforgettable. I&apos;ll be back for more.&quot;
                 </p>
                 <div className="flex flex-col items-center">
                   <img src="./images/clientTestimonial/customer.png" alt="James Bond" className="h-72 mb-5 rounded-full" />
