@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from '../components/Header'
 
-const page = () => {
+const MySecondScreen = () => {
   return (
 
     <div>
@@ -18,4 +18,4 @@ const page = () => {
   )
 }
 
-export default page
+export default MySecondScreen

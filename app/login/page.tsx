@@ -16,7 +16,7 @@ import ConfettiButton, { ConfettiButtonHandle } from '../components/ConfettiButt
 import { GrLogin } from "react-icons/gr";
 import ForgotPassScreen from '../components/Logg/ForgotPassScreen'
 
-const page = () => {
+const Myloginpage = () => {
 
   // State to track input values and errors
   const [email, setEmail] = useState('');  
@@ -146,7 +146,7 @@ const page = () => {
   )
 }
 
-export default page
+export default Myloginpage
 
 
 

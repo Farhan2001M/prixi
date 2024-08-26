@@ -6,8 +6,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import { useState, FormEvent } from 'react';
 import { useEffect } from 'react';
 
-const page = () => {
-
+const Myforgetpage = () => {
 
 
   return (
@@ -25,4 +24,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Myforgetpage

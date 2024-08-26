@@ -17,7 +17,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import { RxCross2 } from "react-icons/rx";
 
 
-const Page = () => {
+const MyProfileInfo = () => {
   {/* Edit Image Functionality */}
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -691,4 +691,4 @@ Or Simply Type DELETE To Delete Your Account`}
   );
 };
 
-export default Page;
+export default MyProfileInfo;
