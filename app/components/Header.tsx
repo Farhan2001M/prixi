@@ -103,11 +103,11 @@ const Header = () => {
           </Link>
 
           <Link href="/userinterface" className={`py-4 text-xl font-medium border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white ${isActive('/userinterface') ? 'bg-zinc-800 text-white' : ''}`}>
-            Link 1
+            Screen 1
           </Link>
 
           <Link href="/screen2go" className={`py-4 text-xl font-medium border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white ${isActive('/screen2go') ? 'bg-zinc-800 text-white' : ''}`}>
-            Link 2
+            Screen 2
           </Link>
 
           <Link href="/login" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/calculate-taxes') ? 'bg-zinc-800 text-white' : ''}`}>

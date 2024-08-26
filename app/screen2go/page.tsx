@@ -8,8 +8,8 @@ const MySecondScreen = () => {
         <Header/>
 
         <div className="h-[90vh] bg-gray-300 p-4">
-            <h1>My scecond screen text is this</h1>
-            <p>Screem 2 text is Lorem ipsum dolor sit amet consectetur adipisicing elit...!!!!!</p>
+            <h1>My 2nd screen text is this. i can change it then and now</h1>
+            <p>For now Screem 2 text is Lorem ipsum dolor sit amet consectetur adipisicing elit...!!!!!</p>
             <p>Bla bla bla</p>
         </div> 
 
