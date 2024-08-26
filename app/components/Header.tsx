@@ -16,7 +16,9 @@ import { BsCalculator } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { GiTakeMyMoney } from "react-icons/gi";
 
-
+import { IoIosHome } from "react-icons/io";
+import { RiLogoutBoxLine } from "react-icons/ri";
+import { FaUserCog } from "react-icons/fa";
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -27,7 +29,8 @@ const Header = () => {
   };
 
   const isActive = (href: string) => pathname === href;
-
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  
   return (
     <>
     <nav className='bg-black h-[10vh]'>
@@ -38,10 +41,14 @@ const Header = () => {
           <div className='w-1/5 h-full  flex justify-center items-center'> <img className=" h-12  " src="/images/PWlogo.png" alt="" /> </div>
           <div className='w-2/5 h-full  flex justify-end items-center'> 
             <ul className='my-auto flex gap-6'>
-              <Link className="bg-transparent text-xl text-white px-4 py-2 border border-gray-300 rounded-lg mx-auto  hover:text-gray-300 hover:border-gray-300 transition-colors duration-300" href="/userinterface">Home</Link>
+
+              <Link href="/userinterface">
+                <IoIosHome  className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" />
+              </Link>
+              {/* <Link className="bg-transparent text-xl text-white px-4 py-2 border border-gray-300 rounded-lg mx-auto  hover:text-gray-300 hover:border-gray-300 transition-colors duration-300" href="/userinterface">Home</Link> */}
               {/* <IoPersonCircleOutline className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" /> */}
               <Link href="/profileinfo">
-                <FaUserEdit className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" />
+                <FaUserCog  className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" />
               </Link>
             </ul>
           </div>
@@ -101,6 +108,11 @@ const Header = () => {
 
           <Link href="/screen2go" className={`py-4 text-xl font-medium border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white ${isActive('/screen2go') ? 'bg-zinc-800 text-white' : ''}`}>
             Link 2
+          </Link>
+
+          <Link href="/login" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/calculate-taxes') ? 'bg-zinc-800 text-white' : ''}`}>
+            <RiLogoutBoxLine  className="text-3xl mx-3" />
+            Logout
           </Link>
 
         </div>

@@ -36,8 +36,7 @@ const Page = () => {
     const fileInput = document.getElementById("imageUpload") as HTMLInputElement;
     if (fileInput) {
       fileInput.value = "";
-    }
-    
+    }    
     setImageSrc(null);
   };
 
@@ -49,12 +48,14 @@ const Page = () => {
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [cellNo, setCellNo] = useState('');
+  // const [cellNo, setCellNo] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+  
+  
   
   const [errors, setErrors] = useState<any>({});
 
@@ -125,7 +126,7 @@ const Page = () => {
 
     if (name === 'firstName') setFirstName(value);
     if (name === 'lastName') setLastName(value);
-    if (name === 'cellNo') setCellNo(value);
+    // if (name === 'cellNo') setCellNo(value);
     if (name === 'email') setEmail(value);
     if (name === 'password') setPassword(value);
     if (name === 'confirmPassword') setConfirmPassword(value);
@@ -281,7 +282,7 @@ const Page = () => {
             />
             <div className="absolute top-0 left-0 p-1">
               <label htmlFor="imageUpload" className="cursor-pointer">
-                <div className="bg-black   text-white p-1 rounded-full hover:bg-blue-700">
+                <div className={` p-1 rounded-full  ${!isEditing ? ' text-white bg-gray-300  cursor-not-allowed ' : 'bg-black  text-white hover:bg-blue-700 '} transition-colors `}>
                   <MdOutlineEdit className="text-2xl" />
                 </div>
               </label>
@@ -291,14 +292,16 @@ const Page = () => {
                 accept="image/*"
                 className="hidden"
                 onChange={handleImageChange}
+                disabled={!isEditing}
               />
             </div>
             <div className="absolute top-0 right-0 p-1">
               <button
                 onClick={handleImageRemove}
-                className="bg-black  text-white p-1 rounded-full hover:bg-blue-700"
+                disabled={!isEditing}
+                className={`p-1 rounded-full text-white transition-colors ${!isEditing ? 'text-white bg-gray-300 cursor-not-allowed ' : 'bg-black hover:bg-blue-700 cursor-pointer'}`}
               >
-                <RxCross2 className="text-2xl"/>
+                <RxCross2 className="text-2xl" />
               </button>
             </div>
           </div>
@@ -397,7 +400,7 @@ const Page = () => {
                 </div>
               </div>
 
-              <div className='w-full flex gap-4'>
+              {/* <div className='w-full flex gap-4'>
                 <div className="mb-4 w-1/2">
                   <label htmlFor="password" className="block text-black text-base font-bold">Password <span className='text-red-500'>*</span></label>
                   <div className="relative">
@@ -423,22 +426,101 @@ const Page = () => {
                   </div>
                   {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
                 </div>
+              </div> */}
+
+              <div className='w-full flex gap-4'>
+                <div className="mb-4 w-1/2">
+                  <label htmlFor="password" className="block text-black text-base font-bold">
+                    Password <span className='text-red-500'>*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="password"
+                      name="password"
+                      type={isPasswordVisible ? 'text' : 'password'}
+                      value={password}
+                      maxLength={30}
+                      onChange={handleInputChange}
+                      className={`block w-full shadow-sm mt-2 p-2 border rounded ${!isEditing ? 'bg-gray-100 cursor-not-allowed border-gray-300' : 'bg-white border-gray-300'} transition-colors`}
+                      placeholder="Enter Your Password"
+                      disabled={!isEditing}
+                    />
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        if (!isEditing) e.preventDefault(); // Prevent default action if not editing
+                        else setIsPasswordVisible(!isPasswordVisible); // Toggle visibility if editing
+                      }}
+                      className={`absolute inset-y-0 right-0 flex items-center px-2 ${!isEditing ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500'}`}
+                      disabled={!isEditing} // Disable button if not editing
+                    >
+                      {isPasswordVisible ? <IoEyeOff /> : <IoEye />}
+                    </button>
+                  </div>
+                  {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+                </div>
+
+                <div className="mb-4 w-1/2">
+                  <label htmlFor="confirmPassword" className="block text-black text-base font-bold">
+                    Confirm Password <span className='text-red-500'>*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type={isConfirmPasswordVisible ? 'text' : 'password'}
+                      value={confirmPassword}
+                      maxLength={35}
+                      onChange={handleInputChange}
+                      className={`block w-full shadow-sm mt-2 p-2 border rounded ${!isEditing ? 'bg-gray-100 cursor-not-allowed border-gray-300' : 'bg-white border-gray-300'} transition-colors`}
+                      placeholder="Confirm Your Password"
+                      disabled={!isEditing}
+                    />
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        if (!isEditing) e.preventDefault(); // Prevent default action if not editing
+                        else setIsConfirmPasswordVisible(!isConfirmPasswordVisible); // Toggle visibility if editing
+                      }}
+                      className={`absolute inset-y-0 right-0 flex items-center px-2 ${!isEditing ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500'}`}
+                      disabled={!isEditing} // Disable button if not editing
+                    >
+                      {isConfirmPasswordVisible ? <IoEyeOff /> : <IoEye />}
+                    </button>
+                  </div>
+                  {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+                </div>
               </div>
               
               
 
               <div className='flex gap-5 mx-auto'>
 
-                <button type="button" onClick={() => {
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsEditing(!isEditing);
                     if (isEditing) {
-                      setIsEditing(false);
-                    } else {
-                      setIsEditing(true);
+                      // Reset form fields when exiting editing mode
+                      setFirstName('');
+                      setLastName('');
+                      setEmail('');
+                      setPassword('');
+                      setConfirmPassword('');
+                      setError('');
+                      setErrors('');
+                      setPhoneNumber('');
+                      setIsPasswordVisible(false);
+                      setIsConfirmPasswordVisible(false); 
                     }
                   }}
-                  className={`flex justify-center items-center  bg-blue-600 text-lg text-white p-2 rounded w-full mx-auto mt-3 ${isEditing ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : ' hover:bg-blue-700'}`} disabled={isEditing} >
-                  {/* <MdOutlineEdit className="text-3xl"/>  */}
-                  Edit Profile
+                  className={`flex justify-center items-center text-lg p-2 rounded w-full mx-auto mt-3 ${
+                    isEditing
+                      ? 'bg-transparent text-black border-2 border-blue-600 hover:bg-blue-700 hover:text-white' // Styles when in editing mode
+                      : 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer' // Styles when not in editing mode
+                  }`}
+                >
+                  {isEditing ? 'Cancel' : 'Edit Profile'} {/* Toggle button label */}
                 </button>
 
                 <button type="submit" className={`bg-blue-600 text-lg text-white p-2 rounded w-full mx-auto mt-3 ${isEditing ? 'hover:bg-blue-700' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`} disabled={!isEditing} >
@@ -446,7 +528,7 @@ const Page = () => {
                 </button>
                 <ConfettiButton ref={confettiButtonRef} />
 
-                <div onClick={ ()=>{
+                {/* <div onClick={ ()=>{
                   if (isEditing) {
                     return
                   }else{
@@ -454,7 +536,17 @@ const Page = () => {
                   } }} 
                   className={`text-lg text-center p-2 rounded w-full mx-auto mt-3  ${isEditing ? 'bg-gray-300 text-gray-600 cursor-not-allowed ' : 'bg-blue-600  text-white hover:bg-blue-700 hover:cursor-pointer'}`}  >
                   Logout
-                </div>
+                </div> */}
+
+                {/* <div onClick={ ()=>{
+                  if (isEditing) {
+                    return
+                  }else{
+                    setConfirmDeleteProfile(!ConfirmDeleteProfile);
+                  } }} 
+                  className={`text-lg text-center p-2 rounded w-full mx-auto mt-3  ${isEditing ? ' text-white bg-gray-300  cursor-not-allowed ' : 'bg-blue-600  text-white hover:bg-blue-700 hover:cursor-pointer'}`}  >
+                  Delete Profile
+                </div> */}
 
                 <div onClick={ ()=>{
                   if (isEditing) {
@@ -462,13 +554,15 @@ const Page = () => {
                   }else{
                     setConfirmDeleteProfile(!ConfirmDeleteProfile);
                   } }} 
-                  className={`text-lg text-center p-2 rounded w-full mx-auto mt-3  ${isEditing ? 'bg-gray-300 text-gray-600 cursor-not-allowed ' : 'bg-blue-600  text-white hover:bg-blue-700 hover:cursor-pointer'}`}  >
+                  className={`w-[100%] text-lg text-center p-2 rounded  mx-auto mt-3  ${isEditing ? ' text-white bg-gray-300  cursor-not-allowed ' : 'bg-red-600  text-white hover:bg-red-700 hover:cursor-pointer'}`}  >
                   Delete Profile
                 </div>
 
               </div>
 
             </form>
+
+            
 
           </div>
 
@@ -557,18 +651,19 @@ const Page = () => {
               </div>
 
               <div className='w-[90%] mx-auto mb-4'>
-                    <label htmlFor="remarks" className="block text-center text-xl font-semibold my-2">Leaving Remarks:</label>
+                    <label htmlFor="remarks" className="block text-center text-xl font-semibold my-2 tracking-wide">Leaving Remarks:</label>
                     <textarea
                         id="remarks"
                         value={remarks}
                         maxLength={10000}
                         rows={3}
-                        className="w-full border border-gray-300 rounded-lg p-2 resize-none"
-                        placeholder={`To Delete Your Account Please Leave us with some suggestions so that we can improve ourselves..! 
-Or Simply Type DELETE`}
+                        className="w-full border border-gray-300 rounded-lg p-2 resize-none text-lg"
+                        placeholder={`Please Leave us with some suggestions so that we can improve ourselves..! 
+Or Simply Type DELETE To Delete Your Account`}
                         onChange={(e)=>handleRemarksChange(e)}
-                    />
-                </div>
+              />
+
+              </div>
               
               <div className='flex gap-4 justify-center  w-[95%]  pb-3  '>
                 <button type="button" onClick={()=> { 
