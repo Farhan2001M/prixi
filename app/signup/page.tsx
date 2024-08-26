@@ -51,13 +51,17 @@ const SignUpForm = () => {
       }
     }
     if (name === 'email') {
-      if(value.length < 1){
+      if (value.length < 1) {
         newErrors.email = '';
       } else if (/\s/.test(value)) {
         newErrors.email = 'Email cannot contain spaces.';
-      } else if(value.length < 3 || value.length > 254) {
-        newErrors.email = 'Email should be between 3 and 254 characters. ';
-      } else{
+      } else if (value.length < 3 || value.length > 254) {
+        newErrors.email = 'Email should be between 3 and 254 characters.';
+      } else if (!/@/.test(value)) {
+        newErrors.email = 'Email must include @';
+      } else if (!/\.[a-zA-Z]{1,}/.test(value.split('@')[1] || '')) {
+        newErrors.email = 'Email must include .domain-name';
+      } else {
         newErrors.email = '';
       }
     }
@@ -198,7 +202,7 @@ const SignUpForm = () => {
         <div className="w-[95%] h-[95%] flex">
           <div className="w-1/2 p-8 flex flex-col my-auto">
             <img className="h-[50px] mx-auto mb-10" src="/images/PBlogo.png" alt="" />
-            <form onSubmit={handleSubmit} className="w-[95%] mx-auto my-6 p-4 rounded">
+            <form onSubmit={handleSubmit} className="w-[95%] mx-auto my-6 p-4 rounded" noValidate>
               <div className='w-full flex gap-4'>
                 <div className="mb-4 w-1/2">
                   <label htmlFor="firstName" className="block text-black text-base font-bold">First Name <span className='text-red-500'>*</span></label>
