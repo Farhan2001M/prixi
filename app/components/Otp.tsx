@@ -67,6 +67,10 @@ const OtpInput = forwardRef(({ onOtpChange, onOtpComplete }: OtpInputProps, ref)
   );
 });
 
+
+// Set the display name for the component
+OtpInput.displayName = 'OtpInput';
+
 export default OtpInput;
 
 
