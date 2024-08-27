@@ -73,8 +73,13 @@ const SignUpForm = () => {
         newErrors.password = 'Password cannot contain spaces.';
       } else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(value)) {
         newErrors.password = 'Password must contain 8 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.';
-      }  else{
+      } else if(value.length > 7){
         newErrors.password = '';
+        if (value !== confirmPassword) {
+          newErrors.confirmPassword = 'Passwords do not match.';
+        }else{
+          newErrors.confirmPassword = '';
+        }
       }
     }
     if (name === 'confirmPassword') {
@@ -108,7 +113,6 @@ const SignUpForm = () => {
   const [error, setError] = useState('');
 
 
-
   useEffect(() => {
     const normalizedNumber = phoneNumber;
     // console.log(normalizedNumber.length)
@@ -127,9 +131,6 @@ const SignUpForm = () => {
   }, [phoneNumber]);
 
 
-  
-
-
   {/* Success Password Change Screen Code */}
   const [SuccessConfirmationScreen, setSuccessConfirmationScreen] = useState(false);
   
@@ -139,6 +140,22 @@ const SignUpForm = () => {
   {/* Confetti Animation Code */}
   const confettiButtonRef = useRef<ConfettiButtonHandle>(null);
   const handleConfirmClick = () => {
+
+    TriggerConfetti();
+
+    const intervalDuration = 4000; // 3 seconds
+    const totalExecutions = 1000;
+    let executionCount = 0;
+    const intervalId = setInterval(() => {
+        TriggerConfetti();
+        executionCount += 1;
+        if (executionCount >= totalExecutions) {
+            clearInterval(intervalId);
+        }
+    }, intervalDuration);    
+  };
+
+  const TriggerConfetti = () => {
     // Trigger confetti animation
     if (confettiButtonRef.current) {
       confettiButtonRef.current.triggerConfetti(); 
@@ -146,11 +163,8 @@ const SignUpForm = () => {
   };
 
 
+
   const router = useRouter();
-
-
-
-
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -191,10 +205,11 @@ const SignUpForm = () => {
     <div className="m-0">
       <nav className='bg-black h-[10vh]'>
         <div className='w-[95%] h-full mx-auto text-white flex justify-between'>
-          <img className="h-[50px] my-auto" src="/images/PWlogo.png" alt="" />
-          <ul className='my-auto flex gap-9'>
+        <Link href="/" className='my-auto'><img className="w-[150px] " src="/images/PWlogo.png" alt="" /></Link>
+
+          {/* <ul className='my-auto flex gap-9'>
             <Link className="bg-transparent text-xl text-white px-4 py-2 border border-gray-300 rounded-lg mx-auto hover:text-gray-300 hover:border-gray-300 transition-colors duration-300" href="/">Home</Link>
-          </ul>
+          </ul> */}
         </div>
       </nav>
 

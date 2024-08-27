@@ -59,7 +59,7 @@ const ConfirmationOfPasswordScreen: React.FC<ConfirmationOfPasswordScreenProps> 
 
       </div>
 
-      <div className={`fixed top-0 left-0 w-screen h-full bg-black bg-opacity-70 z-10 transition-opacity duration-300 ease-in-out flex items-center justify-center`} style={{  opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none' }} onClick={onClick} > </div>
+      <div className={`fixed top-0 left-0 w-screen h-full bg-black bg-opacity-70 z-10 transition-opacity duration-300 ease-in-out flex items-center justify-center`} style={{  opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none' }}  > </div>
       
     </div>
   );

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
 import { useRouter } from 'next/navigation';
 import { GrLogin } from "react-icons/gr";
-import ForgotPassScreen from '../components/Logg/ForgotPassScreen';
+import ForgotPassScreen from '../components/LoginFPSC/ForgotPassScreen';
 
 const Myloginpage = () => {
   const [email, setEmail] = useState('');
@@ -58,7 +58,7 @@ const Myloginpage = () => {
 
     if (!emailValidationError && password) {
       console.log('Form submitted with:', { email, password });
-      router.push('/userinterface');
+      router.push('/screen1');
     }
   };
 
@@ -67,10 +67,10 @@ const Myloginpage = () => {
       {/* Navbar Screen */}
       <nav className='bg-black h-[10vh]'>
         <div className='w-[95%] h-full mx-auto text-white flex justify-between'>
-          <img className="h-[50px] my-auto" src="/images/PWlogo.png" alt="" />
-          <ul className='my-auto flex gap-9'>
+          <Link href="/" className='my-auto'><img className="w-[150px] " src="/images/PWlogo.png" alt="" /></Link>
+          {/* <ul className='my-auto flex gap-9'>
             <Link className="bg-transparent text-xl text-white px-4 py-2 border border-gray-300 rounded-lg mx-auto hover:text-gray-300 hover:border-gray-300 transition-colors duration-300" href="/">Home</Link>
-          </ul>
+          </ul> */}
         </div>
       </nav>
 
@@ -106,6 +106,7 @@ const Myloginpage = () => {
                 <label htmlFor="password" className="block text-black text-xl font-bold">
                   Password <span className='text-red-500'>*</span>
                 </label>
+
                 <div className="relative">
                   <input
                     type={isPasswordVisible ? 'text' : 'password'}
@@ -372,3 +373,4 @@ export default Myloginpage;
 
           {/* Test Party Poppers */}
           {/* <button onClick={()=> handleConfirmClick()}>click me</button> */}
+

@@ -33,8 +33,13 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
         RSTnewErrors.password = 'Password cannot contain spaces.';
       } else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(value)) {
         RSTnewErrors.password = 'Password must contain 8 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.';
-      } else {
+      } else if(value.length > 7){
         RSTnewErrors.password = '';
+        if (value !== RSTconfirmPassword) {
+          RSTnewErrors.confirmPassword = 'Passwords do not match.';
+        }else{
+          RSTnewErrors.confirmPassword = '';
+        }
       }
     }
     if (name === 'confirmPassword') {
@@ -96,7 +101,12 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
 
       <div className={`fixed top-1/2 left-1/2 w-1/2 h-1/2 bg-slate-200 shadow-lg rounded-2xl z-20 transform transition-transform duration-[1000ms] ease-in-out flex items-center justify-center `} style={{ transform: visible ? 'translateX(-50%) translateY(-50%)' : 'translateX(-50%) translateY(-350%)' }} >
         <div className='relative flex flex-col justify-around items-center w-[95%] h-[90%]  bg-white'>
-          <RxCrossCircled onClick={onClick} className='absolute top-1 right-1 text-black hover:text-red-500 cursor-pointer' size={40}  />
+          <RxCrossCircled onClick={ ()=> {
+            setRSTpassword('');
+            setRSTconfirmPassword('');
+            setRSTerrors('');
+            onClick(); }} 
+            className='absolute top-1 right-1 text-black hover:text-red-500 cursor-pointer' size={40}  />
 
           <div>
             <h2 className="text-3xl font-bold text-center mb-2">Reset your password</h2>
@@ -157,7 +167,10 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
               <button
                 type="button"
                 disabled={isButtonDisabled()}
-                onClick={ () => { toggleSuccessConfirmationScreen();} }
+                onClick={ () => { 
+                  setRSTpassword('');
+                  setRSTconfirmPassword('');
+                  toggleSuccessConfirmationScreen();} }
                 className={`text-lg p-2 rounded w-full mx-auto ${isButtonDisabled() ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
               >
                 Confirm Reset Password
@@ -170,7 +183,12 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
         </div>
       </div>
 
-      <div className={`fixed top-0 left-0 w-screen h-full bg-black bg-opacity-70 z-10 transition-opacity duration-1000 ease-in-out flex items-center justify-center`} style={{  opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none' }} onClick={onClick} > </div>
+      <div className={`fixed top-0 left-0 w-screen h-full bg-black bg-opacity-70 z-10 transition-opacity duration-1000 ease-in-out flex items-center justify-center`} style={{  opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none' }} onClick={ ()=>{
+        setRSTpassword('');
+        setRSTconfirmPassword('');
+        onClick();
+        setRSTerrors('');
+      } } > </div>
       
       <ConfirmationOfPasswordScreen visible={showConfirmationOfPasswordScreen} onClick={() => setShowConfirmationOfPasswordScreen(false)} />
     </div>

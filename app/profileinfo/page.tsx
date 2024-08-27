@@ -234,9 +234,6 @@ const MyProfileInfo = () => {
 
 
 
-
-
-
   const [notApproved, setnotApproved] = useState(false);
 
   const [remarks, setRemarks] = useState('');
@@ -264,13 +261,11 @@ const MyProfileInfo = () => {
   };
 
   
-
-
   return (
     <div className="flex flex-col">
       <Header />
 
-      <div className="h-[90vh] p-4">
+      <div className="h-[90vh] p-4 ">
         <div className="h-[100%] p-4 flex flex-col items-center">
           <h1 className="text-3xl mb-5">View/Edit Your Profile Info </h1>
 
