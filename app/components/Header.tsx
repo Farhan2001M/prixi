@@ -101,6 +101,11 @@ const Header = () => {
           7-Generate Reports
         </Link>
 
+        <Link href="/testing" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/testing') ? 'bg-zinc-800 text-white' : ''}`}>
+          <TbReport className="text-3xl mx-3" />
+          7-Testing
+        </Link>
+
         <Link href="/screen1" className={`py-4 text-xl font-medium border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white ${isActive('/screen1') ? 'bg-zinc-800 text-white' : ''}`}>
           Screen 1
         </Link>
