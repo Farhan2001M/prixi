@@ -2,7 +2,6 @@
 
 import Header from "../components/Header";
 import { IoEye, IoEyeOff } from 'react-icons/io5';
-import { NumberFormatter } from 'react-number-formatter';
 import React, { useState, useEffect } from 'react';
 
 import { PatternFormat } from 'react-number-format';

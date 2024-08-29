@@ -11,7 +11,7 @@ const TestComponent: React.FC = () => {
       just intall it using ' npm i -D daisyui@latest ' and start using components code, 
       only just add """ require('daisyui'),  """ in the plugins in tailwind.config.ts file*/}
       
-      {/* Here i use the different Butttons and Modal component */} 
+      {/* Here i use the different Butttons and Modal component from the Daisy */} 
 
       {/* <div className='bg-slate-300 h-screen' >
 
@@ -75,7 +75,7 @@ const TestComponent: React.FC = () => {
       {/* <NextUIProvider></NextUIProvider> */}
 
     
-      {/* Here i use the accordian and skeleton component */}
+      {/* Here i use the accordian and skeleton component from the NextUI*/}
 
       {/* import {Accordion, AccordionItem} from "@nextui-org/accordion";
       import {Card, Skeleton, Button} from "@nextui-org/react";

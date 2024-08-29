@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { RxCrossCircled } from "react-icons/rx";
 import Link from 'next/link';
-import OtpInput from '../Otp';
+import OtpInput from './Otp';
 import PasswordChangeScreen from './PasswordChangeScreen';
 
 interface OTPScreenProps {

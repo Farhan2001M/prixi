@@ -2,7 +2,7 @@
 "use client"
 
 import Link from 'next/link'; // Import Link from Next.js
-import { IoPersonCircleOutline, IoMenu, IoClose } from 'react-icons/io5';
+import { IoMenu } from 'react-icons/io5';
 import React, { useState } from 'react';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { usePathname } from 'next/navigation'; // Correct import for Next.js 13+

@@ -21,7 +21,6 @@ const config: Config = {
         sada: "#ff7b66",
         pay: "#00bc99",
         yoyo: "#8A2BE2",
-        
       },
     },
   },

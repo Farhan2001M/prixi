@@ -25,7 +25,7 @@ const ConfirmationOfPasswordScreen: React.FC<ConfirmationOfPasswordScreenProps> 
               }, 500); // 500ms is the duration of the vibration animation
           }
       }, intervalDuration);
-
+      
       // Cleanup interval on component unmount
       return () => {
           clearInterval(intervalId);
