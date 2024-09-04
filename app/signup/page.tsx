@@ -55,8 +55,8 @@ const SignUpForm = () => {
         newErrors.email = '';
       } else if (/\s/.test(value)) {
         newErrors.email = 'Email cannot contain spaces.';
-      } else if (value.length < 3 || value.length > 254) {
-        newErrors.email = 'Email should be between 3 and 254 characters.';
+      } else if (value.length < 3 ) {
+        newErrors.email = 'Email should be between 3 and 60 characters.';
       } else if (!/@/.test(value)) {
         newErrors.email = 'Email must include @';
       } else if (!/\.[a-zA-Z]{1,}/.test(value.split('@')[1] || '')) {
@@ -294,7 +294,7 @@ const SignUpForm = () => {
                 </div>
                 <div className="mb-4 w-1/2">
                   <label htmlFor="email" className="block text-black text-base font-bold">Email ID <span className='text-red-500'>*</span></label>
-                  <input id="email" name="email" type="email" value={email} onChange={handleInputChange} className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded" placeholder="Enter A Valid Email Address" />
+                  <input id="email" name="email" type="email" value={email} onChange={handleInputChange} className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded" placeholder="Enter A Valid Email Address" maxLength={60} />
                   {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                 </div>
               </div>

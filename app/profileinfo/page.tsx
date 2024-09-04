@@ -212,10 +212,10 @@ const MyProfileInfo = () => {
 
 
 
-  const [ConfirmLogout, setConfirmLogout] = useState(false);
-  const toggleLogoutScreen = () => {
-    setConfirmLogout(!ConfirmLogout);
-  };
+  // const [ConfirmLogout, setConfirmLogout] = useState(false);
+  // const toggleLogoutScreen = () => {
+  //   setConfirmLogout(!ConfirmLogout);
+  // };
 
 
   const [ConfirmDeleteProfile, setConfirmDeleteProfile] = useState(false);
@@ -570,7 +570,7 @@ const MyProfileInfo = () => {
               
               <div className='flex flex-col justify-center  w-[95%] h-[95%] '>
                 <button type="button" onClick={()=> { 
-                  router.push('/userinterface' ); 
+                  router.push('/screen1' ); 
                   }} className={`text-xl p-2 rounded w-full mx-auto bg-blue-600 text-white hover:bg-blue-700   `}  >
                   Continue to Home Screeen
                 </button>
@@ -580,8 +580,11 @@ const MyProfileInfo = () => {
           </div>
           <div className={`fixed top-0 left-0 w-screen h-full bg-black bg-opacity-70 transition-opacity duration-700   ${SuccessConfirmationScreen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} z-10`} > </div>
 
+
+
+
           {/* Confirm Logout */}
-          <div className={`flex justify-center items-center fixed top-1/2 left-1/2 w-1/2 h-[27%] bg-slate-200 shadow-lg rounded-2xl transition-transform duration-1000  transform ${ConfirmLogout ? 'translate-x-[-50%] translate-y-[-50%]' : 'translate-x-[-50%] translate-y-[250%]'} z-20`}>
+          {/* <div className={`flex justify-center items-center fixed top-1/2 left-1/2 w-1/2 h-[27%] bg-slate-200 shadow-lg rounded-2xl transition-transform duration-1000  transform ${ConfirmLogout ? 'translate-x-[-50%] translate-y-[-50%]' : 'translate-x-[-50%] translate-y-[250%]'} z-20`}>
             <div className='relative flex flex-col justify-around items-center w-[95%] h-[85%]  bg-white'>
               <RxCrossCircled onClick={toggleLogoutScreen} className='absolute top-1 right-1 text-black hover:text-red-500 cursor-pointer' size={40}  />
 
@@ -601,7 +604,10 @@ const MyProfileInfo = () => {
               
             </div>
           </div>
-          <div className={`fixed top-0 left-0 w-screen h-full bg-black bg-opacity-70 transition-opacity duration-1000   ${ConfirmLogout ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} z-10`} onClick={toggleLogoutScreen} > </div>
+          <div className={`fixed top-0 left-0 w-screen h-full bg-black bg-opacity-70 transition-opacity duration-1000   ${ConfirmLogout ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} z-10`} onClick={toggleLogoutScreen} > </div> */}
+
+
+
 
           {/* Confirm Delete Account */}
           <div className={`flex justify-center items-center fixed top-1/2 left-1/2 w-1/2 h-1/4 bg-slate-200 shadow-lg rounded-2xl transition-transform duration-1000  transform ${ConfirmDeleteProfile ? 'translate-x-[-50%] translate-y-[-50%]' : 'translate-x-[-50%] translate-y-[250%]'} z-20`}>

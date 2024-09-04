@@ -25,8 +25,7 @@ const LPTestimonials = () => {
               prevEl: '.swiper-button-prev',
             }}
             modules={[Pagination, Navigation]}
-            className="w-full min-h-[500px]"
-          >
+            className="w-full min-h-[500px]" >
             
             <SwiperSlide>
               <div className="flex flex-col items-center p-10 text-center bg-white">

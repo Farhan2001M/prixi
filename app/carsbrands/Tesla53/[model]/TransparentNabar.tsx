@@ -20,7 +20,7 @@ import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaUserCog } from "react-icons/fa";
 
 
-const Header = () => {
+const TransparentNabar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname(); // Get current path
 
@@ -32,27 +32,27 @@ const Header = () => {
   
   return (
     <>
-    <nav className='bg-black h-[10vh]'>
-        <div className='w-[98%] h-full mx-auto text-white flex  '>
+    <nav className='fixed bg-transparent h-[10vh] w-full z-10'>
+      <div className='w-[98%] h-full mx-auto text-white flex '>
 
-          <div className='w-2/5 h-full  flex  items-center'> <IoMenu className="text-5xl  hover:text-gray-300 hover:cursor-pointer" onClick={toggleSidebar} /> </div>
-          
-          <div className='w-1/5 h-full  flex justify-center items-center'> <img className=" h-12  " src="/images/PWlogo.png" alt="" /> </div>
-          <div className='w-2/5 h-full  flex justify-end items-center'> 
-            <ul className='my-auto flex gap-6'>
+        <div className='w-2/5 h-full  flex  items-center'> <IoMenu className="text-5xl  hover:text-gray-300 hover:cursor-pointer" onClick={toggleSidebar} /> </div>
+        
+        <div className='w-1/5 h-full  flex justify-center items-center'> <img className=" h-12  " src="/images/PWlogo.png" alt="" /> </div>
+        <div className='w-2/5 h-full  flex justify-end items-center'> 
+          <ul className='my-auto flex gap-6'>
 
-              <Link href="/screen1">
-                <IoIosHome  className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" />
-              </Link>
-              {/* <Link className="bg-transparent text-xl text-white px-4 py-2 border border-gray-300 rounded-lg mx-auto  hover:text-gray-300 hover:border-gray-300 transition-colors duration-300" href="/userinterface">Home</Link> */}
-              {/* <IoPersonCircleOutline className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" /> */}
-              <Link href="/profileinfo">
-                <FaUserCog  className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" />
-              </Link>
-            </ul>
-          </div>
-    
+            <Link href="/screen1">
+              <IoIosHome  className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" />
+            </Link>
+            {/* <Link className="bg-transparent text-xl text-white px-4 py-2 border border-gray-300 rounded-lg mx-auto  hover:text-gray-300 hover:border-gray-300 transition-colors duration-300" href="/userinterface">Home</Link> */}
+            {/* <IoPersonCircleOutline className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" /> */}
+            <Link href="/profileinfo">
+              <FaUserCog  className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" />
+            </Link>
+          </ul>
         </div>
+  
+      </div>
     </nav>
 
     <aside className={`fixed top-0 left-0 w-1/5 h-full bg-white shadow-lg transition-transform  duration-1000 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} z-20`}>
@@ -133,7 +133,7 @@ const Header = () => {
   )
 }
 
-export default Header
+export default TransparentNabar
 
 
 
@@ -168,3 +168,5 @@ export default Header
 
 
 
+
+  

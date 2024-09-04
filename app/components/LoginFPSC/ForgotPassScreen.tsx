@@ -12,6 +12,9 @@ const ForgotPassScreen: React.FC<ForgotPassScreenProps> = ({ show, onClick }) =>
   const [Femail, setFEmail] = useState<string>('');
   const [showOTPScreen, setShowOTPScreen] = useState<boolean>(false);
 
+  const [passwordError, setPasswordError] = useState('');
+
+
   useEffect(() => {
     setIsValidEmail(validateEmail(Femail));
   }, [Femail]);
@@ -28,11 +31,10 @@ const ForgotPassScreen: React.FC<ForgotPassScreenProps> = ({ show, onClick }) =>
     onClick();
     setTimeout(() => { 
       setFEmail('');
-    }, 2000);
+    }, 1000);
   };
 
   const handleOverlayClick = () => {
-    
     onClick();
     setTimeout(() => { 
       setFEmail('');
@@ -77,8 +79,14 @@ const ForgotPassScreen: React.FC<ForgotPassScreenProps> = ({ show, onClick }) =>
                 value={Femail} 
                 onChange={(e) => setFEmail(e.target.value)} 
                 className="mt-2 p-2 border border-gray-300 rounded w-full" 
-                placeholder="Email ID" 
+                placeholder="Email ID"
+                maxLength={60}
               />
+              {passwordError && (
+                <span className="block text-red-700 text-base font-semibold">
+                  {passwordError}
+                </span>
+              )}
               <div>
                 <button
                   type="button"

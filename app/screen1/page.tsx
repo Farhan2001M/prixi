@@ -1,6 +1,9 @@
 
 import Header from '../components/Header';
 
+
+
+
 const UserInterface = () => {
   
   return (  
@@ -9,7 +12,7 @@ const UserInterface = () => {
 
       <Header/>  
 
-      <div className="h-[90vh] bg-gray-300 p-4">
+      <div className="h-[90vh] bg-white p-4">
         <h1>This is my Screen 1</h1>
         <p>Screem 1 text is Lorem ipsum dolor sit amet consectetur adipisicing elit...!!!!!</p>
       </div>  

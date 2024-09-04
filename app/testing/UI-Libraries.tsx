@@ -63,6 +63,18 @@ const TestComponent: React.FC = () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
       {/* Next UI library Components Usage Testing, no need to create files,just intall it using 
       ' npm install @nextui-org/react framer-motion ' and start using components code, 
       only just add """ "./node_modules/@nextui-org/theme/dist/**//*.{js,ts,jsx,tsx}", """ // 
@@ -120,6 +132,47 @@ const TestComponent: React.FC = () => {
           </Button>
         </div>
       </div> */}
+
+
+
+
+
+
+
+
+
+
+
+
+      {/* Motion-Primitives */}
+      {/* Copy Paste Library */}
+      {/* https://motion-primitives.com/docs */}
+
+
+
+      {/* Animata */}
+      {/* Copy Paste Library */}
+      {/* https://animata.design/docs */}
+
+      
+      {/* Lukacho */}
+      {/*Not so Good but foolows Copy Paste Rule */}
+      {/* https://ui.lukacho.com/components */}
+
+
+
+
+
+
+
+
+      {/* Aceternity ui library Components Usage Testing}
+
+      {/* import { TextGenerateEffect } from "@/components/ui/text-generate-effect"; */}
+      {/* const words = `Oxygen gets you high. In a catastrophic emergency, we're taking giant, panicked breaths. Suddenly you become euphoric, docile. You accept your fate. It's all right here. Emergency water landing, six hundred miles an hour. Blank faces, calm as Hindu cows`; */}
+      {/* <TextGenerateEffect duration={5} filter={false} words={words} /> */}
+
+
 
 
     </>

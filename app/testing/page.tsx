@@ -1,43 +1,55 @@
-"use client"
+"use client";
 
 import React from 'react';
 import Link from 'next/link';
 
-import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+import Header from '../components/Header';
+import Tablecomponent from './CarBrands'
+
+import Accodion from './Acoordion'
 
 const TestComponent: React.FC = () => {
 
-  const words = `Oxygen gets you high. In a catastrophic emergency, we're taking giant, panicked breaths. Suddenly you become euphoric, docile. You accept your fate. It's all right here. Emergency water landing, six hundred miles an hour. Blank faces, calm as Hindu cows`;
 
- 
-  return (
-    <div className='bg-slate-300 h-screen' >
+  return (   
+    <div className='bg-white flex flex-col  w-full'>
 
-      <h1>Hello</h1> <br />
-        <Link href = "/login" className='ml-10 mt-8'> Back to login </Link>
-        <Link href = "/screen1" className='ml-10 mt-28'>  Screen 1 </Link>
-      <br />
+      <Header/>  
 
-      <div className='mt-8 ml-96 mx-auto'>
-    
-          <br /><br />
-        
+      <div className='w-full px-8 mt-4'>
+        <div className='w-full flex flex-col items-center  p-2'>
+
+          <div className='my-4 w-full'>
+            <Accodion/>
+          </div>
+
+        </div>
       </div>
-
-      <div className='mt-8 ml-96 mx-auto '>  
-
-        <br /><br />
-
-      </div>
-
-      <br />
-
-      <TextGenerateEffect duration={5} filter={false} words={words} />
-
-      <br />
-    
     </div>
   );
 };
 
 export default TestComponent;
+
+
+
+
+
+
+
+
+
+// {data.filter( (item)=> {
+//   return  item.first_name.toLowerCase().includes(search)
+//   // return search.toLowerCase() === '' ? item : item.first_name.toLowerCase().includes(search)
+
+// } ).map( (item)=> (
+
+//   <tr key={item.id} className=''>
+//     <td className='w-1/4 table-cell'>{item.first_name}</td>
+//     <td className='w-1/4 table-cell'>{item.last_name}</td>
+//     <td className='w-1/4 table-cell'>{item.email}</td>
+//     <td className='w-1/4 table-cell'>{item.phone}</td>
+//   </tr>
+
+// ))}

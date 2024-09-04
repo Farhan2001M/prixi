@@ -11,7 +11,7 @@ const Myloginpage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [FPScreen, setFPScreen] = useState<boolean>(false);
 
@@ -30,33 +30,59 @@ const Myloginpage = () => {
       return 'Email is required.';
     } else if (/\s/.test(email)) {
       return 'Email cannot contain spaces.';
-    } else if (email.length < 3 || email.length > 254) {
-      return 'Email should be between 3 and 254 characters.';
+    } else if (email.length < 3 ) {
+      return 'Email should be between 3 and 60 characters.';
     } else if (!/@/.test(email)) {
       return 'Email must include @.';
     } else if (!/\.[a-zA-Z]{1,}/.test(email.split('@')[1] || '')) {
-      return 'Email must include a valid domain (e.g., .com).';
+      return 'Email must include a valid domain (e.g, .com / .in / .net)';
     } else {
       return '';
     }
   };
 
+  const validatePassword = (password: string): string => {
+    if(!password){
+      return 'Password is required.';
+    } else if (/\s/.test(password)) {
+      return 'Password cannot contain spaces.';
+    } else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(password)) {
+      return 'Password must contain 8 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.';
+    } else if (password.length > 7) {
+      return '';
+    } else{
+      return '';
+    }
+
+  }
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    setEmailError('');
-    setPasswordError(false);
+    // setEmailError('');
+    // setPasswordError('');
 
     // Validate email
     const emailValidationError = validateEmail(email);
     if (emailValidationError) {
       setEmailError(emailValidationError);
     }
-
-    if (!password) {
-      setPasswordError(true);
+    else{
+      setEmailError('');
     }
 
-    if (!emailValidationError && password) {
+    const passwordValidationError = validatePassword(password);
+    if(passwordValidationError){
+      setPasswordError(passwordValidationError);
+    }
+    else{
+      setPasswordError('');
+    }
+
+    // if (!password) {
+    //   setPasswordError(true);
+    // }
+
+    if (!emailValidationError && !passwordValidationError) {
       console.log('Form submitted with:', { email, password });
       router.push('/screen1');
     }
@@ -94,9 +120,10 @@ const Myloginpage = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   className="mt-2 p-2 border border-gray-300 rounded w-full"
                   placeholder="Email ID"
+                  maxLength={60}
                 />
                 {emailError && (
-                  <span className="block text-red-700 text-base font-semibold">
+                  <span className="block text-red-700 text-sm font-semibold">
                     {emailError}
                   </span>
                 )}
@@ -115,6 +142,7 @@ const Myloginpage = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     className="mt-2 p-2 border border-gray-300 rounded w-full"
                     placeholder="Enter Password"
+                    maxLength={60}
                   />
                   <button
                     type="button"
@@ -125,8 +153,8 @@ const Myloginpage = () => {
                   </button>
                 </div>
                 {passwordError && (
-                  <span className="block text-red-700 text-base font-semibold">
-                    Please enter your password.
+                  <span className="block text-red-700 text-sm font-semibold">
+                    {passwordError}
                   </span>
                 )}
               </div>
