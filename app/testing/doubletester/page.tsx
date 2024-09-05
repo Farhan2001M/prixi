@@ -1,31 +1,3 @@
-// "use client"
-
-// import React from 'react'
-
-// const HelloFunc = () => {
-//   return (
-//     <div>
-
-//     <div>HelloFunc</div>
-    
-//     <button className='bg-slate-600 p-5 m-5 text-white'>
-      
-//     </button>
-
-//     </div>
-    
-//   )
-// }
-
-// export default HelloFunc
-
-
-
-
-
-
-
-
 
 'use client';
 import { useEffect, useState } from 'react';

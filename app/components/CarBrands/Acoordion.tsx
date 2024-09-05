@@ -30,6 +30,7 @@ const MainComponent: React.FC = () => {
           )}
         </ModalContent>
       </Modal>
+
     </>
   );
 };

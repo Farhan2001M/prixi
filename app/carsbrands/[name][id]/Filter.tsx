@@ -166,21 +166,16 @@ const PriceRange: React.FC<PriceRangeProps> = ({ onFiltersChange }) => {
               </ModalBody>
 
               <ModalFooter>
-                
                 <Button color="danger" variant="light" onPress={onClose} 
                     isDisabled={isSelectOpen} // Disable based on Select open state 
-                >
-                  Close
+                > Close
                 </Button>
 
                 <Button color="success" onPress={() => { onClose(); handleApplyFilters(); }}
                   isDisabled={isSelectOpen} // Disable based on Select open state
-                >
-                  Apply Filters
+                > Apply Filters
                 </Button>
-                
               </ModalFooter>
-
             </>
           )}
         </ModalContent>
