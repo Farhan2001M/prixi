@@ -6,6 +6,7 @@ import Header from '../components/Header';
 
 import Accodion from '../components/CarBrands/Acoordion';
 
+import EnhancedTable from './FazoolTable';
 
 const TestComponent: React.FC = () => {
 
@@ -20,6 +21,10 @@ const TestComponent: React.FC = () => {
 
           <div className='my-4 w-full'>
             <Accodion />
+          </div>
+
+          <div>
+            <EnhancedTable/>
           </div>
 
         </div>
