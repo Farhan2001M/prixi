@@ -2,11 +2,11 @@
 
 // import React from 'react'
 
-// const page = () => {
+// const HelloFunc = () => {
 //   return (
 //     <div>
 
-//     <div>page</div>
+//     <div>HelloFunc</div>
     
 //     <button className='bg-slate-600 p-5 m-5 text-white'>
       
@@ -17,7 +17,7 @@
 //   )
 // }
 
-// export default page
+// export default HelloFunc
 
 
 
@@ -32,7 +32,7 @@ import { useEffect, useState } from 'react';
 import { AnimatedNumber } from '@/components/core/animated-number';
 import React from 'react'
 
-const page = () => {
+const HelloFunc = () => {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
@@ -54,4 +54,4 @@ const page = () => {
   );
 }
 
-export default page
+export default HelloFunc
