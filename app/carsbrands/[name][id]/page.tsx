@@ -9,7 +9,7 @@ import Header from '../../components/Header';
 import Accodion from '../../components/CarBrands/Acoordion';
 import Slider from '../../components/CarBrands/Slider';
 
-const page = () => {
+const MainPage = () => {
   const [filters, setFilters] = useState({
     priceRange: [0, 250000],
     yearRange: [2000, 2024],
@@ -72,9 +72,10 @@ const page = () => {
         <Cards data={filteredData} />
       </div>
 
-      <h1>In Dynamic page</h1>
+      <h1>In Dynamic MainPage</h1>
     </div>
   );
 };
 
-export default page;
+export default MainPage;
+

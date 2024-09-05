@@ -7,7 +7,7 @@ import { data } from '../../../MyCarsData/TeslaData';
 import Slider from './StatisticSlider'
 import TransparentNabar from './TransparentNabar'
 
-const Page = () => {
+const SpecPage = () => {
   const searchParams = useSearchParams();
   const modelName = searchParams.get('model') || '';
   console.log(modelName)
@@ -48,84 +48,5 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default SpecPage;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- {/* <div className=' border border-black h-[90vh] relative overflow-hidden rounded-xl'>
-          <Swiper
-            navigation={false}
-            pagination={false}
-            centeredSlides={true}
-            slidesPerView={1}
-            spaceBetween={30}
-            autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
-            }}
-            loop={true}
-            modules={[ Autoplay, Pagination, Navigation]}
-            className="w-full h-full"
-          >
-          
-
-            <SwiperSlide className="relative">
-              <img
-                src="../../images/Cars/Tesla/desktop-full-hd-tesla-model-s-background.png"
-                alt="Alpha bravo v+charlie"
-                className="w-full h-full object-cover"
-                style={{ objectPosition: 'center' }}
-              />
-            
-            </SwiperSlide>
-            
-            <SwiperSlide>
-              <img
-                src="../../images/Cars/Tesla/teop.png"
-                alt="Alpha bravo charlie"
-                className="w-full h-full object-cover"
-                style={{ objectPosition: 'center' }}
-              />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img
-                src="../../images/Cars/Tesla/toto.png"
-                alt="Alpha bravo charlie"
-                className="w-full h-full object-cover"
-                style={{ objectPosition: 'center' }}
-              />
-            </SwiperSlide>
-                    
-          </Swiper>
-          
-        </div>  */}

@@ -53,3 +53,5 @@ const CarTypes: React.FC = () => {
 };
 
 export default CarTypes;
+
+
