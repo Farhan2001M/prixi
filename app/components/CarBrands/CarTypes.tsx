@@ -1,6 +1,6 @@
 // CarTypes.tsx
 import React from 'react';
-import { VehicleType, vehicleTypes } from './Cardata'; // Adjust the import path as necessary
+import { VehicleType, vehicleTypes } from '../../MyCarsData/GeneralCars'; // Adjust the import path as necessary
 import Link from 'next/link';
 
 const CarTypes: React.FC = () => {

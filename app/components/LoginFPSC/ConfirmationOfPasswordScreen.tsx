@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useRef } from 'react';
+import JitterText from '@/components/animata/text/jitter-text-'
 
 
 interface ConfirmationOfPasswordScreenProps {
@@ -51,7 +52,7 @@ const ConfirmationOfPasswordScreen: React.FC<ConfirmationOfPasswordScreenProps> 
               ref={buttonRef}
               className="text-lg p-2 rounded w-full mx-auto bg-blue-600 text-white hover:bg-blue-700"
             >
-              Continue to Login
+              <JitterText text="Continue To Login" />
               
             </button>
           </div>

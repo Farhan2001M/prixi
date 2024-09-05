@@ -1,12 +1,11 @@
 "use client";
 
 import React from 'react';
-import Link from 'next/link';
 
 import Header from '../components/Header';
-import Tablecomponent from './CarBrands'
 
-import Accodion from './Acoordion'
+import Accodion from '../components/CarBrands/Acoordion';
+
 
 const TestComponent: React.FC = () => {
 
@@ -20,7 +19,7 @@ const TestComponent: React.FC = () => {
         <div className='w-full flex flex-col items-center  p-2'>
 
           <div className='my-4 w-full'>
-            <Accodion/>
+            <Accodion />
           </div>
 
         </div>

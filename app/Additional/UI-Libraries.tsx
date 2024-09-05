@@ -63,18 +63,6 @@ const TestComponent: React.FC = () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
       {/* Next UI library Components Usage Testing, no need to create files,just intall it using 
       ' npm install @nextui-org/react framer-motion ' and start using components code, 
       only just add """ "./node_modules/@nextui-org/theme/dist/**//*.{js,ts,jsx,tsx}", """ // 
@@ -137,13 +125,6 @@ const TestComponent: React.FC = () => {
 
 
 
-
-
-
-
-
-
-
       {/* Motion-Primitives */}
       {/* Copy Paste Library */}
       {/* https://motion-primitives.com/docs */}
@@ -158,9 +139,6 @@ const TestComponent: React.FC = () => {
       {/* Lukacho */}
       {/*Not so Good but foolows Copy Paste Rule */}
       {/* https://ui.lukacho.com/components */}
-
-
-
 
 
 

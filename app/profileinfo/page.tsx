@@ -14,6 +14,7 @@ import { GrLogout } from "react-icons/gr";
 import { MdOutlineEdit } from "react-icons/md";
 import { RxCrossCircled } from "react-icons/rx";
 import { RxCross2 } from "react-icons/rx";
+import JitterText from '@/components/animata/text/jitter-text-'
 
 
 const MyProfileInfo = () => {
@@ -572,7 +573,9 @@ const MyProfileInfo = () => {
                 <button type="button" onClick={()=> { 
                   router.push('/screen1' ); 
                   }} className={`text-xl p-2 rounded w-full mx-auto bg-blue-600 text-white hover:bg-blue-700   `}  >
-                  Continue to Home Screeen
+                  <JitterText
+                    text="Continue to Home Screeen"
+                  />
                 </button>
               </div>
               
@@ -620,11 +623,14 @@ const MyProfileInfo = () => {
               
               <div className='flex gap-4 justify-center  w-[95%]  pb-3  '>
                 <button type="button" onClick={()=> { 
-                  
                   toggleDeleteProfile();
                   // router.push('/login' );  
                   }} className={`text-lg p-2 rounded w-full mx-auto bg-blue-600 text-white hover:bg-blue-700   `}  >
-                  Cancel
+                  
+                  <JitterText
+                    text="Cancel"
+                  />
+
                 </button>
                 <button type="button" onClick={()=> { 
                   toggleDeleteProfile();
@@ -670,7 +676,9 @@ Or Simply Type DELETE To Delete Your Account`}
                   toggleDeleteAccountScreen();
                    
                   }} className={`text-lg p-2 rounded w-full mx-auto bg-blue-600 text-white hover:bg-blue-700   `}  >
-                  Cancel
+                  <JitterText
+                    text="Cancel"
+                  />
                 </button>
                 <button type="button" onClick={()=> {
                   handleDeleteAccountClick();

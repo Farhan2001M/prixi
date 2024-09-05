@@ -1,7 +1,8 @@
+
 import React from "react";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
-import { Models } from '../carsbrands/Tesla53/ModelsData';
+import { Models } from '../../MyCarsData/TeslaData';
 
 // Define the props for the Cards component
 interface CardsProps {
@@ -59,6 +60,36 @@ const Cards: React.FC<CardsProps> = ({ data }) => {
 }
 
 export default Cards;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

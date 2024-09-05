@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { useSearchParams } from 'next/navigation';
-import { data } from '../ModelsData';
-
+import { data } from '../../../MyCarsData/TeslaData';
 
 import Slider from './StatisticSlider'
 import TransparentNabar from './TransparentNabar'

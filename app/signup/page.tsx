@@ -7,11 +7,12 @@ import { IoEye, IoEyeOff } from 'react-icons/io5';
 import React, { useState, useEffect } from 'react';
 import { useRef } from 'react';
 
-
 import { TextField } from '@mui/material';
 import { PatternFormat } from 'react-number-format';
 import ConfettiButton, { ConfettiButtonHandle } from '../components/ConfettiButton';
 import { useRouter } from 'next/navigation';  
+
+import JitterText from '@/components/animata/text/jitter-text-'
 
 const SignUpForm = () => {
 
@@ -361,7 +362,7 @@ const SignUpForm = () => {
           
           <div className='flex flex-col justify-center  w-[95%] h-[95%] '>
             <button type="button" onClick={()=> { router.push('/login'); }} className={`text-lg p-2 rounded w-full mx-auto bg-blue-600 text-white hover:bg-blue-700   `}  >
-              Continue to Login
+              <JitterText text="Continue To Login" />
             </button>
           </div>
           
