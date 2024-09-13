@@ -70,11 +70,11 @@ const PriceRange: React.FC<PriceRangeProps> = ({ onFiltersChange }) => {
   return (
     <div>
       <div className="flex gap-5 justify-center">
-        <Button size="lg" onPress={onOpen} color={filtersApplied ? "success" : "primary"} className="text-xl">
+        <Button size="md" onPress={onOpen} color={filtersApplied ? "success" : "primary"} className="text-base">
             Show Filters
         </Button>
 
-        <Button size="lg" color="warning" onPress={handleResetFilters} className="text-xl">
+        <Button size="md" color="warning" onPress={handleResetFilters} className="text-base">
             Reset Filters
         </Button>
       </div>

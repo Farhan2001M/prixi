@@ -112,6 +112,7 @@ const SignUpForm = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState('');
+  
 
 
   useEffect(() => {
@@ -190,7 +191,7 @@ const SignUpForm = () => {
 
     
     if (isValid && Object.keys(newErrors).length === 0){
-      console.log("Hello");
+      console.log("signup up succesfullly ");
       setTimeout(()=>{
         setSuccessConfirmationScreen(!SuccessConfirmationScreen);
       },350);

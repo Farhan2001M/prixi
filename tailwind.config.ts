@@ -11,20 +11,20 @@ const config: Config = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {
-      fontFamily: {
-        sans: ['Poppins', 'sans-serif'],
-      },
-      colors: {
-        farhan: "#FF4500",
-        polo: "#FF5733",
-      },
-    },
+  	extend: {
+  		fontFamily: {
+  			sans: ['Poppins', 'sans-serif']
+  		},
+  		colors: {
+  			farhan: '#FF4500',
+  			polo: '#FF5733'
+  		},
+  	}
   },
-  darkMode: "class",
+  darkMode: ["class", 'class'],
   plugins: [
     require('daisyui'),
     nextui(),
-  ]
+]
 }
 export default config

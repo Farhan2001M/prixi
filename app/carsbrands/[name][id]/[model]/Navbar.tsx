@@ -20,7 +20,7 @@ import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaUserCog } from "react-icons/fa";
 
 
-const TransparentNabar = () => {
+const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname(); // Get current path
 
@@ -32,7 +32,7 @@ const TransparentNabar = () => {
   
   return (
     <>
-    <nav className='fixed bg-transparent h-[10vh] w-full z-10'>
+    <nav className=' bg-black h-[10vh] w-full z-10'>
       <div className='w-[98%] h-full mx-auto text-white flex '>
 
         <div className='w-2/5 h-full  flex  items-center'> <IoMenu className="text-5xl  hover:text-gray-300 hover:cursor-pointer" onClick={toggleSidebar} /> </div>
@@ -133,7 +133,7 @@ const TransparentNabar = () => {
   )
 }
 
-export default TransparentNabar
+export default Navbar
 
 
 

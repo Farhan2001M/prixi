@@ -87,7 +87,7 @@ export interface Models {
       {
         "id": 5,
         "model": "Tesla Cybertruck",
-        "description": "A futuristic all-electric pickup truck with an angular design, built for durability and off-road capability.",
+        "description": "A futuristic all-electric pickup truck with an angular design, built for durability and off-road capability.A futuristic all-electric pickup truck with an angular design, built for durability and off-road capability.A futuristic all-electric pickup truck with an angular design, built for durability and off-road capability.A futuristic all-electric pickup truck with an angular design, built for durability and off-road capability.A futuristic all-electric pickup truck with an angular design, built for durability and off-road capability.A futuristic all-electric pickup truck with an angular design, built for durability and off-road capability.A futuristic all-electric pickup truck with an angular design, built for durability and off-road capability.A futuristic all-electric pickup truck with an angular design, built for durability and off-road capability.A futuristic all-electric pickup truck with an angular design, built for durability and off-road capability.A futuristic all-electric pickup truck with an angular design, built for durability and off-road capability.",
         "launchPrice": "$60,990",
         "vehicleType": "Pickup Truck",
         "seatingCapacity": "6",
