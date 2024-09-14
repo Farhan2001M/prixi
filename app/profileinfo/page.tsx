@@ -18,27 +18,133 @@ import JitterText from '@/components/animata/text/jitter-text-'
 
 
 const MyProfileInfo = () => {
+
   {/* Edit Image Functionality */}
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  
+  // Handle image change and upload
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        setImageSrc(reader.result as string);
-      };
-
-      reader.readAsDataURL(event.target.files[0]);
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append('image', file);
+  
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://127.0.0.1:8000/upload-image', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      if (response.ok) {
+        // Optionally, fetch user data again to update the UI with the new image
+        fetchUserImage();
+      } else {
+        console.error("Failed to upload image");
+      }
     }
   };
-  const handleImageRemove = () => {
-    // Reset the file input value to ensure handleImageChange is triggered
-    const fileInput = document.getElementById("imageUpload") as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = "";
-    }    
-    setImageSrc(null);
+  
+  // // Fetch user data and set the image source
+  // const fetchUserData = async () => {
+  //   const token = localStorage.getItem('token');
+  //   const response = await fetch('http://127.0.0.1:8000/profileinfo', {
+  //     headers: {
+  //       'Authorization': `Bearer ${token}`,
+  //     },
+  //   });
+  //   const data: any = await response.json();
+  //   if (response.ok) {
+  //     setImageSrc(data.user.image ? `data:image/jpeg;base64,${data.user.image}` : null);
+  //   } else {
+  //     console.log("Failed to fetch user data");
+  //   }
+  // };
+
+
+  // Fetch user data and set the image source
+  const fetchUserImage = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://127.0.0.1:8000/user-image', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    const data: any = await response.json();
+    if (response.ok) {
+      console.log(data); // Check if the image field is returned
+      setImageSrc(data.image ? `data:image/jpeg;base64,${data.image}` : null);
+    } else {
+      console.log("Failed to fetch user image");
+    }
   };
+
+  fetchUserImage();
+  
+  // Handle image removal
+  const handleImageRemove = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://127.0.0.1:8000/remove-image', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+  
+    if (response.ok) {
+      // Reset the image
+      setImageSrc(null);
+    } else {
+      console.error("Failed to remove image");
+    }
+  };
+
+
+  
+  // const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.files && event.target.files[0]) {
+  //     const reader = new FileReader();
+
+  //     reader.onload = () => {
+  //       setImageSrc(reader.result as string);
+  //     };
+
+  //     reader.readAsDataURL(event.target.files[0]);
+  //   }
+  // };
+
+
+  const fetchUserData = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://127.0.0.1:8000/getfulluserinfo', {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+    const data: any = await response.json();
+    if (response.ok) {
+        console.log("User Data:", data); // Full user data should be logged here
+        console.log(data.email); 
+        console.log(data.firstName); 
+        console.log(data.lastName); 
+        console.log(data.phoneNumber); 
+    } else {
+        console.log("Failed to fetch user data");
+    }
+  };
+
+  fetchUserData();
+
+  // const handleImageRemove = () => {
+  //   // Reset the file input value to ensure handleImageChange is triggered
+  //   const fileInput = document.getElementById("imageUpload") as HTMLInputElement;
+  //   if (fileInput) {
+  //     fileInput.value = "";
+  //   }    
+  //   setImageSrc(null);
+  // };
+
 
 
 
@@ -126,7 +232,6 @@ const MyProfileInfo = () => {
 
     if (name === 'firstName') setFirstName(value);
     if (name === 'lastName') setLastName(value);
-    // if (name === 'cellNo') setCellNo(value);
     if (name === 'email') setEmail(value);
     if (name === 'password') setPassword(value);
     if (name === 'confirmPassword') setConfirmPassword(value);
@@ -147,7 +252,6 @@ const MyProfileInfo = () => {
   useEffect(() => {
     const normalizedNumber = phoneNumber;
     // console.log(normalizedNumber.length)
-
     if (normalizedNumber.length === 10) {
       setIsValid(true);
       setError(''); // Clear error if phone number is valid
@@ -158,7 +262,6 @@ const MyProfileInfo = () => {
     else {
       setIsValid(false);
     }
-
   }, [phoneNumber]);
 
 
@@ -175,7 +278,33 @@ const MyProfileInfo = () => {
       confettiButtonRef.current.triggerConfetti(); 
     }
   };
-  
+
+
+
+  const fetchDataForAccountDeletion = async () => {
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://127.0.0.1:8000/profileinfo', {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+
+    const data:any = await response.json();
+
+    if (response.ok) {
+      
+      console.log(data.message)
+      console.log(data.user)
+
+      //Delete User Permanently
+      const deleteResponse = await fetch('http://127.0.0.1:8000/deleteuser', { method: 'DELETE', headers: {     'Authorization': `Bearer ${token}`, }, });
+      if (deleteResponse.ok) { console.log('User data deleted successfully'); } else { const errorDetails = await deleteResponse.json(); console.log('Failed to delete user data', errorDetails); }
+
+    } else {
+      console.log("Failed to fetch user data");
+    }
+  };
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -185,16 +314,17 @@ const MyProfileInfo = () => {
     validateFields('firstName', firstName);
     validateFields('lastName', lastName);
     validateFields('email', email);
-    validateFields('password', password);
-    validateFields('confirmPassword', confirmPassword);
-    if (!phoneNumber) {
-      setError('Phone number is required');
-    }
+    // validateFields('password', password);
+    // validateFields('confirmPassword', confirmPassword);
+
+
+    if (!phoneNumber) { setError('Phone number is required');}
     if (!firstName) newErrors.firstName = 'First name is required.';
     if (!lastName) newErrors.lastName = 'Last name is required.';
     if (!email) newErrors.email = 'Email is required.';
-    if (!password) newErrors.password = 'Password is required.';
-    if (password !== confirmPassword) newErrors.confirmPassword = 'Passwords do not match.';
+    
+    // if (!password) newErrors.password = 'Password is required.';
+    // if (password !== confirmPassword) newErrors.confirmPassword = 'Passwords do not match.';
 
     setErrors((prevErrors: any) => ({ ...prevErrors, ...newErrors }));
 
@@ -211,14 +341,6 @@ const MyProfileInfo = () => {
 
   };
 
-
-
-  // const [ConfirmLogout, setConfirmLogout] = useState(false);
-  // const toggleLogoutScreen = () => {
-  //   setConfirmLogout(!ConfirmLogout);
-  // };
-
-
   const [ConfirmDeleteProfile, setConfirmDeleteProfile] = useState(false);
   const toggleDeleteProfile = () => {
     setConfirmDeleteProfile(!ConfirmDeleteProfile);
@@ -229,36 +351,32 @@ const MyProfileInfo = () => {
     setDeleteAccount(!DeleteAccount);
   };
 
-
-
-
-
-
-  const [notApproved, setnotApproved] = useState(false);
-
+  const [Approved, setApproved] = useState(false);
   const [remarks, setRemarks] = useState('');
-
   const handleRemarksChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setRemarks(event.target.value);
-
     const newRemarks = event.target.value;
-
     if(newRemarks === "DELETE"){
-      setnotApproved(true)
-    }else if(remarks.length > 10){
-      setnotApproved(true)
+      setApproved(true)
+    }else if(remarks.length > 10 && newRemarks.includes("DELETE")){
+      setApproved(true)
     }
     else{
-      setnotApproved(false)
+      setApproved(false)
     }
   };
 
   // Handle delete account button click
   const handleDeleteAccountClick = () => {
-    if(notApproved){
+    if(Approved){
+      fetchDataForAccountDeletion();
       router.push('/' ); 
     }
   };
+
+
+  
+  
 
   
   return (
@@ -271,13 +389,13 @@ const MyProfileInfo = () => {
 
           <div className="relative w-48 h-48 bg-slate-200 rounded-full">
             <img
-              src={imageSrc || "/images/clientTestimonial/person-circle.png"} // Update with your default image path
+              src={imageSrc || "/images/clientTestimonial/person-circle.png"}
               alt="Profile"
               className="w-full h-full rounded-full object-cover"
             />
             <div className="absolute top-0 left-0 p-1">
               <label htmlFor="imageUpload" className="cursor-pointer">
-                <div className={` p-1 rounded-full  ${!isEditing ? ' text-white bg-gray-300  cursor-not-allowed ' : 'bg-black  text-white hover:bg-blue-700 '} transition-colors `}>
+                <div className={`p-1 rounded-full ${!isEditing ? 'text-white bg-gray-300 cursor-not-allowed' : 'bg-black text-white hover:bg-blue-700'} transition-colors`}>
                   <MdOutlineEdit className="text-2xl" />
                 </div>
               </label>
@@ -294,12 +412,45 @@ const MyProfileInfo = () => {
               <button
                 onClick={handleImageRemove}
                 disabled={!isEditing}
-                className={`p-1 rounded-full text-white transition-colors ${!isEditing ? 'text-white bg-gray-300 cursor-not-allowed ' : 'bg-black hover:bg-blue-700 cursor-pointer'}`}
+                className={`p-1 rounded-full text-white transition-colors ${!isEditing ? 'text-white bg-gray-300 cursor-not-allowed' : 'bg-black hover:bg-blue-700 cursor-pointer'}`}
               >
                 <RxCross2 className="text-2xl" />
               </button>
             </div>
           </div>
+
+          {/* <div className="relative w-48 h-48 bg-slate-200 rounded-full">
+            <img
+              // src={imageSrc || "/images/clientTestimonial/person-circle.png"} // Update with your default image path
+              src={imageSrc || "/images/clientTestimonial/person-circle.png"} // Update with your default image path
+              alt="Profile"
+              className="w-full h-full rounded-full object-cover"
+            />
+            <div className="absolute top-0 left-0 p-1">
+              <label htmlFor="imageUpload" className="cursor-pointer">
+                <div className={` p-1 rounded-full  ${!isEditing ? ' text-white bg-gray-300  cursor-not-allowed ' : 'bg-black  text-white hover:bg-blue-700 '} transition-colors `}>
+                  <MdOutlineEdit className="text-2xl" />
+                </div>
+              </label>
+              <input
+                type="file"
+                id="imageUpload"
+                accept="image/*"
+                className="hidden"
+                onChange={fetchUserData}
+                disabled={!isEditing}
+              />
+            </div>
+            <div className="absolute top-0 right-0 p-1">
+              <button
+                onClick={handleImageRemove}
+                disabled={!isEditing}
+                className={`p-1 rounded-full text-white transition-colors ${!isEditing ? 'text-white bg-gray-300 cursor-not-allowed ' : 'bg-black hover:bg-blue-700 cursor-pointer'}`}
+              >
+                <RxCross2 className="text-2xl" />
+              </button>
+            </div>
+          </div> */}
 
           <div className="w-4/5">
 
@@ -423,7 +574,10 @@ const MyProfileInfo = () => {
                 </div>
               </div> */}
 
-              <div className='w-full flex gap-4'>
+
+
+              {/* Just For practical use case */}
+              {/* <div className='w-full flex gap-4'>
                 <div className="mb-4 w-1/2">
                   <label htmlFor="password" className="block text-black text-base font-bold">
                     Password <span className='text-red-500'>*</span>
@@ -485,7 +639,7 @@ const MyProfileInfo = () => {
                   </div>
                   {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
                 </div>
-              </div>
+              </div> */}
               
               
 
@@ -683,7 +837,7 @@ Or Simply Type DELETE To Delete Your Account`}
                 <button type="button" onClick={()=> {
                   handleDeleteAccountClick();
                   
-                  }} className={`text-lg p-2 rounded w-full mx-auto  ${notApproved ? 'bg-red-600 text-white hover:bg-red-700 ' : 'bg-gray-100 cursor-not-allowed border-gray-300 '}  `} disabled={!notApproved} >
+                  }} className={`text-lg p-2 rounded w-full mx-auto  ${Approved ? 'bg-red-600 text-white hover:bg-red-700 ' : 'bg-gray-100 cursor-not-allowed border-gray-300 '}  `} disabled={!Approved} >
                   Delete Account
                 </button>
               </div>
@@ -691,7 +845,6 @@ Or Simply Type DELETE To Delete Your Account`}
             </div>
           </div>
           <div className={`fixed top-0 left-0 w-screen h-full bg-black bg-opacity-70 transition-opacity duration-1000   ${DeleteAccount ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} z-10`} onClick={toggleDeleteAccountScreen}  > </div>
-
 
         </div>
       </div>

@@ -1,6 +1,4 @@
 
-
-
 "use client";
 import Link from 'next/link';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
@@ -11,7 +9,7 @@ import { TextField } from '@mui/material';
 import { PatternFormat } from 'react-number-format';
 import ConfettiButton, { ConfettiButtonHandle } from '../components/ConfettiButton';
 import { useRouter } from 'next/navigation';  
-
+import axios from 'axios'
 import JitterText from '@/components/animata/text/jitter-text-'
 
 const SignUpForm = () => {
@@ -168,11 +166,13 @@ const SignUpForm = () => {
 
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     const newErrors: any = {};
-
+  
     validateFields('firstName', firstName);
     validateFields('lastName', lastName);
     validateFields('email', email);
@@ -186,21 +186,66 @@ const SignUpForm = () => {
     if (!email) newErrors.email = 'Email is required.';
     if (!password) newErrors.password = 'Password is required.';
     if (password !== confirmPassword) newErrors.confirmPassword = 'Passwords do not match.';
-
+  
     setErrors((prevErrors: any) => ({ ...prevErrors, ...newErrors }));
-
-    
-    if (isValid && Object.keys(newErrors).length === 0){
-      console.log("signup up succesfullly ");
-      setTimeout(()=>{
-        setSuccessConfirmationScreen(!SuccessConfirmationScreen);
-      },350);
-      setTimeout(() => { 
-        handleConfirmClick();
-      }, 700);
-    } 
-
+  
+    if (isValid && Object.keys(newErrors).length === 0) {
+      const errorResponse = await signupUser();
+      if (errorResponse) {
+        // Merge the returned errors into the existing errors state
+        setErrors((prevErrors: any) => ({ ...prevErrors, ...errorResponse }));
+      } else {
+        // Proceed with successful signup
+        console.log("Signup successful");
+      }
+    }
   };
+
+
+  async function signupUser() {
+    const userData = {
+      firstName: firstName, // Make sure these variables are correctly set in your code
+      lastName: lastName,
+      email: email,
+      phoneNumber: phoneNumber,
+      password: password,
+    };
+  
+    try {
+      const response = await fetch('http://localhost:8000/signup', { // Replace with your actual backend URL
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.message === "This email is already registered with us.") {
+          return { email: data.message };
+        } else {
+          console.log('Signup successful:', data);
+          setSuccessConfirmationScreen(!SuccessConfirmationScreen);
+          setTimeout(() => {
+            handleConfirmClick();
+          }, 700);
+          return null; // Indicates no error
+        }
+      } else {
+        console.error('Signup failed:', data.message);
+        return { general: data.message }; // You can use this for general errors
+      }
+
+    } catch (error) {
+      console.error('An error occurred:', error);
+      // Handle network errors or other unexpected issues
+    }
+  }
+  
+
+
 
 
   return (

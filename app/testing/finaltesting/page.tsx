@@ -21,6 +21,7 @@ const Final = () => {
     const [desc, setDesc] = useState<string>('');   // Explicitly type state as a string
 
     // READ ALL TODOS
+    // http://localhost:3000/testing/finaltesting
     useEffect(() => {
         axios.get('http://localhost:8000/api/todos')
             .then(res => {
@@ -29,7 +30,7 @@ const Final = () => {
             .catch(err => {
                 console.error("Error fetching todos:", err);
             });
-    }); 
+    }, [1]); 
 
     // Post all todos
     const addToDoHandler = () =>{
