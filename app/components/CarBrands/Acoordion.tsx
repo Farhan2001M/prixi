@@ -6,7 +6,6 @@ import CarTypes from './CarTypes';
 
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 
-
 const MainComponent: React.FC = () => {
 
   const { isOpen: isBrandsModalOpen, onOpen: onOpenBrandsModal, onOpenChange: onOpenChangeBrandsModal } = useDisclosure();
@@ -18,6 +17,7 @@ const MainComponent: React.FC = () => {
         <Button color="primary" size="md" onPress={onOpenBrandsModal} className="text-base"> Explore Vehicles by Brands </Button>
         <Button color="primary" size="md" onPress={onOpenTypesModal} className="text-base"> Explore Vehicles by Types </Button>  
       </div>
+      
       {/* Modal for Car Brands */}
       <Modal isOpen={isBrandsModalOpen} onOpenChange={onOpenChangeBrandsModal} size={"5xl"} backdrop="opaque">
         <ModalContent>

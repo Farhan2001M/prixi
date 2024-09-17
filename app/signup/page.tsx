@@ -70,7 +70,7 @@ const SignUpForm = () => {
         newErrors.password = '';
       } else if (/\s/.test(value)) {
         newErrors.password = 'Password cannot contain spaces.';
-      } else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(value)) {
+      } else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,40}/.test(value)) {
         newErrors.password = 'Password must contain 8 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.';
       } else if(value.length > 7){
         newErrors.password = '';
@@ -268,13 +268,13 @@ const SignUpForm = () => {
               <div className='w-full flex gap-4'>
                 <div className="mb-4 w-1/2">
                   <label htmlFor="firstName" className="block text-black text-base font-bold">First Name <span className='text-red-500'>*</span></label>
-                  <input id="firstName" name="firstName" type="text" value={firstName} maxLength={30} onChange={handleInputChange} className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded" placeholder="Enter Your First Name"/>
+                  <input id="firstName" name="firstName" type="text" value={firstName} maxLength={40} onChange={handleInputChange} className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded" placeholder="Enter Your First Name"/>
                   {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
                 </div>
 
                 <div className="mb-4 w-1/2">
                   <label htmlFor="lastName" className="block text-black text-base font-bold">Last Name <span className='text-red-500'>*</span></label>
-                  <input id="lastName" name="lastName" type="text" value={lastName} maxLength={30} onChange={handleInputChange} className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded" placeholder="Enter Your Last Name" />
+                  <input id="lastName" name="lastName" type="text" value={lastName} maxLength={40} onChange={handleInputChange} className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded" placeholder="Enter Your Last Name" />
                   {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
                 </div>
               </div>
@@ -341,7 +341,7 @@ const SignUpForm = () => {
                 </div>
                 <div className="mb-4 w-1/2">
                   <label htmlFor="email" className="block text-black text-base font-bold">Email ID <span className='text-red-500'>*</span></label>
-                  <input id="email" name="email" type="email" value={email} onChange={handleInputChange} className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded" placeholder="Enter A Valid Email Address" maxLength={60} />
+                  <input id="email" name="email" type="email" value={email} onChange={handleInputChange} className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded" placeholder="Enter A Valid Email Address" maxLength={40} />
                   {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                 </div>
               </div>
@@ -350,7 +350,7 @@ const SignUpForm = () => {
                 <div className="mb-4 w-1/2">
                   <label htmlFor="password" className="block text-black text-base font-bold">Password <span className='text-red-500'>*</span></label>
                   <div className="relative">
-                    <input id="password" name="password" type={isPasswordVisible ? 'text' : 'password'} value={password} maxLength={30} onChange={handleInputChange} className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded" placeholder="Enter Your Password" />
+                    <input id="password" name="password" type={isPasswordVisible ? 'text' : 'password'} value={password} maxLength={40} onChange={handleInputChange} className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded" placeholder="Enter Your Password" />
                     <button type="button" onClick={() => setIsPasswordVisible(!isPasswordVisible)} className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-500" >
                       {isPasswordVisible ? <IoEyeOff /> : <IoEye />}
                     </button>
@@ -361,7 +361,7 @@ const SignUpForm = () => {
                 <div className="mb-4 w-1/2">
                   <label htmlFor="confirmPassword" className="block text-black text-base font-bold">Confirm Password <span className='text-red-500'>*</span></label>
                   <div className="relative">
-                    <input id="confirmPassword" name="confirmPassword" type={isConfirmPasswordVisible ? 'text' : 'password'} value={confirmPassword} maxLength={35} onChange={handleInputChange} className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded" placeholder="Confirm Your Password" />
+                    <input id="confirmPassword" name="confirmPassword" type={isConfirmPasswordVisible ? 'text' : 'password'} value={confirmPassword} maxLength={40} onChange={handleInputChange} className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded" placeholder="Confirm Your Password" />
                     <button type="button" onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)} className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-500" >
                       {isConfirmPasswordVisible ? <IoEyeOff /> : <IoEye />}
                     </button>

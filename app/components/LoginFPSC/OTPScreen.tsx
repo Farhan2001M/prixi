@@ -3,7 +3,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import Link from 'next/link';
 import OtpInput from './Otp';
 import PasswordChangeScreen from './PasswordChangeScreen';
-
+import JitterText from '@/components/animata/text/jitter-text-'
 interface OTPScreenProps {
   visible: boolean;
   onClick: () => void;
@@ -13,16 +13,66 @@ interface OTPScreenProps {
 const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
   const [showPasswordChangeScreen, setShowPasswordChangeScreen] = useState<boolean>(false);
   const otpRef = useRef<{ clearOtp: () => void }>(null); // Create a ref for OtpInput
+  const [OTPError, setOTPError] = useState('');
+  
+  // const handleRequestOTP = () => {
+  //   setOTPError('');
+  //   console.log(displayFemail)
+  //   if (otpRef.current) {
+  //     otpRef.current.clearOtp(); // Clear the OTP when requesting a new one
+  //   }
+  //   setTimeout(() => {
+  //     console.log(displayFemail);
+  //     startTimer();
+  //   }, 30);
+  // };
 
-  const handleRequestOTP = () => {
+  const handleRequestOTP = async () => {
+    setOTPError('');
     if (otpRef.current) {
       otpRef.current.clearOtp(); // Clear the OTP when requesting a new one
     }
-    setTimeout(() => {
-      console.log(Femail);
-      startTimer();
-    }, 30);
+    try {
+      const response = await fetch('http://localhost:8000/forgot-password', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: displayFemail }),  // Send email as JSON body
+      });
+
+      if (!response.ok) {
+          const errorData = await response.json();
+          if (response.status === 400) {
+              setOTPError('');
+          } else {
+              console.error('Unexpected error:', errorData);
+              setOTPError('Something went wrong. Please try again later.');
+          }
+          return;
+      }
+
+      const data: any = await response.json();
+
+      console.log(data)
+      console.log(data.message)
+
+      // If OTP is successfully sent again, show this
+      console.log(displayFemail)
+      
+
+      // setTimeout(() => {
+      //   console.log(displayFemail);
+      //   startTimer();
+      // }, 30);
+
+    } catch (error) {
+        console.error('An error occurred:', error);
+        setOTPError('Network error. Please try again later.');
+    }
+          
   };
+
 
   const [otp, setOtp] = useState<string>("");
   const [isOtpComplete, setIsOtpComplete] = useState<boolean>(false);
@@ -35,12 +85,57 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
     setIsOtpComplete(isComplete);
   };
 
-  const handleConfirmOtp = () => {
+  // const handleConfirmOtp = () => {
+  //   console.log("Entered OTP:", otp);
+  //   onClick();
+  //   setShowPasswordChangeScreen(true);
+  //   if (otpRef.current) {
+  //     otpRef.current.clearOtp(); // Clear the OTP when confirming
+  //   }
+  // };
+
+  const handleConfirmOtp = async () => {
+    setIsOtpComplete(false);
+
+    setOTPError('');
     console.log("Entered OTP:", otp);
-    onClick();
-    setShowPasswordChangeScreen(true);
-    if (otpRef.current) {
-      otpRef.current.clearOtp(); // Clear the OTP when confirming
+  
+    try {
+      // Make a request to the FastAPI validate_otp endpoint
+      const response = await fetch('http://localhost:8000/validate-otp', { // Adjust the endpoint as needed
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: 'chfarhanilyas550@gmail.com', // Replace with the actual user email
+          otp: otp.toString(), // Ensure OTP is sent as a string
+        }),
+      });
+  
+      // Check if the request was successful
+      if (response.ok) {
+
+        const result = await response.json();
+  
+        // OTP validation successful
+        console.log("OTP MATCHES");
+        setShowPasswordChangeScreen(true);
+        onClick();
+        if (otpRef.current) {
+          otpRef.current.clearOtp(); // Clear the OTP when confirming
+        }
+        
+      } else {
+        // OTP validation failed
+        const error = await response.json();
+        setOTPError('Entered OTP is not correct.');
+        console.error("Error:", error.detail || "");
+
+      }
+    } catch (error) {
+      // Handle network or other errors
+      console.error("An error occurred:", error);
     }
   };
 
@@ -49,7 +144,7 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
 
   const startTimer = () => {
     setIsTimerActive(true);
-    setTimeLeft(15); // Set initial time (60 seconds)
+    setTimeLeft(60); // Set initial time (60 seconds)
     const timerInterval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
@@ -71,8 +166,9 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
   useEffect(() => {
     if (visible) {
       setTimeout(() => {
-        handleRequestOTP();
-      }, 1000);
+        // handleRequestOTP();
+        startTimer();
+      }, 500);
     }
   }, [visible]);
 
@@ -102,6 +198,11 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
           <div className='flex justify-center items-center w-[95%] h-[65%] border-2 border-black rounded-2xl'>
             <div className='flex flex-col justify-around w-[95%] h-[95%]'>
               <OtpInput ref={otpRef} onOtpChange={handleOtpChange} onOtpComplete={handleOtpComplete} />
+              {OTPError && (
+                <span className="block text-center text-red-700 text-base font-semibold">
+                  {OTPError}
+                </span>
+              )}
               <div className='text-center'>
                 <p className="text-lg">Didn&apos;t receive OTP Code</p>
                 {isTimerActive && (
@@ -109,25 +210,36 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
                     Resend Code available in: {formatTimeLeft(timeLeft)}
                   </p>
                 )}
-                <Link href="#"
+                <button
+                  onClick={(e) => {
+                    startTimer();
+                    handleRequestOTP();  
+                  }}
+                  className={`text-base text-center ${isTimerActive ? 'text-gray-500 cursor-not-allowed' : 'text-blue-600 hover:text-blue-600 hover:underline'}`}
+                  style={{ opacity: isTimerActive ? 0.5 : 1, background: 'none', border: 'none', padding: 0, cursor: isTimerActive ? 'not-allowed' : 'pointer', }}
+                  disabled={isTimerActive}
+                >
+                  Resend Code
+                </button>
+                {/* <Link href="#"
                   onClick={(e) => {
                     e.preventDefault(); // Prevent default link behavior
-                    if (!isTimerActive) {
-                      handleRequestOTP();
-                    }
+                    handleRequestOTP();  
                   }}
                   className={`text-base text-center ${isTimerActive ? 'text-gray-500 cursor-not-allowed' : 'text-blue-600 hover:underline'}`}
                   style={{ opacity: isTimerActive ? 0.5 : 1 }}
                 >
                   Resend Code
-                </Link>
+                </Link> */}
               </div>
               <button type="button"
                 onClick={handleConfirmOtp}
                 className={`text-lg p-2 rounded w-full mx-auto my-3 ${isOtpComplete ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
                 disabled={!isOtpComplete}
               >
-                Confirm OTP
+                <JitterText
+                  text="Confirm OTP"
+                />
               </button>
             </div>
           </div>
@@ -141,7 +253,7 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
         setIsTimerActive(false);
       }}  >
       </div>
-      <PasswordChangeScreen visible={showPasswordChangeScreen} onClick={() => setShowPasswordChangeScreen(false) } />
+      <PasswordChangeScreen visible={showPasswordChangeScreen} onClick={() => setShowPasswordChangeScreen(false)} email={displayFemail}   />
     </div>
   );
 };

@@ -12,9 +12,10 @@ import ConfirmationOfPasswordScreen from './ConfirmationOfPasswordScreen';
 interface PasswordChangeScreenProps {
   visible: boolean;
   onClick: () => void;
+  email: string
 }
 
-const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , onClick }) => {
+const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , onClick, email  }) => {
 
   // Reset Your Password Popup Screen
   const [RSTpassword, setRSTpassword] = useState('');
@@ -22,6 +23,15 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
   const [RSTisPasswordVisible, setRSTisPasswordVisible] = useState(false);
   const [RSTisConfirmPasswordVisible, setRSTisConfirmPasswordVisible] = useState(false);
   const [RSTerrors, setRSTerrors] = useState<any>({});
+  const [PasswordChangeError, setPasswordChangeError] = useState('');
+  
+  const [myemail, setEmail] = useState('');
+
+  useEffect(() => {
+    if (email) {
+      setEmail(email);
+    }
+  }, [email]);
 
   const RSTvalidateFields = (name: string, value: string) => {
     let RSTnewErrors: any = {};
@@ -31,7 +41,7 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
         RSTnewErrors.password = '';
       } else if (/\s/.test(value)) {
         RSTnewErrors.password = 'Password cannot contain spaces.';
-      } else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(value)) {
+      } else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,40}/.test(value)) {
         RSTnewErrors.password = 'Password must contain 8 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.';
       } else if(value.length > 7){
         RSTnewErrors.password = '';
@@ -64,11 +74,68 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
   };
   
   
-  
   {/* Success Password Change Screen Code */}
  
   const [showConfirmationOfPasswordScreen, setShowConfirmationOfPasswordScreen] = useState<boolean>(false);
+  
+  // const toggleSuccessConfirmationScreen = () => {
+    
+  //   onClick();
+  //   setTimeout(() => { 
+  //     setShowConfirmationOfPasswordScreen(!showConfirmationOfPasswordScreen);
+  //     TriggerConfetti();
+  //   }, 100);
+
+  //   const intervalDuration = 4000; // 3 seconds
+  //   const totalExecutions = 1000;
+  //   let executionCount = 0;
+  //   const intervalId = setInterval(() => {
+  //       TriggerConfetti();
+  //       executionCount += 1;
+  //       if (executionCount >= totalExecutions) {
+  //           clearInterval(intervalId);
+  //       }
+  //   }, intervalDuration);
+
+  // };
+
+  async function changeUserPassword() {
+    const passwordData = {
+      email: myemail, // The email of the user whose password is being changed
+      new_password: RSTpassword, // Ensure this variable is set based on the new password input field
+    };
+  
+    try {
+      const response = await fetch('http://localhost:8000/change-password', { // Replace with your actual backend URL
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(passwordData),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        console.log('Password change successful:', data);
+        toggleSuccessConfirmationScreen(); // Show success confirmation
+      } else {
+        console.error('Password change failed: Try again later', data.message);
+        // Display error message if needed
+        setPasswordChangeError('Password change failed:');
+        return { general: data.message }; 
+      }
+  
+    } catch (error) {
+      console.error('An error occurred:', error);
+      setPasswordChangeError('An error occurred:');
+      // Handle network errors or other unexpected issues
+    }
+  }
+
+
   const toggleSuccessConfirmationScreen = () => {
+
     onClick();
     setTimeout(() => { 
       setShowConfirmationOfPasswordScreen(!showConfirmationOfPasswordScreen);
@@ -87,6 +154,11 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
     }, intervalDuration);
 
   };
+
+  const handleChangePasswordClick = () => {
+    changeUserPassword();
+  };
+
 
   const confettiButtonRef = useRef<ConfettiButtonHandle>(null);
   const TriggerConfetti = () => {
@@ -124,7 +196,7 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
                     name="password"
                     type={RSTisPasswordVisible ? 'text' : 'password'}
                     value={RSTpassword}
-                    maxLength={30}
+                    maxLength={40}
                     onChange={RSThandleInputChange}
                     className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded"
                     placeholder="Enter Your Password"
@@ -148,7 +220,7 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
                     name="confirmPassword"
                     type={RSTisConfirmPasswordVisible ? 'text' : 'password'}
                     value={RSTconfirmPassword}
-                    maxLength={35}
+                    maxLength={40}
                     onChange={RSThandleInputChange}
                     className="block w-full shadow-sm mt-2 p-2 border border-gray-300 rounded"
                     placeholder="Confirm Your Password"
@@ -163,6 +235,12 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
                 </div>
                 {RSTerrors.confirmPassword && <p className="text-red-500 text-sm mt-1">{RSTerrors.confirmPassword}</p>}
               </div>
+
+              {PasswordChangeError && (
+                <span className="block text-center text-red-700 text-base font-semibold">
+                  {PasswordChangeError}
+                </span>
+              )}
               
               <button
                 type="button"
@@ -170,7 +248,7 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
                 onClick={ () => { 
                   setRSTpassword('');
                   setRSTconfirmPassword('');
-                  toggleSuccessConfirmationScreen();} }
+                  handleChangePasswordClick(); } }
                 className={`text-lg p-2 rounded w-full mx-auto ${isButtonDisabled() ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
               >
                 Confirm Reset Password

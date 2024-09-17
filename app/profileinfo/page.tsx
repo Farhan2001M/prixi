@@ -21,14 +21,48 @@ const MyProfileInfo = () => {
 
   {/* Edit Image Functionality */}
   const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [originalImageSrc, setOriginalImageSrc] = useState<string | null>(null);
   
+  const fetchUserImage = async () => {
+    let isMounted = true; // Track whether the component is mounted
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://127.0.0.1:8000/user-image', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      const data: any = await response.json();
+
+      if (response.ok && isMounted) {
+        // Set image source only if the component is still mounted
+        const image = data.image ? `data:image/jpeg;base64,${data.image}` : null;
+        setImageSrc(image);
+        setOriginalImageSrc(image); // Save the original image
+      } else if (!response.ok) {
+        console.log("Failed to fetch user image");
+      }
+    } catch (error) {
+      console.error("Error fetching user image:", error);
+    }
+  };
+
+  // Fetch the image on mount
+  useEffect(() => {
+    fetchUserImage();
+    return () => {
+      // Cleanup if needed
+    };
+  }, []); // Empty dependency array ensures this effect runs once on mount
+
+
   // Handle image change and upload
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const formData = new FormData();
       formData.append('image', file);
-  
+
       const token = localStorage.getItem('token');
       const response = await fetch('http://127.0.0.1:8000/upload-image', {
         method: 'POST',
@@ -37,51 +71,20 @@ const MyProfileInfo = () => {
         },
         body: formData,
       });
+
       if (response.ok) {
-        // Optionally, fetch user data again to update the UI with the new image
-        fetchUserImage();
+        // Fetch user image again to update the UI with the new image
+        // fetchUserImage();
+        setImageSrc(URL.createObjectURL(file));
       } else {
         console.error("Failed to upload image");
       }
     }
   };
   
-  // // Fetch user data and set the image source
-  // const fetchUserData = async () => {
-  //   const token = localStorage.getItem('token');
-  //   const response = await fetch('http://127.0.0.1:8000/profileinfo', {
-  //     headers: {
-  //       'Authorization': `Bearer ${token}`,
-  //     },
-  //   });
-  //   const data: any = await response.json();
-  //   if (response.ok) {
-  //     setImageSrc(data.user.image ? `data:image/jpeg;base64,${data.user.image}` : null);
-  //   } else {
-  //     console.log("Failed to fetch user data");
-  //   }
-  // };
 
 
-  // Fetch user data and set the image source
-  const fetchUserImage = async () => {
-    const token = localStorage.getItem('token');
-    const response = await fetch('http://127.0.0.1:8000/user-image', {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-    const data: any = await response.json();
-    if (response.ok) {
-      console.log(data); // Check if the image field is returned
-      setImageSrc(data.image ? `data:image/jpeg;base64,${data.image}` : null);
-    } else {
-      console.log("Failed to fetch user image");
-    }
-  };
 
-  fetchUserImage();
-  
   // Handle image removal
   const handleImageRemove = async () => {
     const token = localStorage.getItem('token');
@@ -91,59 +94,49 @@ const MyProfileInfo = () => {
         'Authorization': `Bearer ${token}`,
       },
     });
-  
     if (response.ok) {
-      // Reset the image
-      setImageSrc(null);
+      // Set image source to default or null
+      setImageSrc('/images/clientTestimonial/person-circle.png');
     } else {
       console.error("Failed to remove image");
     }
   };
 
 
-  
-  // const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (event.target.files && event.target.files[0]) {
-  //     const reader = new FileReader();
-
-  //     reader.onload = () => {
-  //       setImageSrc(reader.result as string);
-  //     };
-
-  //     reader.readAsDataURL(event.target.files[0]);
-  //   }
-  // };
-
-
   const fetchUserData = async () => {
     const token = localStorage.getItem('token');
     const response = await fetch('http://127.0.0.1:8000/getfulluserinfo', {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
     });
-    const data: any = await response.json();
+    const data = await response.json();
     if (response.ok) {
-        console.log("User Data:", data); // Full user data should be logged here
-        console.log(data.email); 
-        console.log(data.firstName); 
-        console.log(data.lastName); 
-        console.log(data.phoneNumber); 
+      // console.log("User Data:", data); // Full user data should be logged here
+      setFirstName(data.firstName || '');
+      setLastName(data.lastName || '');
+      setEmail(data.email || '');
+      setPhoneNumber(data.phoneNumber || '');
     } else {
-        console.log("Failed to fetch user data");
+      console.log("Failed to fetch user data");
+      setError('');
     }
   };
 
-  fetchUserData();
+  useEffect(() => {  
+    fetchUserData();
+  }, []); // Empty dependency array to run only once on component mount
 
-  // const handleImageRemove = () => {
-  //   // Reset the file input value to ensure handleImageChange is triggered
-  //   const fileInput = document.getElementById("imageUpload") as HTMLInputElement;
-  //   if (fileInput) {
-  //     fileInput.value = "";
-  //   }    
-  //   setImageSrc(null);
-  // };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setErrors({}); // Clear errors if any
+    setError('')
+    // Revert image to original state
+    setImageSrc(originalImageSrc);
+    // Optionally fetch user data again to reset other form fields
+    fetchUserData();
+  };
 
 
 
@@ -151,28 +144,22 @@ const MyProfileInfo = () => {
 
   {/* Edit Image Functionality */}
   const [isEditing, setIsEditing] = useState(false);
+  const router = useRouter();
+
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  // const [cellNo, setCellNo] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
-  
-  
-  
   const [errors, setErrors] = useState<any>({});
 
-  
+
 
   const validateFields = (name: string, value: string) => {
-    let newErrors: any = {};    
+    let newErrors: { [key: string]: string } = {}; 
     
     if (name === 'firstName') {
       if(value.length < 1){
-        newErrors.firstName = '';
+        newErrors.firstName = 'First name cannot be empty';
       } else if (/\s/.test(value)) {
         newErrors.firstName = 'First name cannot contain spaces.';
       } else if(value.length < 2 || value.length > 30) {
@@ -183,7 +170,7 @@ const MyProfileInfo = () => {
     }
     if (name === 'lastName') {
       if(value.length < 1){
-        newErrors.lastName = '';
+        newErrors.lastName = 'Last name cannot be empty';
       } else if (/\s/.test(value)) {
         newErrors.lastName = 'Last name cannot contain spaces.';
       } else if(value.length < 2 || value.length > 30) {
@@ -203,46 +190,19 @@ const MyProfileInfo = () => {
         newErrors.email = '';
       }
     }
-    if (name === 'password') {
-      
-      if(value.length < 1){
-        newErrors.password = '';
-      } else if (/\s/.test(value)) {
-        newErrors.password = 'Password cannot contain spaces.';
-      } else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(value)) {
-        newErrors.password = 'Password must contain 8 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.';
-      }  else{
-        newErrors.password = '';
-      }
-    }
-    if (name === 'confirmPassword') {
-      if (value !== password) {
-        newErrors.confirmPassword = 'Passwords do not match.';
-      }
-      else{
-        newErrors.confirmPassword = '';
-      }
-    }
-
     setErrors((prevErrors: any) => ({ ...prevErrors, ...newErrors }));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     if (name === 'firstName') setFirstName(value);
     if (name === 'lastName') setLastName(value);
     if (name === 'email') setEmail(value);
-    if (name === 'password') setPassword(value);
-    if (name === 'confirmPassword') setConfirmPassword(value);
-
     validateFields(name, value);
+    
   };
 
-  const router = useRouter();
-
-
-
+  
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState('');
@@ -258,7 +218,9 @@ const MyProfileInfo = () => {
     } else if(normalizedNumber.length > 0 && normalizedNumber.length < 10){
       setIsValid(false);
       setError('Phone No is not Valid');
-    } 
+    }else if(normalizedNumber.length < 1){
+      setError('Phone No cannnot be empty');
+    }
     else {
       setIsValid(false);
     }
@@ -267,9 +229,88 @@ const MyProfileInfo = () => {
 
 
 
+  const [isFormValid, setIsFormValid] = useState(false); // New state for form validity
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Define a local variable to collect errors
+    let newErrors: any = {};
+
+    // Perform validation checks
+    // Instead of relying on state updates, store the errors in newErrors immediately
+    if (!firstName) {
+      newErrors.firstName = 'First name is required.';
+    } else if (/\s/.test(firstName)) {
+      newErrors.firstName = 'First name cannot contain spaces.';
+    } else if (firstName.length < 2 || firstName.length > 30) {
+      newErrors.firstName = 'First name should be between 2 and 30 characters.';
+    }
+
+    if (!lastName) {
+      newErrors.lastName = 'Last name is required.';
+    } else if (/\s/.test(lastName)) {
+      newErrors.lastName = 'Last name cannot contain spaces.';
+    } else if (lastName.length < 2 || lastName.length > 30) {
+      newErrors.lastName = 'Last name should be between 2 and 30 characters.';
+    }
+
+    if (!email) {
+      newErrors.email = 'Email is required.';
+    } else if (/\s/.test(email)) {
+      newErrors.email = 'Email cannot contain spaces.';
+    } else if (email.length < 3 || email.length > 254) {
+      newErrors.email = 'Email should be between 3 and 254 characters.';
+    }
+
+    // Phone number validation
+    if (!phoneNumber) {
+      newErrors.phoneNumber = 'Phone number is required.';
+      setIsValid(false);  // Set phone validity as false when empty
+      setError('Phone number is required.');
+    } else if (phoneNumber.length !== 10) {
+      newErrors.phoneNumber = 'Phone number must be exactly 10 digits.';
+      setIsValid(false);
+    } else {
+      setIsValid(true);
+    }
+
+    // Update state with the errors found
+    setErrors(newErrors);
+
+
+    // Check if there are any errors before proceeding
+    if (Object.keys(newErrors).length > 0 || !isValid) {
+      return; // Stop form submission if there are errors
+    }
+
+    // If no errors, proceed to fetch token and submit form
+    const token = localStorage.getItem('token');
+    if (token) {
+      await updateDetails(token, firstName, lastName, phoneNumber);
+    }
+
+    console.log("Hello");
+    console.log(firstName);
+    console.log(lastName);
+    console.log(email);
+    console.log(phoneNumber);
+
+    // Show confirmation screen after successful submission
+    setTimeout(() => {
+      setSuccessConfirmationScreen(!SuccessConfirmationScreen);
+    }, 350);
+
+    setTimeout(() => {
+      handleConfirmClick();
+    }, 700);
+  };
+
+
+
   {/* Success Password Change Screen Code */}
   const [SuccessConfirmationScreen, setSuccessConfirmationScreen] = useState(false);
-  
+
   {/* Confetti Animation Code */}
   const confettiButtonRef = useRef<ConfettiButtonHandle>(null);
   const handleConfirmClick = () => {
@@ -279,8 +320,7 @@ const MyProfileInfo = () => {
     }
   };
 
-
-
+  
   const fetchDataForAccountDeletion = async () => {
     const token = localStorage.getItem('token');
     const response = await fetch('http://127.0.0.1:8000/profileinfo', {
@@ -305,41 +345,27 @@ const MyProfileInfo = () => {
     }
   };
 
+  const updateDetails = async (token: string, firstName: string, lastName: string, phoneNumber: string) => {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/updateuser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ firstName, lastName, phoneNumber }),
+        });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const newErrors: any = {};
-
-    validateFields('firstName', firstName);
-    validateFields('lastName', lastName);
-    validateFields('email', email);
-    // validateFields('password', password);
-    // validateFields('confirmPassword', confirmPassword);
-
-
-    if (!phoneNumber) { setError('Phone number is required');}
-    if (!firstName) newErrors.firstName = 'First name is required.';
-    if (!lastName) newErrors.lastName = 'Last name is required.';
-    if (!email) newErrors.email = 'Email is required.';
-    
-    // if (!password) newErrors.password = 'Password is required.';
-    // if (password !== confirmPassword) newErrors.confirmPassword = 'Passwords do not match.';
-
-    setErrors((prevErrors: any) => ({ ...prevErrors, ...newErrors }));
-
-    
-    if (isValid && Object.keys(newErrors).length === 0){
-      console.log("Hello");
-      setTimeout(()=>{
-        setSuccessConfirmationScreen(!SuccessConfirmationScreen);
-      },350);
-      setTimeout(() => { 
-        handleConfirmClick();
-      }, 700);
-    } 
-
+        if (response.ok) {
+            console.log("User details updated successfully");
+        } else {
+            console.log("Failed to update user details");
+        }
+    } catch (error) {
+        console.error("Error updating user details", error);
+    }
   };
+
 
   const [ConfirmDeleteProfile, setConfirmDeleteProfile] = useState(false);
   const toggleDeleteProfile = () => {
@@ -374,11 +400,8 @@ const MyProfileInfo = () => {
     }
   };
 
+  const hasErrors = Object.keys(errors).some((key) => errors[key] !== '') || !isValid ;
 
-  
-  
-
-  
   return (
     <div className="flex flex-col">
       <Header />
@@ -387,7 +410,7 @@ const MyProfileInfo = () => {
         <div className="h-[100%] p-4 flex flex-col items-center">
           <h1 className="text-3xl mb-5">View/Edit Your Profile Info </h1>
 
-          <div className="relative w-48 h-48 bg-slate-200 rounded-full">
+          <div className="relative w-60 h-60 bg-slate-200 rounded-full">
             <img
               src={imageSrc || "/images/clientTestimonial/person-circle.png"}
               alt="Profile"
@@ -469,7 +492,7 @@ const MyProfileInfo = () => {
                   <label htmlFor="lastName" className="block text-black text-base font-bold">Last Name <span className='text-red-500'>*</span></label>
                   <input id="lastName" name="lastName" type="text" value={lastName} maxLength={30} onChange={handleInputChange} 
                   className={`block w-full shadow-sm mt-2 p-2 border rounded ${!isEditing ? 'bg-gray-100 cursor-not-allowed border-gray-300' : 'bg-white border-gray-300'} transition-colors`} 
-                  placeholder="Enter Your Last Name" disabled={!isEditing}/>
+                  placeholder={`Enter Your Last Name ${lastName}`} disabled={!isEditing}/>
                   {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
                 </div>
               </div>
@@ -477,7 +500,7 @@ const MyProfileInfo = () => {
               <div className='w-full flex gap-4'>
                 
                 <div className="mb-4 w-1/2">
-                  <label htmlFor="cellNo" className="block text-black text-base font-bold"> Cell No <span className="text-red-500">*</span> </label>
+                  <label htmlFor="cellNo" className="block text-black text-base font-bold"> Phone No <span className="text-red-500">*</span> </label>
                   
                   <PatternFormat
                     format="+1 (###) ###-####"
@@ -486,7 +509,7 @@ const MyProfileInfo = () => {
                     mask="_"
                     value={phoneNumber}
                     onValueChange={({ value }) => setPhoneNumber(value)}
-                    placeholder="Your US number as +1 (123) 123 1234"
+                    placeholder={`Your US number as +1 (123) 123 1234 ${phoneNumber}`}
                     disabled={!isEditing}
                     InputProps={{
                       classes: {
@@ -533,169 +556,59 @@ const MyProfileInfo = () => {
                       },
                     }}
                   />
-                  
+
                   {error && (<div className='text-red-500 text-sm mt-2'>{error}</div>)}
 
                 </div>
                 <div className="mb-4 w-1/2">
                   <label htmlFor="email" className="block text-black text-base font-bold">Email ID <span className='text-red-500'>*</span></label>
                   <input id="email" name="email" type="email" value={email} onChange={handleInputChange} 
-                  className={`block w-full shadow-sm mt-2 p-2 border rounded ${!isEditing ? 'bg-gray-100 cursor-not-allowed border-gray-300' : 'bg-white border-gray-300'} transition-colors`} 
-                  placeholder="Enter A Valid Email Address" disabled={!isEditing} />
+                  className={`block w-full shadow-sm mt-2 p-2 border rounded bg-gray-100 cursor-not-allowed border-gray-300 transition-colors`} 
+                  placeholder={`Enter A Valid Email Address ${email}`} disabled={!isEditing || isEditing} />
                   {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                 </div>
+
+                {/* <div className="mb-4 w-1/2">
+                  <label htmlFor="email" className="block text-black text-base font-bold">Email ID <span className='text-red-500'>*</span></label>
+                  <input id="email" name="email" type="email" value={email} onChange={handleInputChange} 
+                  className={`block w-full shadow-sm mt-2 p-2 border rounded ${!isEditing ? 'bg-gray-100 cursor-not-allowed border-gray-300' : 'bg-white border-gray-300'} transition-colors`} 
+                  placeholder={`Enter A Valid Email Address ${email}`} disabled={!isEditing || isEditing} />
+                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                </div> */}
+
               </div>
-
-              {/* <div className='w-full flex gap-4'>
-                <div className="mb-4 w-1/2">
-                  <label htmlFor="password" className="block text-black text-base font-bold">Password <span className='text-red-500'>*</span></label>
-                  <div className="relative">
-                    <input id="password" name="password" type={isPasswordVisible ? 'text' : 'password'} value={password} maxLength={30} onChange={handleInputChange} 
-                    className={`block w-full shadow-sm mt-2 p-2 border rounded ${!isEditing ? 'bg-gray-100 cursor-not-allowed border-gray-300' : 'bg-white border-gray-300'} transition-colors`} 
-                    placeholder="Enter Your Password" disabled={!isEditing}/>
-                    <button type="button" onClick={() => setIsPasswordVisible(!isPasswordVisible)} className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-500" >
-                      {isPasswordVisible ? <IoEyeOff /> : <IoEye />}
-                    </button>
-                  </div>
-                  {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
-                </div>
-
-                <div className="mb-4 w-1/2">
-                  <label htmlFor="confirmPassword" className="block text-black text-base font-bold">Confirm Password <span className='text-red-500'>*</span></label>
-                  <div className="relative">
-                    <input id="confirmPassword" name="confirmPassword" type={isConfirmPasswordVisible ? 'text' : 'password'} value={confirmPassword} maxLength={35} onChange={handleInputChange} 
-                      className={`block w-full shadow-sm mt-2 p-2 border rounded ${!isEditing ? 'bg-gray-100 cursor-not-allowed border-gray-300' : 'bg-white border-gray-300'} transition-colors`} 
-                      placeholder="Confirm Your Password"  disabled={!isEditing} />
-                    <button type="button" onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)} className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-500" >
-                      {isConfirmPasswordVisible ? <IoEyeOff /> : <IoEye />}
-                    </button>
-                  </div>
-                  {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
-                </div>
-              </div> */}
-
-
-
-              {/* Just For practical use case */}
-              {/* <div className='w-full flex gap-4'>
-                <div className="mb-4 w-1/2">
-                  <label htmlFor="password" className="block text-black text-base font-bold">
-                    Password <span className='text-red-500'>*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      id="password"
-                      name="password"
-                      type={isPasswordVisible ? 'text' : 'password'}
-                      value={password}
-                      maxLength={30}
-                      onChange={handleInputChange}
-                      className={`block w-full shadow-sm mt-2 p-2 border rounded ${!isEditing ? 'bg-gray-100 cursor-not-allowed border-gray-300' : 'bg-white border-gray-300'} transition-colors`}
-                      placeholder="Enter Your Password"
-                      disabled={!isEditing}
-                    />
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        if (!isEditing) e.preventDefault(); // Prevent default action if not editing
-                        else setIsPasswordVisible(!isPasswordVisible); // Toggle visibility if editing
-                      }}
-                      className={`absolute inset-y-0 right-0 flex items-center px-2 ${!isEditing ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500'}`}
-                      disabled={!isEditing} // Disable button if not editing
-                    >
-                      {isPasswordVisible ? <IoEyeOff /> : <IoEye />}
-                    </button>
-                  </div>
-                  {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
-                </div>
-
-                <div className="mb-4 w-1/2">
-                  <label htmlFor="confirmPassword" className="block text-black text-base font-bold">
-                    Confirm Password <span className='text-red-500'>*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type={isConfirmPasswordVisible ? 'text' : 'password'}
-                      value={confirmPassword}
-                      maxLength={35}
-                      onChange={handleInputChange}
-                      className={`block w-full shadow-sm mt-2 p-2 border rounded ${!isEditing ? 'bg-gray-100 cursor-not-allowed border-gray-300' : 'bg-white border-gray-300'} transition-colors`}
-                      placeholder="Confirm Your Password"
-                      disabled={!isEditing}
-                    />
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        if (!isEditing) e.preventDefault(); // Prevent default action if not editing
-                        else setIsConfirmPasswordVisible(!isConfirmPasswordVisible); // Toggle visibility if editing
-                      }}
-                      className={`absolute inset-y-0 right-0 flex items-center px-2 ${!isEditing ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500'}`}
-                      disabled={!isEditing} // Disable button if not editing
-                    >
-                      {isConfirmPasswordVisible ? <IoEyeOff /> : <IoEye />}
-                    </button>
-                  </div>
-                  {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
-                </div>
-              </div> */}
-              
-              
-
+                          
               <div className='flex gap-5 mx-auto'>
 
                 <button
-                  type="button"
-                  onClick={() => {
-                    setIsEditing(!isEditing);
-                    if (isEditing) {
-                      // Reset form fields when exiting editing mode
-                      setFirstName('');
-                      setLastName('');
-                      setEmail('');
-                      setPassword('');
-                      setConfirmPassword('');
-                      setError('');
-                      setErrors('');
-                      setPhoneNumber('');
-                      setIsPasswordVisible(false);
-                      setIsConfirmPasswordVisible(false); 
-                    }
-                  }}
-                  className={`flex justify-center items-center text-lg p-2 rounded w-full mx-auto mt-3 ${
-                    isEditing
-                      ? 'bg-transparent text-black border-2 border-blue-600 hover:bg-blue-700 hover:text-white' // Styles when in editing mode
-                      : 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer' // Styles when not in editing mode
-                  }`}
+                    type="button"
+                    onClick={() => {
+                        if (isEditing) {
+                            handleCancel(); // Handle cancel functionality
+                        } else {
+                            setIsEditing(true);
+                            fetchUserData(); // Enter edit mode
+                        }
+                    }}
+                    className={`flex justify-center items-center text-lg p-2 rounded w-full mx-auto mt-3 ${
+                        isEditing
+                            ? 'bg-transparent text-black border-2 border-blue-600 hover:bg-blue-700 hover:text-white'
+                            : 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
+                    }`}
                 >
-                  {isEditing ? 'Cancel' : 'Edit Profile'} {/* Toggle button label */}
+                    {isEditing ? 'Cancel' : 'Edit Profile'}
                 </button>
 
-                <button type="submit" className={`bg-blue-600 text-lg text-white p-2 rounded w-full mx-auto mt-3 ${isEditing ? 'hover:bg-blue-700' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`} disabled={!isEditing} >
+
+                <button
+                  type="submit"
+                  className={`bg-blue-600 text-lg text-white p-2 rounded w-full mx-auto mt-3 
+                    ${isEditing && !hasErrors ? 'hover:bg-blue-700' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
+                  disabled={!isEditing || hasErrors}
+                >
                   Save Changes
                 </button>
                 <ConfettiButton ref={confettiButtonRef} />
-
-                {/* <div onClick={ ()=>{
-                  if (isEditing) {
-                    return
-                  }else{
-                    setConfirmLogout(!ConfirmLogout);
-                  } }} 
-                  className={`text-lg text-center p-2 rounded w-full mx-auto mt-3  ${isEditing ? 'bg-gray-300 text-gray-600 cursor-not-allowed ' : 'bg-blue-600  text-white hover:bg-blue-700 hover:cursor-pointer'}`}  >
-                  Logout
-                </div> */}
-
-                {/* <div onClick={ ()=>{
-                  if (isEditing) {
-                    return
-                  }else{
-                    setConfirmDeleteProfile(!ConfirmDeleteProfile);
-                  } }} 
-                  className={`text-lg text-center p-2 rounded w-full mx-auto mt-3  ${isEditing ? ' text-white bg-gray-300  cursor-not-allowed ' : 'bg-blue-600  text-white hover:bg-blue-700 hover:cursor-pointer'}`}  >
-                  Delete Profile
-                </div> */}
 
                 <div onClick={ ()=>{
                   if (isEditing) {
@@ -836,7 +749,6 @@ Or Simply Type DELETE To Delete Your Account`}
                 </button>
                 <button type="button" onClick={()=> {
                   handleDeleteAccountClick();
-                  
                   }} className={`text-lg p-2 rounded w-full mx-auto  ${Approved ? 'bg-red-600 text-white hover:bg-red-700 ' : 'bg-gray-100 cursor-not-allowed border-gray-300 '}  `} disabled={!Approved} >
                   Delete Account
                 </button>

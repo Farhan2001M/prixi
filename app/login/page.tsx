@@ -33,7 +33,7 @@ const Myloginpage = () => {
     } else if (/\s/.test(email)) {
       return 'Email cannot contain spaces.';
     } else if (email.length < 3 ) {
-      return 'Email should be between 3 and 60 characters.';
+      return 'Email should be between 3 and 40 characters.';
     } else if (!/@/.test(email)) {
       return 'Email must include @.';
     } else if (!/\.[a-zA-Z]{1,}/.test(email.split('@')[1] || '')) {
@@ -48,7 +48,7 @@ const Myloginpage = () => {
       return 'Password is required.';
     } else if (/\s/.test(password)) {
       return 'Password cannot contain spaces.';
-    } else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(password)) {
+    } else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,40}/.test(password)) {
       return 'Password must contain 8 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.';
     } else if (password.length > 7) {
       return '';
@@ -213,7 +213,7 @@ const Myloginpage = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   className="mt-2 p-2 border border-gray-300 rounded w-full"
                   placeholder="Email ID"
-                  maxLength={60}
+                  maxLength={40}
                 />
                 {emailError && (
                   <span className="block text-red-700 text-sm font-semibold">
@@ -235,7 +235,7 @@ const Myloginpage = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     className="mt-2 p-2 border border-gray-300 rounded w-full"
                     placeholder="Enter Password"
-                    maxLength={60}
+                    maxLength={40}
                   />
                   <button
                     type="button"
@@ -252,15 +252,15 @@ const Myloginpage = () => {
                 )}
               </div>
 
-              <div className="flex items-center justify-between mb-4">
-                <label className="inline-flex items-center hover:cursor-pointer">
+              <div className="flex justify-end items-center mb-4">
+                {/* <label className="inline-flex items-center hover:cursor-pointer">
                   <input type="checkbox" className="form-checkbox text-blue-500 w-5 h-5" />
                   <span className="ml-2 text-blue-600 text-lg">Remember Me</span>
-                </label>
+                </label> */}
                 <div>
                   <a
                     href="#"
-                    className="text-lg text-blue-600 hover:underline"
+                    className=" text-lg text-blue-600 hover:underline"
                     onClick={(e) => { e.preventDefault(); handleToggle(); }}
                   >
                     Forgot Password?

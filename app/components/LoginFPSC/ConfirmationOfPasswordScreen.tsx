@@ -67,5 +67,3 @@ const ConfirmationOfPasswordScreen: React.FC<ConfirmationOfPasswordScreenProps> 
 };
 
 export default ConfirmationOfPasswordScreen;
-
-
