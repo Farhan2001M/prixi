@@ -1,25 +1,10 @@
-export interface Models {
-    id: number;
-    model: string;
-    description?: string;
-    launchPrice?: string;       // Making this optional
-    vehicleType?: string;       // Making this optional
-    seatingCapacity?: string;   // Making this optional
-    engineType?: string;        // Making this optional
-    colorsAvailable?: string[]; // Making this optional
-    horsepower?: string;        // Making this optional
-    torque?: string;            // Making this optional
-    transmission?: string;      // Making this optional
-    releaseDate?: string;       // Making this optional
-    startingPrice?: string      // Making this optional
-    variants?: string[];        // Making this optional
-    img?: string[] ;            // Making this optional
-  }
+
+import { Models } from './Types'; // Adjust the path accordingly
   
   export const data: Models[] = [
       {
         "id": 1,
-        "model": "Tesla Model S",
+        "model": "Dodge car S",
         "launchPrice": "$94,990",
         "vehicleType": "Sedan",
         "seatingCapacity": "5",
@@ -35,7 +20,7 @@ export interface Models {
       },
       {
         "id": 2,
-        "model": "Tesla Model 3",
+        "model": "Dodge car 3",
         "description": "A compact all-electric sedan offering a balance of performance, range, and affordability.",
         "launchPrice": "$39,990",
         "vehicleType": "Sedan",
@@ -52,7 +37,7 @@ export interface Models {
       },
       {
         "id": 3,
-        "model": "Tesla Model X",
+        "model": "Dodge car X",
         "description": "An all-electric SUV with distinctive falcon-wing doors, high performance, and spacious interior.",
         "launchPrice": "$104,990",
         "vehicleType": "SUV",
@@ -69,7 +54,7 @@ export interface Models {
       },
       {
         "id": 4,
-        "model": "Tesla Model Y",
+        "model": "Dodge car Y",
         "description": "A compact all-electric SUV combining the performance of the Model 3 with increased cargo space and versatility.",
         "launchPrice": "$54,990",
         "vehicleType": "SUV",

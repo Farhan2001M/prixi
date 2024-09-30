@@ -5,7 +5,7 @@ export interface Car {
 
 export const data: Car[] = [
     { "id": 1, "name": "Alfa Romeo" },
-    { "id": 2, "name": "Audi" },
+    { "id": 2, "name": "Audi" },  
     { "id": 3, "name": "BMW" },
     { "id": 4, "name": "BYD" },
     { "id": 5, "name": "Cadillac" },

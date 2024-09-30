@@ -212,7 +212,7 @@ const SignUpForm = () => {
     };
   
     try {
-      const response = await fetch('http://localhost:8000/signup', { // Replace with your actual backend URL
+      const response = await fetch('http://localhost:8000/signup', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

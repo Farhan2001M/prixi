@@ -9,7 +9,6 @@ import Accodion from '../components/CarBrands/Acoordion';
 
 const TestComponent: React.FC = () => {
 
-
   return (   
     <div className='bg-white flex flex-col  w-full'>
 
@@ -21,7 +20,7 @@ const TestComponent: React.FC = () => {
           <div className='my-4 w-full'>
             <Accodion />
           </div>
-
+          
         </div>
       </div>
     </div>
@@ -29,7 +28,6 @@ const TestComponent: React.FC = () => {
 };
 
 export default TestComponent;
-
 
 
 

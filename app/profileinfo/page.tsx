@@ -36,7 +36,7 @@ const MyProfileInfo = () => {
 
       if (response.ok && isMounted) {
         // Set image source only if the component is still mounted
-        const image = data.image ? `data:image/jpeg;base64,${data.image}` : null;
+        const image = data.image ? (data.imageType === 'jpeg' ? `data:image/jpeg;base64,${data.image}` : `data:image/png;base64,${data.image}`) : null;
         setImageSrc(image);
         setOriginalImageSrc(image); // Save the original image
       } else if (!response.ok) {
@@ -81,9 +81,6 @@ const MyProfileInfo = () => {
       }
     }
   };
-  
-
-
 
   // Handle image removal
   const handleImageRemove = async () => {
@@ -102,7 +99,6 @@ const MyProfileInfo = () => {
     }
   };
 
-
   const fetchUserData = async () => {
     const token = localStorage.getItem('token');
     const response = await fetch('http://127.0.0.1:8000/getfulluserinfo', {
@@ -112,7 +108,6 @@ const MyProfileInfo = () => {
     });
     const data = await response.json();
     if (response.ok) {
-      // console.log("User Data:", data); // Full user data should be logged here
       setFirstName(data.firstName || '');
       setLastName(data.lastName || '');
       setEmail(data.email || '');
@@ -125,7 +120,7 @@ const MyProfileInfo = () => {
 
   useEffect(() => {  
     fetchUserData();
-  }, []); // Empty dependency array to run only once on component mount
+  }, []); 
 
 
   const handleCancel = () => {
@@ -441,39 +436,6 @@ const MyProfileInfo = () => {
               </button>
             </div>
           </div>
-
-          {/* <div className="relative w-48 h-48 bg-slate-200 rounded-full">
-            <img
-              // src={imageSrc || "/images/clientTestimonial/person-circle.png"} // Update with your default image path
-              src={imageSrc || "/images/clientTestimonial/person-circle.png"} // Update with your default image path
-              alt="Profile"
-              className="w-full h-full rounded-full object-cover"
-            />
-            <div className="absolute top-0 left-0 p-1">
-              <label htmlFor="imageUpload" className="cursor-pointer">
-                <div className={` p-1 rounded-full  ${!isEditing ? ' text-white bg-gray-300  cursor-not-allowed ' : 'bg-black  text-white hover:bg-blue-700 '} transition-colors `}>
-                  <MdOutlineEdit className="text-2xl" />
-                </div>
-              </label>
-              <input
-                type="file"
-                id="imageUpload"
-                accept="image/*"
-                className="hidden"
-                onChange={fetchUserData}
-                disabled={!isEditing}
-              />
-            </div>
-            <div className="absolute top-0 right-0 p-1">
-              <button
-                onClick={handleImageRemove}
-                disabled={!isEditing}
-                className={`p-1 rounded-full text-white transition-colors ${!isEditing ? 'text-white bg-gray-300 cursor-not-allowed ' : 'bg-black hover:bg-blue-700 cursor-pointer'}`}
-              >
-                <RxCross2 className="text-2xl" />
-              </button>
-            </div>
-          </div> */}
 
           <div className="w-4/5">
 
