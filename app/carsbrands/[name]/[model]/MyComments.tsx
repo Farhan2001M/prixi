@@ -130,6 +130,11 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
   };
 
   const postComment = async () => {
+
+    if (commentText == ""){
+      console.log("empty comment cannot be posted")
+      return
+    }
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('You need to be logged in to post a comment.');
@@ -250,10 +255,6 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       return;
     }
 
-
-
-
-
     const response = await fetch(`http://localhost:8000/check-comment-owner/${brandName}/${modelName}/${commentId}`, {
       method: 'GET',
       headers: {
@@ -279,6 +280,10 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
   };
 
   const postReply = async (commentId: string) => {
+    if (commentText == ""){
+      console.log("empty comment cannot be posted")
+      return
+    }
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('You need to be logged in to reply to a comment.');
@@ -351,6 +356,11 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
   };
 
   const saveEditReply = async (commentId: string, replyId: string) => {
+
+    if (commentText == ""){
+      console.log("empty comment cannot be posted")
+      return
+    }
     const token = localStorage.getItem('token');
     if (!token) {
         console.error('You need to be logged in to save a reply edit.');
@@ -438,42 +448,63 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
   }, [comments, sortingMode]);
 
 
-  
   return (
-    <div>
-      <h3>Comments</h3>
-
+    <div className="min-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <h3 className="text-2xl font-semibold mb-4">Comments</h3>
+  
       {/* Sorting Buttons */}
-      <div className='flex gap-7'>
-        <button onClick={sortByReplies}>
-          {sortingMode === 'top-comments' && sortOrder === 'asc'
-            ? 'Show Top Comments (Descending)'
-            : 'Show Top Comments (Ascending)'}
-        </button>
-
-        <button onClick={sortByLikes}>
-          {sortingMode === 'most-loved' && sortOrder === 'asc'
-            ? 'Show Most Loved Comments (Descending)'
-            : 'Show Most Loved Comments (Ascending)'}
-        </button>
-
-        <button onClick={resetView}>Reset View</button>
+      <div className="flex justify-between mb-4">
+        <div className="flex space-x-4">
+          <button
+            onClick={sortByReplies}
+            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-200"
+          >
+            {sortingMode === 'top-comments' && sortOrder === 'asc'
+              ? 'Show Top Comments (Descending)'
+              : 'Show Top Comments (Ascending)'}
+          </button>
+  
+          <button
+            onClick={sortByLikes}
+            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-200"
+          >
+            {sortingMode === 'most-loved' && sortOrder === 'asc'
+              ? 'Show Most Loved Comments (Descending)'
+              : 'Show Most Loved Comments (Ascending)'}
+          </button>
+  
+          <button
+            onClick={resetView}
+            className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded hover:bg-red-700 transition duration-200"
+          >
+            Reset View
+          </button>
+        </div>
       </div>
-
+  
       {/* Comment Posting Section */}
       <textarea
         value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
         placeholder="Add a comment"
         rows={4}
+        className="w-full p-2 border border-gray-300 rounded mb-4"
       />
-      <button onClick={postComment}>Post Comment</button>
-
+      <button
+        onClick={postComment}
+        className="w-full py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700 transition duration-200"
+      >
+        Post Comment
+      </button>
+  
       {/* Comments Display */}
-      <div>
+      <div className="mt-6">
         {sortedComments.length > 0 ? (
           sortedComments.map((comment) => (
-            <div key={comment.commentId} style={{paddingLeft: '20px' , marginBottom: '15px' }}>
+            <div
+              key={comment.commentId}
+              className="border-b border-gray-200 pb-4 mb-4"
+            >
               {/* Editing logic */}
               {editingCommentId === comment.commentId ? (
                 <>
@@ -481,92 +512,166 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
                     value={editingCommentText}
                     onChange={(e) => setEditingCommentText(e.target.value)}
                     rows={2}
+                    className="w-full p-2 border border-gray-300 rounded mb-2"
                   />
-                  <button onClick={() => saveEdit(comment.commentId)}>Save</button>
-                  <button onClick={cancelEdit}>Cancel</button>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => saveEdit(comment.commentId)}
+                      className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-200"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={cancelEdit}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-300 rounded hover:bg-gray-400 transition duration-200"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </>
               ) : (
                 <>
-
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                     {/* Display user image only for the owner's comments */}
-                     {comment.userEmail === useremail && userImage && (
-                       <img src={userImage} alt="User" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} />
-                     )}
-                     <p>{comment.commentText}</p>
+                  <div className="flex items-center space-x-2 mb-2">
+                    {comment.userEmail === useremail && userImage && (
+                      <img
+                        src={userImage}
+                        alt="User"
+                        className="w-8 h-8 rounded-full"
+                      />
+                    )}
+                    <p className="flex-1">{comment.commentText}</p>
                   </div>
-
-                  <p><strong>By:</strong> {comment.userEmail} <strong>At:</strong> {new Date(comment.timestamp).toLocaleString()}</p>
-                  ({comment.Likes.length})
-
+  
+                  <p className="text-sm text-gray-600">
+                    <strong>By:</strong> {comment.userEmail} <strong>At:</strong>{' '}
+                    {new Date(comment.timestamp).toLocaleString()} ({comment.Likes.length + " likes"})
+                  </p>
+  
                   {/* Like/Unlike button based on Likes count */}
                   {comment.userEmail !== useremail && (
-                    <button onClick={() => handleLikeComment(comment.commentId)}>
-                      {comment.Likes.includes(useremail) ? <FaHeart /> : <FaRegHeart />} 
+                    <button
+                      onClick={() => handleLikeComment(comment.commentId)}
+                      className="mt-2 text-red-500 hover:text-red-600"
+                    >
+                      {comment.Likes.includes(useremail) ? <FaHeart /> : <FaRegHeart />}
                     </button>
                   )}
-
-                  {/* Other buttons like Edit, Delete, Reply */}
-
-                  {comment.userEmail == useremail && (
-                    <>
-                      <button onClick={() => startEditing(comment.commentId)}>Edit Comment</button>
-                      <button onClick={() => deleteComment(comment.commentId)}>Delete Comment</button>
-                    </>
+  
+                  {/* Edit, Delete, Reply buttons */}
+                  {comment.userEmail === useremail && (
+                    <div className="mt-2">
+                      <button
+                        onClick={() => startEditing(comment.commentId)}
+                        className="text-sm text-blue-600 hover:underline"
+                      >
+                        Edit Comment
+                      </button>
+                      <button
+                        onClick={() => deleteComment(comment.commentId)}
+                        className="ml-4 text-sm text-red-600 hover:underline"
+                      >
+                        Delete Comment
+                      </button>
+                    </div>
                   )}
                   {comment.userEmail !== useremail && (
-                    <button onClick={() => startReplying(comment.commentId)}>Reply Comment</button>
+                    <button
+                      onClick={() => startReplying(comment.commentId)}
+                      className="mt-2 text-sm text-blue-600 hover:underline ml-4"
+                    >
+                      Reply Comment
+                    </button>
                   )}
-
+  
                   {replyingCommentId === comment.commentId && (
-                    <div style={{ paddingLeft: '20px' }}>
+                    <div className="mt-2 ml-6">
                       <textarea
                         value={replyText}
                         onChange={(e) => setReplyText(e.target.value)}
                         placeholder="Write a reply..."
                         rows={2}
+                        className="w-full p-2 border border-gray-300 rounded mb-2"
                       />
-                      <button onClick={() => postReply(comment.commentId)}>Post Reply</button>
-                      <button onClick={cancelReply}>Cancel</button>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => postReply(comment.commentId)}
+                          className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700 transition duration-200"
+                        >
+                          Post Reply
+                        </button>
+                        <button
+                          onClick={cancelReply}
+                          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-300 rounded hover:bg-gray-400 transition duration-200"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </div>
                   )}
-
+  
                   {/* Render replies */}
                   {comment.replies.length > 0 && (
-                    <div style={{ paddingLeft: '30px' , marginTop: '15px' }}>
+                    <div className="mt-4 ml-6 border-l border-gray-300 pl-4">
                       {comment.replies.map((reply) => (
-                        <div key={reply.commentId}>
+                        <div key={reply.commentId} className="mb-4">
                           {editingReplyId === reply.commentId ? (
                             <>
                               <textarea
                                 value={editingReplyText}
                                 onChange={(e) => setEditingReplyText(e.target.value)}
                                 rows={2}
+                                className="w-full p-2 border border-gray-300 rounded mb-2"
                               />
-                              <button onClick={() => saveEditReply(comment.commentId, reply.commentId)}>Save</button>
-                              <button onClick={() => setEditingReplyId(null)}>Cancel</button>
+                              <div className="flex space-x-2">
+                                <button
+                                  onClick={() => saveEditReply(comment.commentId, reply.commentId)}
+                                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-200"
+                                >
+                                  Save
+                                </button>
+                                <button
+                                  onClick={() => setEditingReplyId(null)}
+                                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-300 rounded hover:bg-gray-400 transition duration-200"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
                             </>
                           ) : (
                             <>
-
-                              <div style={{ display: 'flex', alignItems: 'center' }}>
-                                {/* Display user image only for the owner's comments */}
-                                {comment.userEmail === useremail && userImage && (
-                                  <img src={userImage} alt="User" style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />
+                              <div className="flex items-center space-x-2 mb-2">
+                                {reply.userEmail === useremail && userImage && (
+                                  <img
+                                    src={userImage}
+                                    alt="User"
+                                    className="w-6 h-6 rounded-full"
+                                  />
                                 )}
-                                <p>{reply.commentText}</p>
+                                <p className="flex-1">{reply.commentText}</p>
                               </div>
-
-                              <p><strong>By:</strong> {reply.userEmail} <strong>At:</strong> {new Date(reply.timestamp).toLocaleString()}</p>
-
+  
+                              <p className="text-sm text-gray-600">
+                                <strong>By:</strong> {reply.userEmail} <strong>At:</strong>{' '}
+                                {new Date(reply.timestamp).toLocaleString()}
+                              </p>
+  
                               {/* Reply Edit and Delete buttons */}
-                              {comment.userEmail == useremail && (
-                                <>
-                                  <button onClick={() => startEditingReply(comment.commentId, reply.commentId, reply.commentText)}>Edit Reply</button>
-                                  <button onClick={() => deleteReply(comment.commentId, reply.commentId)}>Delete Reply</button>
-                                </>
+                              {reply.userEmail === useremail && (
+                                <div className="mt-2">
+                                  <button
+                                    onClick={() => startEditingReply(comment.commentId, reply.commentId, reply.commentText)}
+                                    className="text-sm text-blue-600 hover:underline"
+                                  >
+                                    Edit Reply
+                                  </button>
+                                  <button
+                                    onClick={() => deleteReply(comment.commentId, reply.commentId)}
+                                    className="ml-4 text-sm text-red-600 hover:underline"
+                                  >
+                                    Delete Reply
+                                  </button>
+                                </div>
                               )}
-                              
                             </>
                           )}
                         </div>
@@ -578,7 +683,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
             </div>
           ))
         ) : (
-          <p>No comments yet.</p>
+          <p className="text-center text-gray-500">No comments yet.</p>
         )}
       </div>
     </div>
@@ -596,6 +701,22 @@ export default MyComments;
 
 
 
+// <h3 className='text-3xl font-bold ml-5'>Comments:</h3>
+
+// <div className='w-3/6 mx-auto flex flex-col gap-2'>
+  
+//   <Textarea
+//     value={commentText}
+//     maxRows={3}
+//     label="Description"
+//     placeholder="Add a comment (Max rows 3)"
+//     onChange={(e) => setCommentText(e.target.value)}
+//   />
+//   <Button color="primary" onClick={postComment} >
+//     Post Comment
+//   </Button>  
+
+// </div>
 
 
 
@@ -617,145 +738,151 @@ export default MyComments;
 
 
 
+ 
+// return (
+//   <div>
+//     <h3>Comments</h3>
 
+//     {/* Sorting Buttons */}
+//     <div className='flex gap-7'>
+//       <button onClick={sortByReplies}>
+//         {sortingMode === 'top-comments' && sortOrder === 'asc'
+//           ? 'Show Top Comments (Descending)'
+//           : 'Show Top Comments (Ascending)'}
+//       </button>
 
+//       <button onClick={sortByLikes}>
+//         {sortingMode === 'most-loved' && sortOrder === 'asc'
+//           ? 'Show Most Loved Comments (Descending)'
+//           : 'Show Most Loved Comments (Ascending)'}
+//       </button>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//   return (
-//     <div>
-//       <h3>Comments</h3>
-//       <textarea
-//         value={commentText}
-//         onChange={(e) => setCommentText(e.target.value)}
-//         placeholder="Add a comment"
-//         rows={4}
-//       />
-//       <button onClick={postComment}>Post Comment</button>
-
-//       <div>
-//         {comments.length > 0 ? (
-//           comments.map((comment) => (
-//             <div key={comment.commentId} style={{ marginBottom: '10px' }}>
-//               {editingCommentId === comment.commentId ? (
-//                 <>
-//                   <textarea
-//                     value={editingCommentText}
-//                     onChange={(e) => setEditingCommentText(e.target.value)}
-//                     rows={2}
-//                   />
-//                   <button onClick={() => saveEdit(comment.commentId)}>Save</button>
-//                   <button onClick={cancelEdit}>Cancel</button>
-//                 </>
-//               ) : (
-//                 <>
-//                   <div style={{ display: 'flex', alignItems: 'center' }}>
-//                     {/* Display user image only for the owner's comments */}
-//                     {comment.userEmail === useremail && userImage && (
-//                       <img src={userImage} alt="User" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} />
-//                     )}
-//                     <p>{comment.commentText}</p>
-//                   </div>
-                  
-//                   <p>
-//                     <strong>By:</strong> {comment.userEmail} <strong>At:</strong> {new Date(comment.timestamp).toLocaleString()}
-//                   </p>
-                  
-//                   {/* Do not show the like button for user's own comments */}
-//                   {comment.userEmail !== useremail && (
-//                     <button onClick={() => handleLikeComment(comment.commentId)}>
-//                       {comment.Likes.includes(useremail) ? <FaHeart style={{ color: 'red' }} /> : <FaRegHeart />} ({comment.Likes.length})
-//                     </button>
-//                   )}
-
-//                   <button onClick={() => startEditing(comment.commentId)}>Edit</button>
-//                   <button onClick={() => deleteComment(comment.commentId)}>Delete</button>
-//                   <button onClick={() => startReplying(comment.commentId)}>Reply</button>
-
-//                   {replyingCommentId === comment.commentId && (
-//                     <div style={{ paddingLeft: '20px' }}>
-//                       <textarea
-//                         value={replyText}
-//                         onChange={(e) => setReplyText(e.target.value)}
-//                         placeholder="Write a reply..."
-//                         rows={2}
-//                       />
-//                       <button onClick={() => postReply(comment.commentId)}>Post Reply</button>
-//                       <button onClick={cancelReply}>Cancel</button>
-//                     </div>
-//                   )}
-
-//                   {/* Render replies */}
-//                   {comment.replies.length > 0 && (
-//                     <div style={{ paddingLeft: '20px' }}>
-//                       {comment.replies.map((reply) => (
-//                         <div key={reply.commentId}>
-//                           {editingReplyId === reply.commentId ? (
-//                             <>
-//                               <textarea
-//                                 value={editingReplyText}
-//                                 onChange={(e) => setEditingReplyText(e.target.value)}
-//                                 rows={2}
-//                               />
-//                               <button onClick={() => saveEditReply(comment.commentId, reply.commentId)}>Save</button>
-//                               <button onClick={() => setEditingReplyId(null)}>Cancel</button>
-//                             </>
-//                           ) : (
-//                             <>
-//                               <div style={{ display: 'flex', alignItems: 'center' }}>
-//                                 {/* Display user image only for the owner's replies */}
-//                                 {reply.userEmail === useremail && userImage && (
-//                                   <img src={userImage} alt="User" style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />
-//                                 )}
-//                                 <p>{reply.commentText}</p>
-//                               </div>
-                              
-//                               <p>
-//                                 <strong>By:</strong> {reply.userEmail} <strong>At:</strong> {new Date(reply.timestamp).toLocaleString()}
-//                               </p>
-
-//                               <button onClick={() => startEditingReply(comment.commentId, reply.commentId, reply.commentText)}>Edit Reply</button>
-//                               <button onClick={() => deleteReply(comment.commentId, reply.commentId)}>Delete Reply</button>
-//                             </>
-//                           )}
-//                         </div>
-//                       ))}
-//                     </div>
-//                   )}
-//                 </>
-//               )}
-//             </div>
-//           ))
-//         ) : (
-//           <p>No comments yet.</p>
-//         )}
-//       </div>
+//       <button onClick={resetView}>Reset View</button>
 //     </div>
-//   );
+
+//     {/* Comment Posting Section */}
+//     <textarea
+//       value={commentText}
+//       onChange={(e) => setCommentText(e.target.value)}
+//       placeholder="Add a comment"
+//       rows={4}
+//     />
+//     <button onClick={postComment}>Post Comment</button>
+
+//     {/* Comments Display */}
+//     <div>
+//       {sortedComments.length > 0 ? (
+//         sortedComments.map((comment) => (
+//           <div key={comment.commentId} style={{paddingLeft: '20px' , marginBottom: '15px' }}>
+//             {/* Editing logic */}
+//             {editingCommentId === comment.commentId ? (
+//               <>
+//                 <textarea
+//                   value={editingCommentText}
+//                   onChange={(e) => setEditingCommentText(e.target.value)}
+//                   rows={2}
+//                 />
+//                 <button onClick={() => saveEdit(comment.commentId)}>Save</button>
+//                 <button onClick={cancelEdit}>Cancel</button>
+//               </>
+//             ) : (
+//               <>
+
+//                 <div style={{ display: 'flex', alignItems: 'center' }}>
+//                    {/* Display user image only for the owner's comments */}
+//                    {comment.userEmail === useremail && userImage && (
+//                      <img src={userImage} alt="User" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} />
+//                    )}
+//                    <p>{comment.commentText}</p>
+//                 </div>
+
+//                 <p><strong>By:</strong> {comment.userEmail} <strong>At:</strong> {new Date(comment.timestamp).toLocaleString()}</p>
+//                 ({comment.Likes.length})
+
+//                 {/* Like/Unlike button based on Likes count */}
+//                 {comment.userEmail !== useremail && (
+//                   <button onClick={() => handleLikeComment(comment.commentId)}>
+//                     {comment.Likes.includes(useremail) ? <FaHeart /> : <FaRegHeart />} 
+//                   </button>
+//                 )}
+
+//                 {/* Other buttons like Edit, Delete, Reply */}
+
+//                 {comment.userEmail == useremail && (
+//                   <>
+//                     <button onClick={() => startEditing(comment.commentId)}>Edit Comment</button>
+//                     <button onClick={() => deleteComment(comment.commentId)}>Delete Comment</button>
+//                   </>
+//                 )}
+//                 {comment.userEmail !== useremail && (
+//                   <button onClick={() => startReplying(comment.commentId)}>Reply Comment</button>
+//                 )}
+
+//                 {replyingCommentId === comment.commentId && (
+//                   <div style={{ paddingLeft: '20px' }}>
+//                     <textarea
+//                       value={replyText}
+//                       onChange={(e) => setReplyText(e.target.value)}
+//                       placeholder="Write a reply..."
+//                       rows={2}
+//                     />
+//                     <button onClick={() => postReply(comment.commentId)}>Post Reply</button>
+//                     <button onClick={cancelReply}>Cancel</button>
+//                   </div>
+//                 )}
+
+//                 {/* Render replies */}
+//                 {comment.replies.length > 0 && (
+//                   <div style={{ paddingLeft: '30px' , marginTop: '15px' }}>
+//                     {comment.replies.map((reply) => (
+//                       <div key={reply.commentId}>
+//                         {editingReplyId === reply.commentId ? (
+//                           <>
+//                             <textarea
+//                               value={editingReplyText}
+//                               onChange={(e) => setEditingReplyText(e.target.value)}
+//                               rows={2}
+//                             />
+//                             <button onClick={() => saveEditReply(comment.commentId, reply.commentId)}>Save</button>
+//                             <button onClick={() => setEditingReplyId(null)}>Cancel</button>
+//                           </>
+//                         ) : (
+//                           <>
+
+//                             <div style={{ display: 'flex', alignItems: 'center' }}>
+//                               {/* Display user image only for the owner's comments */}
+//                               {comment.userEmail === useremail && userImage && (
+//                                 <img src={userImage} alt="User" style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />
+//                               )}
+//                               <p>{reply.commentText}</p>
+//                             </div>
+
+//                             <p><strong>By:</strong> {reply.userEmail} <strong>At:</strong> {new Date(reply.timestamp).toLocaleString()}</p>
+
+//                             {/* Reply Edit and Delete buttons */}
+//                             {comment.userEmail == useremail && (
+//                               <>
+//                                 <button onClick={() => startEditingReply(comment.commentId, reply.commentId, reply.commentText)}>Edit Reply</button>
+//                                 <button onClick={() => deleteReply(comment.commentId, reply.commentId)}>Delete Reply</button>
+//                               </>
+//                             )}
+                            
+//                           </>
+//                         )}
+//                       </div>
+//                     ))}
+//                   </div>
+//                 )}
+//               </>
+//             )}
+//           </div>
+//         ))
+//       ) : (
+//         <p>No comments yet.</p>
+//       )}
+//     </div>
+//   </div>
+// );
 // };
 
-
-
-
-
-
-
-
-
-
-
-
-
+// export default MyComments;

@@ -15,7 +15,7 @@ const MainComponent: React.FC = () => {
     <>
       <div className='flex gap-8'>
         <Button color="primary" size="md" onPress={onOpenBrandsModal} className="text-base"> Explore Vehicles by Brands </Button>
-        <Button color="primary" size="md" onPress={onOpenTypesModal} className="text-base"> Explore Vehicles by Types </Button>  
+        {/* <Button color="primary" size="md" onPress={onOpenTypesModal} className="text-base"> Explore Vehicles by Types </Button>   */}
       </div>
       
       {/* Modal for Car Brands */}

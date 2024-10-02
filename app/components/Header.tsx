@@ -66,57 +66,49 @@ const Header = () => {
           Close
         </Link>
 
-        <Link href="" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('') ? 'bg-zinc-800 text-white' : ''}`}>
+        <Link href="/vehiclesinfo" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/vehiclesinfo') ? 'bg-zinc-800 text-white' : ''}`}>
           <BsCalculator className="text-3xl mx-3" />
-          1-Price Calculator
+          1-Vehicles Info
+        </Link>
+
+        <Link href="/pricecalculator" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('') ? 'bg-zinc-800 text-white' : ''}`}>
+          <BsCalculator className="text-3xl mx-3" />
+          2-Price Calculator
         </Link>
 
         <Link href="/calculate-taxes" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/calculate-taxes') ? 'bg-zinc-800 text-white' : ''}`}>
           <TbReceiptTax className="text-3xl mx-3" />
-          2-Calculate Taxes
+          3-Calculate Taxes
         </Link>
 
         <Link href="/calculate-loan-financing" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/calculate-loan-financing') ? 'bg-zinc-800 text-white' : ''}`}>
           <GiTakeMyMoney className="text-4xl mx-3" />
-          3-Calculate Loan Financing
+          4-Calculate Loan Financing
         </Link>
 
         <Link href="/get-recommendations" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/get-recommendations') ? 'bg-zinc-800 text-white' : ''}`}>
           <MdOutlineRecommend className="text-3xl mx-3" />
-          4-Get Recommendations
+          5-Get Recommendations
         </Link>
 
         <Link href="/my-dashboard" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/my-dashboard') ? 'bg-zinc-800 text-white' : ''}`}>
           <LuLayoutDashboard className="text-3xl mx-3" />
-          5-My Dashboard
+          6-My Dashboard
         </Link>
 
         <Link href="/system-overview" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/system-overview') ? 'bg-zinc-800 text-white' : ''}`}>
           <AiOutlineDashboard className="text-3xl mx-3" />
-          6-System Overview
+          7-System Overview
         </Link>
 
         <Link href="/generate-reports" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/generate-reports') ? 'bg-zinc-800 text-white' : ''}`}>
           <TbReport className="text-3xl mx-3" />
-          7-Generate Reports
-        </Link>
-
-        <Link href="/testing" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/testing') ? 'bg-zinc-800 text-white' : ''}`}>
-          <TbReport className="text-3xl mx-3" />
-          7-Testing
-        </Link>
-
-        <Link href="/screen1" className={`py-4 text-xl font-medium border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white ${isActive('/screen1') ? 'bg-zinc-800 text-white' : ''}`}>
-          Screen 1
-        </Link>
-
-        <Link href="/screen2" className={`py-4 text-xl font-medium border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white ${isActive('/screen2') ? 'bg-zinc-800 text-white' : ''}`}>
-          Screen 2
+          8-Generate Reports
         </Link>
 
         <Link href="/profileinfo" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/profileinfo') ? 'bg-zinc-800 text-white' : ''}`}>
           <FaUserCog  className="text-3xl mx-3" />
-          Profile Settings
+          9-Profile Settings
         </Link>
 
         <Link href="/login" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/calculate-taxes') ? 'bg-zinc-800 text-white' : ''}`}>

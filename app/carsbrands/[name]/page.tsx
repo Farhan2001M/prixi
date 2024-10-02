@@ -8,10 +8,12 @@ import Accodion from '../../components/CarBrands/Acoordion';
 import Slider from '../../components/CarBrands/Slider';
 import { usePathname } from 'next/navigation';
 import { VehicleModel } from '../../MyCarsData/Types';  // Updated to use the new VehicleModel interface
+import {Input} from "@nextui-org/react";
 
 const MainPage = () => {
   const [MyData, setMyData] = useState<VehicleModel[]>([]);
   const pathname = usePathname();
+  const [searchTerm, setSearchTerm] = useState('');  // New state for search term
   
   // Extract car brand name from URL (e.g., /carsbrands/Tesla)
   const pathParts = pathname.split('/');
@@ -58,6 +60,9 @@ const MainPage = () => {
     const vehicleTypeMatch = filters.vehicleTypes.length === 0 || 
       filters.vehicleTypes.some(type => car.vehicleType?.toLowerCase().includes(type.toLowerCase()));
 
+      // Filter by model name based on searchTerm
+    const modelNameMatch = car.modelName.toLowerCase().includes(searchTerm.toLowerCase());
+
     return (
       launchPrice >= filters.priceRange[0] &&
       launchPrice <= filters.priceRange[1] &&
@@ -66,7 +71,8 @@ const MainPage = () => {
       horsepower >= filters.horsepowerRange[0] &&
       horsepower <= filters.horsepowerRange[1] &&
       year >= filters.yearRange[0] &&
-      year <= filters.yearRange[1] 
+      year <= filters.yearRange[1] &&
+      modelNameMatch  // Include modelName filter
     );
   });
 
@@ -75,7 +81,22 @@ const MainPage = () => {
       <Header />
 
       <div className='m-8 w-10/12 mx-auto'>
-        <Accodion />
+        <div className='flex justify-between'>
+          <Accodion /> 
+
+          {/* New Search Bar */}
+          
+          <input
+            type="text"
+            className="border border-gray-300 p-2 rounded-md shadow-sm w-1/3"
+            placeholder="Search by model name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}  // Update search term on input change
+          />
+          
+          <Range onFiltersChange={handleFiltersChange} brandName={BrandName} />
+        </div>
+      
       </div>
 
       <div className='m-4 w-10/12 mx-auto'>
@@ -83,7 +104,7 @@ const MainPage = () => {
       </div>
 
       <div className='m-4 w-10/12 mx-auto'>
-        <Range onFiltersChange={handleFiltersChange} brandName={BrandName} />
+        
       </div>
 
       <div className='m-4 w-10/12 mx-auto'>

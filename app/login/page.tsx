@@ -108,7 +108,7 @@ const Myloginpage = () => {
         if(response.ok){
           console.log(data);
           localStorage.setItem('token', data.token); // Store the token securely
-          router.push('/screen1'); // Redirect to another page
+          router.push('/vehiclesinfo'); // Redirect to another page
         } else {
           console.error('Unexpected response:', data);
         }

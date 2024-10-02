@@ -1,7 +1,8 @@
+"use client";
 
 import Header from '../components/Header';
 
-
+import Accodion from '../components/CarBrands/Acoordion';
 
 
 const UserInterface = () => {
@@ -13,8 +14,11 @@ const UserInterface = () => {
       <Header/>  
 
       <div className="h-[90vh] bg-white p-4">
-        <h1>This is my Screen 1</h1>
-        <p>Screem 1 text is Lorem ipsum dolor sit amet consectetur adipisicing elit...!!!!!</p>
+        
+        <div className='w-full'>
+          <Accodion />
+        </div>
+      
       </div>  
     
     </div>

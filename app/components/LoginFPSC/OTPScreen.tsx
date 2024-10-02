@@ -14,6 +14,7 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
   const [showPasswordChangeScreen, setShowPasswordChangeScreen] = useState<boolean>(false);
   const otpRef = useRef<{ clearOtp: () => void }>(null); // Create a ref for OtpInput
   const [OTPError, setOTPError] = useState('');
+
   
   // const handleRequestOTP = () => {
   //   setOTPError('');
@@ -61,11 +62,6 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
       console.log(displayFemail)
       
 
-      // setTimeout(() => {
-      //   console.log(displayFemail);
-      //   startTimer();
-      // }, 30);
-
     } catch (error) {
         console.error('An error occurred:', error);
         setOTPError('Network error. Please try again later.');
@@ -95,49 +91,54 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
   // };
 
   const handleConfirmOtp = async () => {
-    setIsOtpComplete(false);
+    setIsOtpComplete(false);  // Reset OTP completion state
+    setOTPError('');          // Clear any existing OTP errors
 
-    setOTPError('');
     console.log("Entered OTP:", otp);
-  
+
+    console.log(Femail);
+
     try {
-      // Make a request to the FastAPI validate_otp endpoint
-      const response = await fetch('http://localhost:8000/validate-otp', { // Adjust the endpoint as needed
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: 'chfarhanilyas550@gmail.com', // Replace with the actual user email
-          otp: otp.toString(), // Ensure OTP is sent as a string
-        }),
-      });
-  
-      // Check if the request was successful
-      if (response.ok) {
+        // Make a request to the FastAPI validate_otp endpoint
+        const response = await fetch('http://localhost:8000/validate-otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: Femail,      // Ensure this is dynamically populated
+                otp: otp.toString(),   // Ensure OTP is sent as a string
+            }),
+        });
 
-        const result = await response.json();
-  
-        // OTP validation successful
-        console.log("OTP MATCHES");
-        setShowPasswordChangeScreen(true);
-        onClick();
-        if (otpRef.current) {
-          otpRef.current.clearOtp(); // Clear the OTP when confirming
+        // Check if the request was successful
+        if (response.ok) {
+            const result = await response.json();
+            
+            // OTP validation successful
+            console.log("OTP MATCHES");
+            setShowPasswordChangeScreen(true);  // Proceed to next screen (password reset)
+            onClick();                          // Handle any additional steps
+
+            // Clear the OTP input if reference is available
+            if (otpRef.current) {
+                otpRef.current.clearOtp();      // Clear OTP field
+            }
+
+        } else {
+            // OTP validation failed
+            const error = await response.json();
+            setOTPError(error.detail || 'Entered OTP is not correct.');  // Set OTP error message
+            console.error("Error:", error.detail || "OTP validation failed.");
         }
-        
-      } else {
-        // OTP validation failed
-        const error = await response.json();
-        setOTPError('Entered OTP is not correct.');
-        console.error("Error:", error.detail || "");
 
-      }
     } catch (error) {
-      // Handle network or other errors
-      console.error("An error occurred:", error);
+        // Handle network or other errors
+        setOTPError('An error occurred while validating OTP.');
+        console.error("An error occurred:", error);
     }
   };
+
 
   const [isTimerActive, setIsTimerActive] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<number>(0);
