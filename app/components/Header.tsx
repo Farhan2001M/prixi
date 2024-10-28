@@ -18,7 +18,9 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { IoIosHome } from "react-icons/io";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaUserCog } from "react-icons/fa";
+import { BsBookmarkHeartFill } from "react-icons/bs";
 
+import { BsBox2Heart } from "react-icons/bs";
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -41,11 +43,17 @@ const Header = () => {
           <div className='w-2/5 h-full  flex justify-end items-center'> 
             <ul className='my-auto flex gap-6'>
 
+              <Link href="/favorites">
+                <BsBox2Heart  className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" />
+              </Link>
+
               <Link href="/screen1">
                 <IoIosHome  className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" />
               </Link>
+
               {/* <Link className="bg-transparent text-xl text-white px-4 py-2 border border-gray-300 rounded-lg mx-auto  hover:text-gray-300 hover:border-gray-300 transition-colors duration-300" href="/userinterface">Home</Link> */}
               {/* <IoPersonCircleOutline className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" /> */}
+
               <Link href="/profileinfo">
                 <FaUserCog  className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" />
               </Link>

@@ -600,7 +600,7 @@ const MyProfileInfo = () => {
               
               <div className='flex flex-col justify-center  w-[95%] h-[95%] '>
                 <button type="button" onClick={()=> { 
-                  router.push('/screen1' ); 
+                  router.push('/vehiclesinfo' ); 
                   }} className={`text-xl p-2 rounded w-full mx-auto bg-blue-600 text-white hover:bg-blue-700   `}  >
                   <JitterText
                     text="Continue to Home Screeen"
