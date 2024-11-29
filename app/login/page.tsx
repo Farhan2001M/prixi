@@ -109,13 +109,25 @@ const Myloginpage = () => {
           console.log(data);
           localStorage.setItem('token', data.token); // Store the token securely
           router.push('/vehiclesinfo'); // Redirect to another page
+          // Play the PositiveNotification sound after a 2-second delay
+          setTimeout(() => {
+            const positiveSound = new Audio('/sounds/login.wav'); // Correct path to your sound
+            positiveSound.play();
+          }, 20);  // 2000 milliseconds = 2 seconds
+
         } else {
           console.error('Unexpected response:', data);
+          // Play the Denied sound on failure
+          const deniedSound = new Audio('/sounds/denied.wav');
+          deniedSound.play();
         }
 
       } catch (error) {
           console.error('An error occurred:', error);
           // Handle network errors or other unexpected issues
+          // Play the Denied sound on failure
+          const deniedSound = new Audio('/sounds/denied.wav');
+          deniedSound.play();
       }
 
       

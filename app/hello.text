@@ -1,0 +1,165 @@
+_id : 672e65637af03c47d2aef6b7
+firstName : "Farhan"
+lastName : "Ilyas"
+email : "F550@gmail.com"
+phoneNumber : "6451325163"
+password : Binary.createFromBase64('JDJiJDEyJDV1RmhNMTBXYm1aRlFDSXd0ZlM0MC4uMXJ5MzJvRUNBRm9WbWhoSEQxZm1OV3dGeXFFdUNh', 0)
+GenImage : "iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAIAAAD/gAIDAAAAwklEQVR4nO3XsRGCMBiGYc…"
+image: "iVBORw0KGgoAAAANSUhEUgAABVYAAAMACAYAAADPPjzCAAAAAXNSR0IArs4c6QAAAARnQU…"
+searches : Array (3)
+favorites : Array (5)
+    0 : Object
+        brandName : "Ford"
+        modelName : "Tourneo"
+    1 : Object
+        brandName : "Ford"
+        modelName : "F-150"
+    2 : Object    
+        brandName : "Ford"
+        modelName : "Lncia"    
+    3 : Object
+    4 : Object
+
+statistics : Object
+    brandVisited: Object
+        Tesla: 20
+        Nio: 3
+        Polestar: 9
+    
+    totalVisitedCards : 21   
+    cumulativePrice : 1321188
+    averagePrice : 94370.57142857143
+    cumulativeHorsepower : 11780
+    averageHorsepower : 841.4285714285714
+    cumulativeTorque : 16976
+    averageTorque : 1212.5714285714287
+    uniqueVisitedModels : Array (13)
+        2 : "Ford_Mustang Mach E"
+        4 : "Ford_Capri"
+        5 : "Hyundai_Tuscon"
+        6 : "Ford_Tourneo"
+        7 : "Hyundai_Elantra"
+        8 : "Buggati_veryon"
+        11 : "Buggati_Chiron"
+        13 : "Buggati_Mistral"
+
+    VehicleTypesVisited : Object
+        Hatchback : 8
+        Pickup-Truck : 12
+        SUV : 8
+        Coupe : 4
+        Sedan : 11
+        Compact: 5
+
+    EngineTypesVisited : Object
+        Petrol: 6
+        Diesel: 5
+        Electric: 3
+        Hybrid: 7
+
+    yearRangesVisited: Object
+        2010-2015: 7
+        1995-2000: 1
+        2020-2025: 5
+        1985-1990: 2
+        2015-2020: 6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    _id : 66f5b666dc2d82cbc0c1de3d
+    brandName : "Polestar"
+
+    models : Array (4)
+
+        0 : Object
+            modelName : "3"
+            vehicleType : "Sedan"
+            engineType : "Hybrid"
+            description : "Fsjnskjs  khsvjhs smhvsbmsn announc…"
+            torque : 240
+            year : 2015
+            launchPrice : 52000
+            horsepower : 420
+            seatingCapacity : 5
+            variants : Array (2)
+                0 : "Nsx"
+                1 : "SPR"
+            colors : Array (3)
+                0 : "White"
+                1 : "Red"
+                2 : "Blue"
+            images : Array (1)
+            AnonymousAsk : Array (3)
+                0 : Object
+                    anonyTextId : "14c97ea1-e266-43c8-bde8-8807cbb93256"
+                    anonyText : "adfghj"
+                    timestamp : "2024-11-25T00:20:01.362Z"
+                1 : Object
+                2 : Object
+            comments : Array (2)
+                0 : Object
+                    commentId : "6c1d51a0-bf04-40fc-a299-a008395d71eb"
+                    userEmail : "F550@gmail.com"
+                    commentText : "sdfghjkl"
+                    Likes : Array (1)
+                        0 : "Maryamfarhan550@gmail.com"
+                    timestamp : "2024-11-14T08:04:42.358486"
+                    replies : Array (1)
+                        0 : Object
+                        commentId : "8f8082e2-57a2-4298-8d41-6cf3cb1932ae"
+                        userEmail : "Maryamfarhan550@gmail.com"
+                        commentText : "dfgh"
+                        Likes : Array (empty)
+                        timestamp : "2024-11-27T20:42:59.780540"
+
+                1 : Object
+
+        1 : Object
+            modelName : "F-150"
+            vehicleType : "Pickup-Truck"
+            engineType : "Diesel"
+            description : "Ford- speed up to 95 km/h Ford is s…"
+            torque : 1410
+            year : "1995"
+            launchPrice : 43000
+            horsepower : 750
+            seatingCapacity : 6
+            variants : Array (2)        
+                0 : "lightning"
+                1 : "compressor"
+            colors : Array (3)            
+                0 : "Red" 
+                1 : "Black"
+                2 : "Gray"
+            images : Array (1)
+            comments : Array (empty)
+
+
+
+
+
+
+
+
+
+
+Mr. Aneeb is here...!!!

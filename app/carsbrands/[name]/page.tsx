@@ -7,18 +7,19 @@ import Header from '../../components/Header';
 import Accodion from '../../components/CarBrands/Acoordion';
 import Slider from '../../components/CarBrands/Slider';
 import { usePathname } from 'next/navigation';
-import { VehicleModel } from '../../MyCarsData/Types';  // Updated to use the new VehicleModel interface
+import { VehicleModel } from '../../MyCarsData/Types';
+import { Input } from "@nextui-org/react";
 
 const MainPage = () => {
   const [MyData, setMyData] = useState<VehicleModel[]>([]);
   const pathname = usePathname();
-  const [searchTerm, setSearchTerm] = useState('');  // New state for search term
-  
-  // Extract car brand name from URL (e.g., /carsbrands/Tesla)
-  const pathParts = pathname.split('/');
-  const BrandName = pathParts[pathParts.length - 1];  // Get the brand name
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
 
-  // Fetch data from the backend based on the car brand name
+  const pathParts = pathname.split('/');
+  const BrandName = pathParts[pathParts.length - 1];
+
   useEffect(() => {
     const fetchCarModels = async () => {
       if (BrandName) {
@@ -28,7 +29,7 @@ const MainPage = () => {
             throw new Error(`Error fetching car data: ${response.statusText}`);
           }
           const data = await response.json();
-          setMyData(data.models);  // Assuming `models` is the key in the document that holds car models
+          setMyData(data.models);
         } catch (err) {
           console.error('Error fetching car models:', err);
         }
@@ -49,14 +50,13 @@ const MainPage = () => {
     setFilters(newFilters);
   };
 
-  // Apply filters to the data
   const filteredData = MyData.filter((car: VehicleModel) => {
     const launchPrice = car.launchPrice || 0;
     const year = car.year || 0;
     const horsepower = car.horsepower || 0;
     const seatingCapacity = car.seatingCapacity || 0;
     const vehicleTypeMatch = filters.vehicleTypes.length === 0 || filters.vehicleTypes.some(type => car.vehicleType?.toLowerCase().includes(type.toLowerCase()));
-    const modelNameMatch = car.modelName.toLowerCase().includes(searchTerm.toLowerCase()); // Filter by model name based on searchTerm
+    const modelNameMatch = car.modelName.toLowerCase().includes(searchTerm.toLowerCase());
 
     return (
       launchPrice >= filters.priceRange[0] &&
@@ -67,31 +67,171 @@ const MainPage = () => {
       horsepower <= filters.horsepowerRange[1] &&
       year >= filters.yearRange[0] &&
       year <= filters.yearRange[1] &&
-      modelNameMatch  // Include modelName filter
+      modelNameMatch
     );
   });
+
+  const handleResetFilters = () => {
+    setSearchTerm('');
+    setFilters({
+      priceRange: [0, 2500000],
+      yearRange: [1980, 2030],
+      vehicleTypes: [],
+      minSeatingCapacity: 1,
+      horsepowerRange: [0, 2500],
+    });
+  };
+
+  const handleFocus = async () => {
+    setShowHistory(true); // Show the history dropdown
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://127.0.0.1:8000/getsearchhistory", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSearchHistory(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch search history:", err);
+    }
+  };
+
+  const handleSearchSubmit = async (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && searchTerm.trim() !== "") {
+      setShowHistory(false);
+      try {
+        const token = localStorage.getItem("token");
+        await fetch("http://127.0.0.1:8000/updatesearchhistory", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ searchTerm }),
+        });
+
+        setSearchHistory((prevHistory) => {
+          const updatedHistory = [searchTerm, ...prevHistory.filter(term => term !== searchTerm)];
+          return updatedHistory.slice(0, 3);
+        });
+
+      } catch (err) {
+        console.error("Failed to update search history:", err);
+      }
+    }
+  };
+
+  const handleHistoryClick = (term: string) => {
+    setSearchTerm(term); // Set the clicked term as the search term
+    setShowHistory(false); // Hide the dropdown
+  };
+
+  const [isDeleting, setIsDeleting] = useState(false); // Track if we are deleting a term
+
+  const handleDeleteSearch = async (term: string) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      // Mark as deleting
+      setIsDeleting(true);
+  
+      // Call the backend to remove the search term
+      const response = await fetch(`http://127.0.0.1:8000/removesearchhistory/${term}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+  
+        // Update the local state with the new search history
+        setSearchHistory(data.searches);
+      } else {
+        console.error("Failed to delete search term:", await response.json());
+      }
+    } catch (err) {
+      console.error("Error deleting search term:", err);
+    } finally {
+      setTimeout(() => {
+        setIsDeleting(false); // Reset the deleting state after the delay
+      }, 700); // Set delay before hiding dropdown
+    }
+  };
+  
+
+  const handleBlur = () => {
+    // Add a slight delay to allow clicks to register before hiding
+    setTimeout(() => setShowHistory(false), 200);
+  };
 
   return (
     <div className="flex flex-col">
       <Header />
 
       <div className='m-8 w-10/12 mx-auto flex justify-between'>
-        
-        <Accodion /> 
-        {/* New Search Bar */}
-        <input
-          type="text"
-          className="border border-gray-300 p-2 rounded-md shadow-sm w-1/3"
-          placeholder="Search by model name"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}  // Update search term on input change
-        />
-        <Range onFiltersChange={handleFiltersChange} brandName={BrandName} />
+
+        <Accodion />
+
+        <div className="relative w-1/3">
+          {/* Search Bar */}
+          <Input
+            isClearable
+            type="text"
+            variant="bordered"
+            placeholder="Enter Model Name & Click Enter"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onClear={() => setSearchTerm('')}
+            className="w-full"
+            onFocus={handleFocus}
+            onBlur={handleBlur} // Hide dropdown on blur
+            onKeyDown={handleSearchSubmit}
+          />
+
+          {/* Search History Dropdown */}
+          {showHistory && searchHistory.length > 0 && (
+            // <div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10">
+            <div className={`absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10 ${isDeleting ? "opacity-0 pointer-events-none" : "transition-opacity opacity-100"}`}>
+              {searchHistory.map((term, index) => (
+                <div
+                  key={index}
+                  className="flex justify-between items-center p-2 hover:bg-gray-100"
+                  onClick={() => handleHistoryClick(term)} // Attach click handler to the whole line
+                >
+                  <span className="cursor-pointer">
+                    {term}
+                  </span>
+                  {/* Cross Icon */}
+                  <button
+                    className="text-red-500 hover:text-red-900 ml-2 transform transition-transform duration-300 hover:rotate-90 "
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent click from triggering handleHistoryClick
+                      handleDeleteSearch(term);
+                    }}
+                  >
+                    ✖
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+        </div>
+
+        <Range onFiltersChange={handleFiltersChange} brandName={BrandName} searchTerm={searchTerm}onResetFilters={handleResetFilters} />
 
       </div>
 
-      <div className='m-4 w-10/12 mx-auto'>
-        <Slider />
+      <div className="m-4 w-10/12 mx-auto">
+        <Slider brandName={BrandName} />
       </div>
 
       <div className='m-4 w-10/12 mx-auto'>

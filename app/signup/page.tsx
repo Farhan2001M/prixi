@@ -170,17 +170,13 @@ const SignUpForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
     const newErrors: any = {};
-  
     validateFields('firstName', firstName);
     validateFields('lastName', lastName);
     validateFields('email', email);
     validateFields('password', password);
     validateFields('confirmPassword', confirmPassword);
-    if (!phoneNumber) {
-      setError('Phone number is required');
-    }
+    if (!phoneNumber) { setError('Phone number is required'); }
     if (!firstName) newErrors.firstName = 'First name is required.';
     if (!lastName) newErrors.lastName = 'Last name is required.';
     if (!email) newErrors.email = 'Email is required.';
@@ -194,55 +190,42 @@ const SignUpForm = () => {
       if (errorResponse) {
         // Merge the returned errors into the existing errors state
         setErrors((prevErrors: any) => ({ ...prevErrors, ...errorResponse }));
-      } else {
-        // Proceed with successful signup
-        console.log("Signup successful");
-      }
+      } else { console.log("Signup successful"); }
     }
   };
 
-
   async function signupUser() {
-    const userData = {
-      firstName: firstName, // Make sure these variables are correctly set in your code
-      lastName: lastName,
-      email: email,
-      phoneNumber: phoneNumber,
-      password: password,
-    };
-  
+    const userData = { firstName, lastName, email, phoneNumber, password };
+    
     try {
       const response = await fetch('http://localhost:8000/signup', { 
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify(userData)
       });
   
-      const data = await response.json();
-
-      if (response.ok) {
-        if (data.message === "This email is already registered with us.") {
-          return { email: data.message };
-        } else {
-          console.log('Signup successful:', data);
-          setSuccessConfirmationScreen(!SuccessConfirmationScreen);
-          setTimeout(() => {
-            handleConfirmClick();
-          }, 700);
-          return null; // Indicates no error
-        }
-      } else {
-        console.error('Signup failed:', data.message);
-        return { general: data.message }; // You can use this for general errors
+      if (!response.ok) {
+        // If response is not ok, log the error and return it as a general error
+        const errorData = await response.json();
+        console.error('Signup failed:', errorData.detail || errorData.message);
+        return { general: errorData.detail || 'An unexpected error occurred.' };
       }
-
+  
+      const data = await response.json();
+      if (data.message === "This email is already registered with us.") {
+        return { email: data.message };
+      } else {
+        console.log('Signup successful:', data);
+        setSuccessConfirmationScreen(!SuccessConfirmationScreen);
+        setTimeout(() => { handleConfirmClick(); }, 700);
+        return null;
+      }
     } catch (error) {
       console.error('An error occurred:', error);
-      // Handle network errors or other unexpected issues
+      return { general: 'An unexpected error occurred.' };
     }
   }
+  
   
 
 

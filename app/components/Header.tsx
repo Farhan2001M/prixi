@@ -6,7 +6,6 @@ import { IoMenu } from 'react-icons/io5';
 import React, { useState } from 'react';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { usePathname } from 'next/navigation'; // Correct import for Next.js 13+
-
 import { TbReport } from "react-icons/tb";
 import { AiOutlineDashboard } from "react-icons/ai";
 import { MdOutlineRecommend } from "react-icons/md";
@@ -14,12 +13,10 @@ import { TbReceiptTax } from "react-icons/tb";
 import { BsCalculator } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { GiTakeMyMoney } from "react-icons/gi";
-
 import { IoIosHome } from "react-icons/io";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaUserCog } from "react-icons/fa";
 import { BsBookmarkHeartFill } from "react-icons/bs";
-
 import { BsBox2Heart } from "react-icons/bs";
 
 const Header = () => {
@@ -47,7 +44,7 @@ const Header = () => {
                 <BsBox2Heart  className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" />
               </Link>
 
-              <Link href="/screen1">
+              <Link href="/vehiclesinfo">
                 <IoIosHome  className="text-5xl my-auto hover:text-gray-200 hover:cursor-pointer" />
               </Link>
 
@@ -94,7 +91,7 @@ const Header = () => {
           4-Calculate Loan Financing
         </Link>
 
-        <Link href="/get-recommendations" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/get-recommendations') ? 'bg-zinc-800 text-white' : ''}`}>
+        <Link href="/recommendations" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/get-recommendations') ? 'bg-zinc-800 text-white' : ''}`}>
           <MdOutlineRecommend className="text-3xl mx-3" />
           5-Get Recommendations
         </Link>
@@ -119,8 +116,19 @@ const Header = () => {
           9-Profile Settings
         </Link>
 
-        <Link href="/login" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/calculate-taxes') ? 'bg-zinc-800 text-white' : ''}`}>
-          <RiLogoutBoxLine  className="text-3xl mx-3" />
+        <Link
+          href="/login"
+          onClick={() => {
+            // Play logout sound from the public/images folder
+            const logoutSound = new Audio('/sounds/logout.wav');  // Correct path to the sound file
+            logoutSound.play();
+            
+            localStorage.removeItem("toastShown");
+            localStorage.removeItem("token");
+          }}
+          className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/calculate-taxes') ? 'bg-zinc-800 text-white' : ''}`}
+        >
+          <RiLogoutBoxLine className="text-3xl mx-3" />
           Logout
         </Link>
 
@@ -134,37 +142,6 @@ const Header = () => {
 }
 
 export default Header
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useRef } from 'react';
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 
@@ -16,12 +16,19 @@ interface MyCommentsProps {
   modelName: string;
 }
 
+interface AnonymousComment {
+  anonyTextId: string;
+  anonyText: string;
+  timestamp: string; // ISO format timestamp
+}
+
 const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
   
   const [useremail, setuseremail] = useState<string>(''); // Input for a new useremail
   const [commentText, setCommentText] = useState<string>(''); // Input for a new comment
   const [editingCommentText, setEditingCommentText] = useState<string>(''); // Input for editing a comment
   const [comments, setComments] = useState<Comment[]>([]); // List of top-level comments
+  const [anonymousComments, setAnonymousComments] = useState<AnonymousComment[]>([]);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null); // Track which comment is being edited
   const [replyingCommentId, setReplyingCommentId] = useState<string | null>(null);
   const [replyText, setReplyText] = useState<string>(''); // State for reply input
@@ -34,29 +41,82 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
   const [sortingMode, setSortingMode] = useState('default'); // Sorting mode: 'default', 'top-comments', 'most-loved'
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc'); // Sorting order: 'asc' or 'desc'
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pendingAction, setPendingAction] = useState<null | (() => void)>(null);
+  // Refs for the buttons
+  const buttonClicked = useRef(false); // Tracks if a button was clicked
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null); // Reference for the textarea
+
+  const handleFocusLoss = (action: () => void) => {
+    if (buttonClicked.current) {
+      // If a button was clicked, skip modal logic
+      buttonClicked.current = false;
+      action();
+      return;
+    }
+
+    if (commentText.trim() !== "") {
+      setPendingAction(() => action); // Save the pending action
+      setIsModalOpen(true); // Open the modal
+    } else {
+      action(); // Perform the action directly if no text is present
+    }
+  };
+
+  const handleDiscard = () => {
+    setCommentText(""); // Clear the textarea
+    setIsModalOpen(false); // Close the modal
+    if (pendingAction) pendingAction(); // Perform the pending action
+  };
+
+  const handleContinue = () => {
+    setIsModalOpen(false); // Close the modal
+    // Refocus on the textarea
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  };
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (commentText.trim() !== "") {
+        e.preventDefault();
+        e.returnValue = ""; // Standard for showing the browser warning
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [commentText]);
+
   
   const fetchUserImage = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
 
     try {
-      const response = await fetch('http://localhost:8000/user-image', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      if (response.ok) {
-        const { image } = await response.json();
-        setUserImage(`data:image/png;base64,${image}`);  /////////  WHY NOT JPG OR PNG BUT STILL WORKS
-      }
+        const response = await fetch('http://localhost:8000/user-image', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        if (response.ok) {
+            const { image, GenImage } = await response.json();
+            const finalImage = image ? image : GenImage;
+            setUserImage(`data:image/png;base64,${finalImage}`);
+        }
     } catch (error) {
-      console.error('Failed to fetch user image:', error);
+        console.error('Failed to fetch user image:', error);
     }
   };
 
   useEffect(() => {  
-    fetchUserImage();
+      fetchUserImage();
   }, []);
+
 
   const fetchUserEmail = async () => {
     const token = localStorage.getItem('token');
@@ -80,7 +140,6 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
         // Set the email in state and localStorage
         setuseremail(fetchedEmail);
         localStorage.setItem('userEmail', fetchedEmail);
-        console.log('User email stored in localStorage:', fetchedEmail);
     } catch (error) {
         console.error('Error fetching user email:', error);
     }
@@ -94,6 +153,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
 
   useEffect(() => {
     fetchComments();
+    fetchAnonymousComments();
   }, []);
 
   const fetchComments = async () => {
@@ -106,31 +166,41 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
     }
   };
 
-  const UserhasImage = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('You need to be logged in to check for an image.');
-      return null;
-    }
-  
-    const response = await fetch('http://localhost:8000/user-image', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-  
-    if (response.ok) {
-      const data = await response.json();
-      return data.image; // This will be the user's image or null
-    } else {
-      console.error("Error fetching user image");
-      return null;
+  const fetchAnonymousComments = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/get-anonymous-comments/${brandName}/${modelName}`);
+      const data: { anonymousComments: AnonymousComment[] } = await response.json(); // Explicitly type the response
+      setAnonymousComments(data.anonymousComments); // Update state
+    } catch (err) {
+      console.error("Error fetching anonymous comments:", err);
     }
   };
 
-  const postComment = async () => {
+  const UserhasImage = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        console.error('You need to be logged in to check for an image.');
+        return null;
+    }
 
+    const response = await fetch('http://localhost:8000/user-image', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        return data.image || data.GenImage; // Return custom image if available, otherwise GenImage
+    } else {
+        console.error("Error fetching user image");
+        return null;
+    }
+  };
+
+
+  const postComment = async () => {
     if (commentText == ""){
       console.log("empty comment cannot be posted")
       return
@@ -140,13 +210,11 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       console.error('You need to be logged in to post a comment.');
       return;
     }
-
     const userImage = await UserhasImage();
     if (!userImage) {
       console.error('You do not have an image. Please upload one before posting a comment.');
       return;
     }
-
     const response = await fetch(`http://localhost:8000/post-comment/${brandName}/${modelName}`, {
       method: 'POST',
       headers: {
@@ -158,12 +226,34 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
         timestamp: new Date().toISOString() 
       }),
     });
-
     if (response.ok) {
       setCommentText(''); 
       fetchComments(); 
     } else {
       console.error("Error posting comment");
+    }
+  };
+
+  const postAnonymousComment = async () => {
+    if (commentText == "") {
+      console.log("empty comment cannot be posted");
+      return;
+    }
+    const response = await fetch(`http://localhost:8000/post-anonymous-comment/${brandName}/${modelName}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        anonyText: commentText,
+        timestamp: new Date().toISOString(),
+      }),
+    });
+    if (response.ok) {
+      setCommentText(''); // Clear textarea
+      fetchAnonymousComments(); // Refresh AnonymousComments
+    } else {
+      console.error("Error posting anonymous comment");
     }
   };
 
@@ -280,7 +370,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
   };
 
   const postReply = async (commentId: string) => {
-    if (commentText == ""){
+    if (replyText == ""){
       console.log("empty comment cannot be posted")
       return
     }
@@ -357,7 +447,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
 
   const saveEditReply = async (commentId: string, replyId: string) => {
 
-    if (commentText == ""){
+    if (editingReplyText == ""){
       console.log("empty comment cannot be posted")
       return
     }
@@ -483,20 +573,64 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       </div>
   
       {/* Comment Posting Section */}
+      {/* Textarea */}
       <textarea
+        ref={textareaRef} // Attach the ref to the textarea
         value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
         placeholder="Add a comment"
         rows={4}
-        className="w-full p-2 border border-gray-300 rounded mb-4"
+        className="w-full p-2 border border-gray-300 rounded mb-4 focus:border-blue-500"
+        onBlur={() =>
+          setTimeout(() => {
+            handleFocusLoss(() => {});
+          }, 0) // Ensure this runs after button clicks are processed
+        }
       />
-      <button
-        onClick={postComment}
-        className="w-full py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700 transition duration-200"
-      >
-        Post Comment
-      </button>
-  
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded shadow-lg max-w-sm w-full">
+            <p className="text-gray-800 mb-4">
+              Your comment will be discarded if you leave without posting it. Do you want to continue?
+            </p>
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={handleDiscard}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded hover:bg-red-700"
+              >
+                Discard Comment
+              </button>
+              <button
+                onClick={handleContinue}
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+              >
+                Continue Writing
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Buttons */}
+      <div className="flex space-x-4">
+        <button
+          onMouseDown={() => (buttonClicked.current = true)} // Set flag on button press
+          onClick={postComment}
+          className="w-full py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700 transition duration-200"
+        >
+          Post Comment
+        </button>
+        <button
+          onMouseDown={() => (buttonClicked.current = true)} // Set flag on button press
+          onClick={postAnonymousComment}
+          className="w-full py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-200"
+        >
+          Post Anonymously
+        </button>
+      </div>
+
       {/* Comments Display */}
       <div className="mt-6">
         {sortedComments.length > 0 ? (
@@ -532,16 +666,16 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
               ) : (
                 <>
                   <div className="flex items-center space-x-2 mb-2">
-                    {comment.userEmail === useremail && userImage && (
-                      <img
-                        src={userImage}
-                        alt="User"
-                        className="w-8 h-8 rounded-full"
-                      />
-                    )}
-                    <p className="flex-1">{comment.commentText}</p>
+                      {comment.userEmail === useremail && userImage && (
+                          <img
+                              src={userImage}
+                              alt="User"
+                              className="w-8 h-8 rounded-full"
+                          />
+                      )}
+                      <p className="flex-1">{comment.commentText}</p>
                   </div>
-  
+                  
                   <p className="text-sm text-gray-600">
                     <strong>By:</strong> {comment.userEmail} <strong>At:</strong>{' '}
                     {new Date(comment.timestamp).toLocaleString()} ({comment.Likes.length + " likes"})
@@ -686,6 +820,29 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
           <p className="text-center text-gray-500">No comments yet.</p>
         )}
       </div>
+
+      {/* Dividing Line */}
+      <hr className="my-6 border-gray-300" />
+
+      {/* Anonymous Comments */}
+      <h3 className="text-lg font-bold mb-4">Anonymous Opinions</h3>
+      {anonymousComments.length > 0 ? (
+        anonymousComments.map((anon) => (
+          <div
+            key={anon.anonyTextId}
+            className="border-b border-gray-200 pb-4 mb-4"
+          >
+            <p className="flex-1">{anon.anonyText}</p>
+            <p className="text-sm text-gray-600">
+              <strong>At:</strong>{' '}
+              {new Date(anon.timestamp).toLocaleString()}
+            </p>
+          </div>
+        ))
+      ) : (
+        <p className="text-center text-gray-500">No anonymous comments yet.</p>
+      )}
+
     </div>
   );
 };
@@ -693,196 +850,3 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
 export default MyComments;
 
 
-
-
-
-
-
-
-
-
-// <h3 className='text-3xl font-bold ml-5'>Comments:</h3>
-
-// <div className='w-3/6 mx-auto flex flex-col gap-2'>
-  
-//   <Textarea
-//     value={commentText}
-//     maxRows={3}
-//     label="Description"
-//     placeholder="Add a comment (Max rows 3)"
-//     onChange={(e) => setCommentText(e.target.value)}
-//   />
-//   <Button color="primary" onClick={postComment} >
-//     Post Comment
-//   </Button>  
-
-// </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-// return (
-//   <div>
-//     <h3>Comments</h3>
-
-//     {/* Sorting Buttons */}
-//     <div className='flex gap-7'>
-//       <button onClick={sortByReplies}>
-//         {sortingMode === 'top-comments' && sortOrder === 'asc'
-//           ? 'Show Top Comments (Descending)'
-//           : 'Show Top Comments (Ascending)'}
-//       </button>
-
-//       <button onClick={sortByLikes}>
-//         {sortingMode === 'most-loved' && sortOrder === 'asc'
-//           ? 'Show Most Loved Comments (Descending)'
-//           : 'Show Most Loved Comments (Ascending)'}
-//       </button>
-
-//       <button onClick={resetView}>Reset View</button>
-//     </div>
-
-//     {/* Comment Posting Section */}
-//     <textarea
-//       value={commentText}
-//       onChange={(e) => setCommentText(e.target.value)}
-//       placeholder="Add a comment"
-//       rows={4}
-//     />
-//     <button onClick={postComment}>Post Comment</button>
-
-//     {/* Comments Display */}
-//     <div>
-//       {sortedComments.length > 0 ? (
-//         sortedComments.map((comment) => (
-//           <div key={comment.commentId} style={{paddingLeft: '20px' , marginBottom: '15px' }}>
-//             {/* Editing logic */}
-//             {editingCommentId === comment.commentId ? (
-//               <>
-//                 <textarea
-//                   value={editingCommentText}
-//                   onChange={(e) => setEditingCommentText(e.target.value)}
-//                   rows={2}
-//                 />
-//                 <button onClick={() => saveEdit(comment.commentId)}>Save</button>
-//                 <button onClick={cancelEdit}>Cancel</button>
-//               </>
-//             ) : (
-//               <>
-
-//                 <div style={{ display: 'flex', alignItems: 'center' }}>
-//                    {/* Display user image only for the owner's comments */}
-//                    {comment.userEmail === useremail && userImage && (
-//                      <img src={userImage} alt="User" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} />
-//                    )}
-//                    <p>{comment.commentText}</p>
-//                 </div>
-
-//                 <p><strong>By:</strong> {comment.userEmail} <strong>At:</strong> {new Date(comment.timestamp).toLocaleString()}</p>
-//                 ({comment.Likes.length})
-
-//                 {/* Like/Unlike button based on Likes count */}
-//                 {comment.userEmail !== useremail && (
-//                   <button onClick={() => handleLikeComment(comment.commentId)}>
-//                     {comment.Likes.includes(useremail) ? <FaHeart /> : <FaRegHeart />} 
-//                   </button>
-//                 )}
-
-//                 {/* Other buttons like Edit, Delete, Reply */}
-
-//                 {comment.userEmail == useremail && (
-//                   <>
-//                     <button onClick={() => startEditing(comment.commentId)}>Edit Comment</button>
-//                     <button onClick={() => deleteComment(comment.commentId)}>Delete Comment</button>
-//                   </>
-//                 )}
-//                 {comment.userEmail !== useremail && (
-//                   <button onClick={() => startReplying(comment.commentId)}>Reply Comment</button>
-//                 )}
-
-//                 {replyingCommentId === comment.commentId && (
-//                   <div style={{ paddingLeft: '20px' }}>
-//                     <textarea
-//                       value={replyText}
-//                       onChange={(e) => setReplyText(e.target.value)}
-//                       placeholder="Write a reply..."
-//                       rows={2}
-//                     />
-//                     <button onClick={() => postReply(comment.commentId)}>Post Reply</button>
-//                     <button onClick={cancelReply}>Cancel</button>
-//                   </div>
-//                 )}
-
-//                 {/* Render replies */}
-//                 {comment.replies.length > 0 && (
-//                   <div style={{ paddingLeft: '30px' , marginTop: '15px' }}>
-//                     {comment.replies.map((reply) => (
-//                       <div key={reply.commentId}>
-//                         {editingReplyId === reply.commentId ? (
-//                           <>
-//                             <textarea
-//                               value={editingReplyText}
-//                               onChange={(e) => setEditingReplyText(e.target.value)}
-//                               rows={2}
-//                             />
-//                             <button onClick={() => saveEditReply(comment.commentId, reply.commentId)}>Save</button>
-//                             <button onClick={() => setEditingReplyId(null)}>Cancel</button>
-//                           </>
-//                         ) : (
-//                           <>
-
-//                             <div style={{ display: 'flex', alignItems: 'center' }}>
-//                               {/* Display user image only for the owner's comments */}
-//                               {comment.userEmail === useremail && userImage && (
-//                                 <img src={userImage} alt="User" style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />
-//                               )}
-//                               <p>{reply.commentText}</p>
-//                             </div>
-
-//                             <p><strong>By:</strong> {reply.userEmail} <strong>At:</strong> {new Date(reply.timestamp).toLocaleString()}</p>
-
-//                             {/* Reply Edit and Delete buttons */}
-//                             {comment.userEmail == useremail && (
-//                               <>
-//                                 <button onClick={() => startEditingReply(comment.commentId, reply.commentId, reply.commentText)}>Edit Reply</button>
-//                                 <button onClick={() => deleteReply(comment.commentId, reply.commentId)}>Delete Reply</button>
-//                               </>
-//                             )}
-                            
-//                           </>
-//                         )}
-//                       </div>
-//                     ))}
-//                   </div>
-//                 )}
-//               </>
-//             )}
-//           </div>
-//         ))
-//       ) : (
-//         <p>No comments yet.</p>
-//       )}
-//     </div>
-//   </div>
-// );
-// };
-
-// export default MyComments;

@@ -1,57 +1,76 @@
-import React from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+"use client";
 
-const Slider = () => {
-  return (
-    <div className='my-5 border border-black h-96 relative overflow-hidden rounded-xl'>
-      <Swiper
-        navigation={false}
-        pagination={false}
-        centeredSlides={true}
-        slidesPerView={1}
-        spaceBetween={30}
-        autoplay={{
-          delay: 2500,
-          disableOnInteraction: false,
-        }}
-        loop={true}
-        modules={[ Autoplay, Pagination, Navigation]}
-        className="w-full h-full" >
+import React, { useEffect, useState } from "react";
 
-        <SwiperSlide className="relative">
-          <img
-            src="../../images/Cars/Tesla/desktop-full-hd-tesla-model-s-background.png"
-            alt="Alpha bravo v+charlie"
-            className="w-full h-full object-cover"
-            style={{ objectPosition: 'center' }}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src="../../images/Cars/Tesla/teop.png"
-            alt="Alpha bravo charlie"
-            className="w-full h-full object-cover"
-            style={{ objectPosition: 'center' }}
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src="../../images/Cars/Tesla/toto.png"
-            alt="Alpha bravo charlie"
-            className="w-full h-full object-cover"
-            style={{ objectPosition: 'center' }}
-          />
-        </SwiperSlide>
-        {/* Add more SwiperSlides as needed */}  
-      </Swiper>
-      
-    </div> 
-  )
+interface SliderProps {
+  brandName: string;
 }
 
-export default Slider
+const CustomSlider: React.FC<SliderProps> = ({ brandName }) => {
+  const [images, setImages] = useState<string[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
+  // Fetch images from the backend
+  useEffect(() => {
+    const fetchBrandImages = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/get-brand-images/${brandName}`
+        );
+        if (!response.ok) {
+          throw new Error(`Failed to fetch brand images: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setImages(data.images || []);
+      } catch (err) {
+        console.error("Error fetching brand images:", err);
+      }
+    };
+
+    fetchBrandImages();
+  }, [brandName]);
+
+  // Set an interval to automatically slide through the images
+  useEffect(() => {
+    if (images.length > 0) {
+      const intervalId = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length); // Loop through images
+      }, 3500); // Change image every 2.5 seconds
+
+      return () => clearInterval(intervalId); // Cleanup interval on component unmount
+    }
+  }, [images]);
+
+  return (
+    <div className="my-5 border border-black h-96 relative overflow-hidden rounded-xl">
+      <div
+        className="relative w-full h-full flex transition-transform duration-700 ease-in-out"
+        style={{
+          transform: `translateX(-${currentIndex * 100}%)`, // Move slides horizontally
+        }}
+      >
+        {images.length > 0 ? (
+          images.map((image, index) => (
+            <div
+              key={index}
+              className="w-full h-full flex-shrink-0"
+              style={{
+                backgroundImage: `url(data:image/${
+                  image.includes("png") ? "png" : "jpeg"
+                };base64,${image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+          ))
+        ) : (
+          <div className="flex items-center justify-center w-full h-full">
+            <p className="text-lg font-bold text-gray-500">No images available</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default CustomSlider;

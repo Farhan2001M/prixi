@@ -56,10 +56,8 @@ const Cards: React.FC<CardsProps> = ({ filter, brandname }) => {
     }
 
     const isFavorited = favorites.includes(modelName);
-    const apiUrl = isFavorited
-      ? "http://localhost:8000/favorites/remove"
-      : "http://localhost:8000/favorites/add";
-    
+    const apiUrl = isFavorited ? "http://localhost:8000/favorites/remove" : "http://localhost:8000/favorites/add";
+  
     try {
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -72,11 +70,9 @@ const Cards: React.FC<CardsProps> = ({ filter, brandname }) => {
           brandName: brandname,
         }),
       });
-
       if (!response.ok) {
         throw new Error(`Failed to ${isFavorited ? 'remove' : 'add'} favorite`);
       }
-
       if (isFavorited) {
         setFavorites(favorites.filter(fav => fav !== modelName));  // Remove from favorites
       } else {
@@ -88,25 +84,54 @@ const Cards: React.FC<CardsProps> = ({ filter, brandname }) => {
     }
   };
 
-  const handleCardClick = (modelName: string) => {
+  const handleCardClick = async ( modelName: string, vehicleType: string, engineType: string, price: number, horsepower: number, torque: number , year: number ) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError("Please log in to track visits.");
+      return;
+    }
+    // Track the visit in the backend
+    try {
+      await fetch("http://localhost:8000/track-model-visit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          brandName: brandname,
+          modelName: modelName,
+          vehicleType: vehicleType,
+          engineType: engineType,
+          price: price,
+          horsepower: horsepower,
+          torque: torque,
+          year: year ,
+        }),
+      });
+    } catch (error) {
+      console.error("Error tracking visit:", error);
+    }
     router.push(`/carsbrands/${brandname}/page?model=${encodeURIComponent(modelName)}`);
   };
-
+  
   return (
     <div className="gap-3 grid grid-cols-2 sm:grid-cols-3">
       {error && <p className="text-red-500">{error}</p>}
       {filter.length > 0 ? (
         filter.map((item, index) => (
-          <Card
-            shadow="sm"
-            key={index}
-            isPressable
-            className="hover:bg-black hover:text-white relative"
-          >
-            
+          <Card shadow="sm" key={index} isPressable className="hover:bg-black hover:text-white relative" >
             <CardBody
               className="overflow-visible p-0 bg-slate-200"
-              onClick={() => handleCardClick(item.modelName)}
+              onClick={() => handleCardClick(
+                item.modelName,                 // Pass model name
+                item.vehicleType || "unknown",  // Pass vehicle type
+                item.engineType || "unknown",   // Pass engine type
+                item.launchPrice || 0,          // Pass price, defaulting to 0 if undefined
+                item.horsepower || 0,           // Pass horsepower, defaulting to 0 if undefined
+                item.torque || 0 ,              // Pass torque, defaulting to 0 if undefined
+                item.year || 2024 ,             // Pass year, defaulting to 2023 if undefined
+              )}
             >
               {item.images && item.images[0] ? (
                 <Image
@@ -124,6 +149,7 @@ const Cards: React.FC<CardsProps> = ({ filter, brandname }) => {
                 </div>
               )}
             </CardBody>
+
             <CardFooter className="text-small justify-between">
               <b>{item.modelName}</b>
               <p>{item.launchPrice ? `$${item.launchPrice.toLocaleString()}` : "Coming Soon"}</p>
@@ -149,7 +175,3 @@ const Cards: React.FC<CardsProps> = ({ filter, brandname }) => {
 }
 
 export default Cards;
-
-
-
-

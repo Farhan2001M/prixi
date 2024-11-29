@@ -1,13 +1,13 @@
 // pages/comments/components/Comment.tsx
+
 import React, { useState, useRef, useEffect } from 'react';
 import Action from './Action';
-
 import DownArrow from '../assets/down-arrow.svg';
 import UpArrow from '../assets/up-arrow.svg';
 
 interface CommentNode {
   id: number;
-  name: string;
+  name?: string;
   items?: CommentNode[]; // Recursive type for nested comments
 }
 
@@ -86,7 +86,7 @@ const Comment: React.FC<CommentProps> = ({
               ref={inputRef}
               style={{ wordWrap: 'break-word' }}
             >
-              {comment.name}
+              {comment.name || ''} {/* Fallback for optional `name` */}
             </span>
             <div style={{ display: 'flex', marginTop: '5px' }}>
               {editMode ? (

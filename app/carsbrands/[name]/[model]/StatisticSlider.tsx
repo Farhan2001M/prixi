@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 // import CommentsPart from './CommentsPart';
-
-
 import MyComments from './MyComments';
 
 
@@ -45,10 +43,10 @@ const Carousel: React.FC<CarouselProps> = ({ modelData , brandname }) => {
 
   return (
     <>
-      <div className='flex border-y-1 border-black mt-8'>
+      <div className='flex  mt-8'>
         
         {/* Info Section */}
-        <div className="flex flex-col justify-around w-[50vw] text-black p-4">
+        <div className="flex flex-col justify-around w-[35vw] ml-12 text-black p-4">
           <div className='flex flex-col gap-4'>
             <h1 className="text-4xl font-bold my-2">{modelData.modelName || "Model name not available"}</h1>
             <table className="max-w-full">
@@ -101,15 +99,21 @@ const Carousel: React.FC<CarouselProps> = ({ modelData , brandname }) => {
         </div>
 
         {/* Carousel Section */}
-        <div className="relative h-[60vh] w-[50vw] my-auto ">
+        <div className="relative w-[65vw]">
           {images.map((image, index) => (
             <div
               key={index}
-              className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
-              style={{ backgroundImage: `url(${image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+              className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 p-8 ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
+              style={{
+                backgroundImage: `url(${image})`,
+                backgroundSize: 'contain',  
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
             ></div>
           ))}
         </div>
+
       </div>
 
       <div className='p-5 flex flex-col'>
@@ -119,9 +123,7 @@ const Carousel: React.FC<CarouselProps> = ({ modelData , brandname }) => {
 
       {/* <CommentsPart /> */}
       
-
       <MyComments brandName={brandname} modelName={modelData.modelName || "Unknown Model"}  />
-
 
     </>
   );

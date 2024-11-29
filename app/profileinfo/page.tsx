@@ -20,83 +20,42 @@ import JitterText from '@/components/animata/text/jitter-text-'
 const MyProfileInfo = () => {
 
   {/* Edit Image Functionality */}
+
+
+  // State variables for storing images
   const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [genImageSrc, setGenImageSrc] = useState<string | null>(null); // Store GenImage separately
   const [originalImageSrc, setOriginalImageSrc] = useState<string | null>(null);
   
+  // Fetch both images initially
   const fetchUserImage = async () => {
-    let isMounted = true; // Track whether the component is mounted
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://127.0.0.1:8000/user-image', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      const data: any = await response.json();
-
-      if (response.ok && isMounted) {
-        // Set image source only if the component is still mounted
-        const image = data.image ? (data.imageType === 'jpeg' ? `data:image/jpeg;base64,${data.image}` : `data:image/png;base64,${data.image}`) : null;
-        setImageSrc(image);
-        setOriginalImageSrc(image); // Save the original image
-      } else if (!response.ok) {
-        console.log("Failed to fetch user image");
-      }
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://127.0.0.1:8000/user-image', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        const data = await response.json();
+        
+        if (response.ok) {
+            const customImage = data.image ? `data:image/png;base64,${data.image}` : null;
+            const genImage = `data:image/png;base64,${data.GenImage}`;
+            
+            setImageSrc(customImage || genImage); // Show custom image if available, else GenImage
+            setGenImageSrc(genImage); // Store GenImage separately
+            setOriginalImageSrc(customImage); // Store the original custom image
+        } else {
+            console.error("Failed to fetch user image");
+        }
     } catch (error) {
-      console.error("Error fetching user image:", error);
+        console.error("Error fetching user image:", error);
     }
   };
 
-  // Fetch the image on mount
-  useEffect(() => {
-    fetchUserImage();
-    return () => {
-      // Cleanup if needed
-    };
-  }, []); // Empty dependency array ensures this effect runs once on mount
-
-
-  // Handle image change and upload
-  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      const formData = new FormData();
-      formData.append('image', file);
-
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://127.0.0.1:8000/upload-image', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (response.ok) {
-        // Fetch user image again to update the UI with the new image
-        // fetchUserImage();
-        setImageSrc(URL.createObjectURL(file));
-      } else {
-        console.error("Failed to upload image");
-      }
-    }
-  };
-
-  // Handle image removal
-  const handleImageRemove = async () => {
-    const token = localStorage.getItem('token');
-    const response = await fetch('http://127.0.0.1:8000/remove-image', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-    if (response.ok) {
-      // Set image source to default or null
-      setImageSrc('/images/clientTestimonial/person-circle.png');
-    } else {
-      console.error("Failed to remove image");
-    }
+  // Temporarily display GenImage without affecting the backend
+  const handleImageRemove = () => {
+    setImageSrc(genImageSrc);
   };
 
   const fetchUserData = async () => {
@@ -118,18 +77,63 @@ const MyProfileInfo = () => {
     }
   };
 
+
   useEffect(() => {  
     fetchUserData();
+    fetchUserImage();
   }, []); 
+
+  
+
+
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append('image', file);
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://127.0.0.1:8000/upload-image', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      if (response.ok) {
+        setImageSrc(URL.createObjectURL(file));
+      } else {
+        console.error("Failed to upload image");
+      }
+    }
+  };
+
+  // const handleImageRemove = async () => {
+  //   const token = localStorage.getItem('token');
+  //   const response = await fetch('http://127.0.0.1:8000/remove-image', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Authorization': `Bearer ${token}`,
+  //     },
+  //   });
+    
+  //   if (response.ok) {
+  //     // Re-fetch the user image, which will return the initials image by default if no custom image is available
+  //     fetchUserImage();
+  //   } else {
+  //     console.error("Failed to remove image");
+  //   }
+  // };
+
+  
+
+
 
 
   const handleCancel = () => {
     setIsEditing(false);
     setErrors({}); // Clear errors if any
     setError('')
-    // Revert image to original state
     setImageSrc(originalImageSrc);
-    // Optionally fetch user data again to reset other form fields
     fetchUserData();
   };
 
@@ -279,11 +283,24 @@ const MyProfileInfo = () => {
       return; // Stop form submission if there are errors
     }
 
-    // If no errors, proceed to fetch token and submit form
     const token = localStorage.getItem('token');
     if (token) {
-      await updateDetails(token, firstName, lastName, phoneNumber);
+        // Only remove image from the backend if GenImage is currently displayed
+        if (imageSrc === genImageSrc) {
+            await fetch('http://127.0.0.1:8000/remove-image', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+        }
+
+        // Call the updateDetails function for other user details
+        await updateDetails(token, firstName, lastName, phoneNumber);
     }
+
+    setIsEditing(false); // Exit edit mode
+    setOriginalImageSrc(imageSrc); // Save the current displayed image as original
 
     console.log("Hello");
     console.log(firstName);
@@ -530,14 +547,6 @@ const MyProfileInfo = () => {
                   {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                 </div>
 
-                {/* <div className="mb-4 w-1/2">
-                  <label htmlFor="email" className="block text-black text-base font-bold">Email ID <span className='text-red-500'>*</span></label>
-                  <input id="email" name="email" type="email" value={email} onChange={handleInputChange} 
-                  className={`block w-full shadow-sm mt-2 p-2 border rounded ${!isEditing ? 'bg-gray-100 cursor-not-allowed border-gray-300' : 'bg-white border-gray-300'} transition-colors`} 
-                  placeholder={`Enter A Valid Email Address ${email}`} disabled={!isEditing || isEditing} />
-                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-                </div> */}
-
               </div>
                           
               <div className='flex gap-5 mx-auto'>
@@ -613,34 +622,6 @@ const MyProfileInfo = () => {
           <div className={`fixed top-0 left-0 w-screen h-full bg-black bg-opacity-70 transition-opacity duration-700   ${SuccessConfirmationScreen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} z-10`} > </div>
 
 
-
-
-          {/* Confirm Logout */}
-          {/* <div className={`flex justify-center items-center fixed top-1/2 left-1/2 w-1/2 h-[27%] bg-slate-200 shadow-lg rounded-2xl transition-transform duration-1000  transform ${ConfirmLogout ? 'translate-x-[-50%] translate-y-[-50%]' : 'translate-x-[-50%] translate-y-[250%]'} z-20`}>
-            <div className='relative flex flex-col justify-around items-center w-[95%] h-[85%]  bg-white'>
-              <RxCrossCircled onClick={toggleLogoutScreen} className='absolute top-1 right-1 text-black hover:text-red-500 cursor-pointer' size={40}  />
-
-              <div>
-                <h2 className="text-3xl leading-10 font-bold text-center my-4 w-4/6 mx-auto">Are You Sure You Want To Logout Of Your Prixi Account!</h2>
-              </div>
-
-              
-              
-              <div className='flex flex-col justify-center  w-[95%] h-[95%] '>
-                <button type="button" onClick={()=> { 
-                  router.push('/login' );  
-                  }} className={`flex justify-center items-center gap-2 text-lg p-2 rounded w-full mx-auto bg-blue-600 text-white hover:bg-blue-700   `}  >
-                  <GrLogout className="text-4xl  " /> Confirm Logout
-                </button>
-              </div>
-              
-            </div>
-          </div>
-          <div className={`fixed top-0 left-0 w-screen h-full bg-black bg-opacity-70 transition-opacity duration-1000   ${ConfirmLogout ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} z-10`} onClick={toggleLogoutScreen} > </div> */}
-
-
-
-
           {/* Confirm Delete Account */}
           <div className={`flex justify-center items-center fixed top-1/2 left-1/2 w-1/2 h-1/4 bg-slate-200 shadow-lg rounded-2xl transition-transform duration-1000  transform ${ConfirmDeleteProfile ? 'translate-x-[-50%] translate-y-[-50%]' : 'translate-x-[-50%] translate-y-[250%]'} z-20`}>
             <div className='relative flex flex-col justify-around items-center w-[95%] h-[85%]  bg-white '>
@@ -656,11 +637,9 @@ const MyProfileInfo = () => {
                   // router.push('/login' );  
                   }} className={`text-lg p-2 rounded w-full mx-auto bg-blue-600 text-white hover:bg-blue-700   `}  >
                   
-                  <JitterText
-                    text="Cancel"
-                  />
-
+                  <JitterText text="Cancel" />
                 </button>
+                
                 <button type="button" onClick={()=> { 
                   toggleDeleteProfile();
                   toggleDeleteAccountScreen();
@@ -682,7 +661,6 @@ const MyProfileInfo = () => {
               <div>
                 <h2 className="text-3xl leading-10 font-bold text-center mt-4 mb-2 w-4/6 mx-auto">We&apos;re sorry to see you go.</h2>
                 <p className=" text-center text-xl w-5/6 mx-auto mb-2" >Deleting your account is permanent & it will remove all of your information from our database. This action cannot be undone⚠️</p>
-                {/* <p className=" text-center" >Deleting your account will remove all of your information from our database. This action cannot be undone.</p> */}
               </div>
 
               <div className='w-[90%] mx-auto mb-4'>

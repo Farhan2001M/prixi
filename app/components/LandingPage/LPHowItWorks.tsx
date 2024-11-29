@@ -30,27 +30,27 @@ const LPHowItWorks = () => {
             
             <div className='w-3/6 flex flex-col gap-4 m-5 absolute top-16 left-28'>
 
-              <div className='flex justify-between bg-white pl-4 py-5 border-2 rounded-3xl  mx-4  max-w-[680px] '>
-                <div className='w-16  bg-gray-300 rounded-3xl flex justify-center items-center'>  <img src="/images/hwtIcons/search.png" alt="" /> </div>
+              <div className='flex bg-white pl-4 py-5 border-2 rounded-3xl mx-4  max-w-[680px] '>
+                <div className='w-16 bg-gray-300 rounded-3xl flex justify-center items-center mr-6'>  <img src="/images/hwtIcons/search.png" alt="" /> </div>
                 <div className='flex flex-col gap-4 max-w-[580px]'>
                   <div><h2 className='text-2xl text-black font-bold'>Find vehicle info</h2></div>
-                  <div><p className='text-lg'>Choose from our wide range of cars, select the  that suit you best.</p></div>
+                  <div><p className='text-lg'>Choose what best suits you & your needs.</p></div>
                 </div>
               </div>
 
-              <div className='flex justify-between bg-white pl-4 py-5 border-2 rounded-3xl  mx-4 max-w-[680px]'>
-                <div className='w-16  bg-gray-300 rounded-3xl flex justify-center items-center'>  <img className='w-[40px]' src="/images/hwtIcons/ai-brain.png" alt="" />  </div>
+              <div className='flex bg-white pl-4 py-5 border-2 rounded-3xl mx-4 max-w-[680px]'>
+                <div className='w-16 bg-gray-300 rounded-3xl flex justify-center items-center mr-6'>  <img className='w-[40px]' src="/images/hwtIcons/ai-brain.png" alt="" />  </div>
                 <div className='flex flex-col gap-4 max-w-[580px]'>
-                  <div><h2 className='text-2xl text-black font-bold'>Price prediction in an instant</h2></div>
-                  <div><p className='text-lg'>Select your desired car with just a few clicks using our latest AI technologies for its evaluation.</p></div>
+                  <div><h2 className='text-2xl text-black font-bold'>Instant Price prediction </h2></div>
+                  <div><p className='text-lg'>Select ythew clicks using our latest AI tech for its evaluation.</p></div>
                 </div>
               </div>
 
-              <div className='flex justify-between bg-white pl-4 py-5 border-2 rounded-3xl  mx-4 max-w-[680px]'>
-                <div className='w-16  bg-gray-300 rounded-3xl flex justify-center items-center' > <img src="/images/hwtIcons/face-happy.png" alt="" /> </div>
+              <div className='flex bg-white pl-4 py-5 border-2 rounded-3xl mx-4 max-w-[680px]'>
+                <div className='w-16 bg-gray-300 rounded-3xl flex justify-center items-center mr-6' > <img src="/images/hwtIcons/face-happy.png" alt="" /> </div>
                 <div className='flex flex-col gap-4 max-w-[580px]'>
-                  <div><h2 className='text-2xl text-black font-bold'>See latest trends in Auto industry</h2></div>
-                  <div><p className='text-lg'>With our interactive dashboards and realtime interacrtions.</p></div>
+                  <div><h2 className='text-2xl text-black font-bold'>Discover Latest Automotive Trends</h2></div>
+                  <div><p className='text-lg'>With our interactive dashboards and realtime interactions.</p></div>
                 </div>
               </div>
               
