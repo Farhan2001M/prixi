@@ -12,8 +12,17 @@ const SystemOverview = () => {
   const fetchData = async () => {
     const token = localStorage.getItem('token');
     if (!token) { setError("Please log in to view your user overview."); return; }
-    try { const userOverviewData = await fetchUserOverview(token); setUserOverview(userOverviewData); const userDataSummary = await fetchUserOverviewDetail(token); setVehicleData(userDataSummary); } 
-    catch (err: unknown) { if (err instanceof Error) { setError(err.message); } else { setError("An unknown error occurred."); } console.error('Error fetching data:', err); }
+    try { 
+      const userOverviewData = await fetchUserOverview(token); 
+      setUserOverview(userOverviewData); 
+      const userDataSummary = await fetchUserOverviewDetail(token); 
+      setVehicleData(userDataSummary); 
+    } 
+    catch (err: unknown) { 
+      if (err instanceof Error) { setError(err.message); } 
+      else { setError("An unknown error occurred.") ; } 
+      console.error('Error fetching data:', err) ; 
+    }
   };
 
   useEffect(() => {

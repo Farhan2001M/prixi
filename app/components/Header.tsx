@@ -96,7 +96,7 @@ const Header = () => {
           5-Get Recommendations
         </Link>
 
-        <Link href="/my-dashboard" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/my-dashboard') ? 'bg-zinc-800 text-white' : ''}`}>
+        <Link href="/dashboard" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/my-dashboard') ? 'bg-zinc-800 text-white' : ''}`}>
           <LuLayoutDashboard className="text-3xl mx-3" />
           6-My Dashboard
         </Link>

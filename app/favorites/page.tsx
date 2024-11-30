@@ -36,11 +36,9 @@ const FavoriteCards: React.FC = () => {
             "Authorization": `Bearer ${token}`,
           },
         });
-
         if (!response.ok) {
           throw new Error("Failed to fetch detailed favorite vehicles");
         }
-
         const data = await response.json();
         setFavorites(data.favorites || []);
       } catch (err) {
