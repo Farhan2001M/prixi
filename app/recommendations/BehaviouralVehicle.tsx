@@ -13,7 +13,7 @@ interface RecommendedVehicle {
   vector: number[];
 }
 
-const InterestedVehicle: React.FC = () => {
+const BehaviouralVehicle: React.FC = () => {
   const [recommendedVehicles, setRecommendedVehicles] = useState<RecommendedVehicle[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // Track loading state
   const [loaded, setLoaded] = useState<boolean>(false); // Track if data is loaded
@@ -29,7 +29,7 @@ const InterestedVehicle: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/recommendationsbyfavorites", {
+        const response = await fetch("http://localhost:8000/recommendationsbybehavior", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -159,7 +159,7 @@ const InterestedVehicle: React.FC = () => {
   );
 };
 
-export default InterestedVehicle;
+export default BehaviouralVehicle;
 
 
 

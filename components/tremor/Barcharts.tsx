@@ -1,29 +1,12 @@
-// Tremor BarChart [v0.2.1]
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client"
 
 import React from "react"
 import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react"
-import {
-  Bar,
-  CartesianGrid,
-  Label,
-  BarChart as RechartsBarChart,
-  Legend as RechartsLegend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts"
+import { Bar, CartesianGrid, Label, BarChart as RechartsBarChart, Legend as RechartsLegend, ResponsiveContainer, Tooltip, XAxis, YAxis, } from "recharts"
 import { AxisDomain } from "recharts/types/util/types"
 
-import {
-  AvailableChartColors,
-  AvailableChartColorsKeys,
-  constructCategoryColors,
-  getColorClassName,
-  getYAxisDomain,
+import { AvailableChartColors, AvailableChartColorsKeys, constructCategoryColors, getColorClassName, getYAxisDomain,
 } from "@/lib/chartUtils"
 import { useOnWindowResize } from "@/lib/useOnWindowResize"
 import { cn } from "@/lib/utils";
@@ -89,7 +72,6 @@ const renderShape = (
   )
 }
 
-//#region Legend
 
 interface LegendItemProps {
   name: string

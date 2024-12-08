@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import { fetchUserOverview, fetchUserOverviewDetail } from './helperapis'; 
 
+
 const SystemOverview = () => {
   const [userOverview, setUserOverview] = useState<any>({});
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +36,7 @@ const SystemOverview = () => {
       
       <Header />
 
-      <div className="h-[90vh] bg-red-400 px-12 py-10">
+      <div className="h-[90vh] bg-slate-100 px-12 py-10">
           
       <div className="flex gap-6 ">
         
@@ -44,7 +45,7 @@ const SystemOverview = () => {
             <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
               <p>{userOverview.totalUniqueModels}</p>
             </div>
-            <div className="description text-sm text-left">
+            <div className="description text-sm text-left mt-2">
               Total Unique Vehicle Models visited
             </div>
           </div>
@@ -53,7 +54,7 @@ const SystemOverview = () => {
             <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
               <p>{vehicleData.totalModels}</p>
             </div>
-            <div className="description text-sm text-left">
+            <div className="description text-sm text-left mt-2">
               Total Inventory of our Vehicles
             </div>
           </div>
@@ -61,29 +62,63 @@ const SystemOverview = () => {
 
         <div className='flex flex-col gap-4'>
           <div className="card w-52 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
-            <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
-              <p>{userOverview.averagePrice ? userOverview.averagePrice.toFixed(2) : '0.00'}</p>
+            <div className="number text-5xl font-bold overflow-hidden text-ellipsis inline-flex items-baseline">
+              <p>
+                {userOverview.averagePrice ? (
+                  <>
+                    {Math.round(userOverview.averagePrice)} 
+                    <span className="text-3xl ml-1">$</span>
+                  </>
+                ) : (
+                  <>
+                    0
+                    <span className="text-3xl ml-1">$</span>
+                  </>
+                )}
+              </p>
             </div>
-            <div className="description text-sm text-left">
-              Average Price vehicles you've viewed
+            <div className="description text-sm text-left mt-2">
+              Average Price vehicles you&apos;ve viewed
             </div>
           </div>
 
           <div className="card w-52 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
-            <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
-              <p>{userOverview.averageTorque ? userOverview.averageTorque.toFixed(2) : '0.00'}</p>
+            <div className="number text-5xl font-bold overflow-hidden text-ellipsis inline-flex items-baseline">
+              <p>
+                {userOverview.averageTorque ? (
+                  <>
+                    {Math.round(userOverview.averageTorque)}
+                    <span className="text-2xl ml-1">Nm</span>
+                  </>
+                ) : (
+                  <>
+                    0<span className="text-2xl ml-1">Nm</span>
+                  </>
+                )}
+              </p>
             </div>
-            <div className="description text-sm text-left">
-              Average Torque of vehicles you've viewed
+            <div className="description text-sm text-left mt-2">
+              Average Torque of vehicles you&apos;ve viewed
             </div>
           </div>
 
           <div className="card w-52 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
-            <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
-              <p>{userOverview.averageHorsepower ? userOverview.averageHorsepower.toFixed(2) : '0.00'}</p>
+            <div className="number text-5xl font-bold overflow-hidden text-ellipsis inline-flex items-baseline">
+              <p>
+                {userOverview.averageHorsepower ? (
+                  <>
+                    {Math.round(userOverview.averageHorsepower)}
+                    <span className="text-2xl ml-1">Hp</span>
+                  </>
+                ) : (
+                  <>
+                    0<span className="text-2xl ml-1">Hp</span>
+                  </>
+                )}
+              </p>
             </div>
-            <div className="description text-sm text-left">
-              Average Horsepower of vehicles you've viewed
+            <div className="description text-sm text-left mt-2">
+              Average Horsepower of vehicles you&apos;ve viewed
             </div>
           </div>
         </div>
@@ -93,7 +128,7 @@ const SystemOverview = () => {
             <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
               <p>{userOverview.mostFavoriteEngineType || 'N/A'}</p>
             </div>
-            <div className="description text-sm text-left">
+            <div className="description text-sm text-left mt-2">
               Your Most Favorite Engine Type
             </div>
           </div>
@@ -102,27 +137,29 @@ const SystemOverview = () => {
             <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
               <p>{userOverview.mostFavoriteVehicleType || 'N/A'}</p>
             </div>
-            <div className="description text-sm text-left">
+            <div className="description text-sm text-left mt-2">
               Your Most Favorite Vehicle Type
             </div>
           </div>
         </div>
 
-        <div className="card w-52 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
-          <div className="number text-3xl font-bold overflow-hidden text-ellipsis">
-            <p>{userOverview.mostViewedYearRange || 'N/A'}</p>
-          </div>
-          <div className="description text-sm text-left">
-            Your Most Viewed Vehicle Year Range
-          </div>
-        </div>          
+        <div className='flex flex-col gap-4'>
+          <div className="card w-52 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
+            <div className="number text-3xl font-bold overflow-hidden text-ellipsis">
+              <p>{userOverview.mostViewedYearRange || 'N/A'}</p>
+            </div>
+            <div className="description text-sm text-left mt-5">
+              Your Most Viewed Vehicle Year Range
+            </div>
+          </div> 
+        </div>         
 
         <div className='flex flex-col gap-4'>
           <div className="card w-52 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
             <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
               <p>{vehicleData.totalComments}</p>
             </div>
-            <div className="description text-sm text-left">
+            <div className="description text-sm text-left mt-2">
               Total Comments You Posted
             </div>
           </div>
@@ -131,7 +168,7 @@ const SystemOverview = () => {
             <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
               <p>{vehicleData.totalReplies}</p>
             </div>
-            <div className="description text-sm text-left">
+            <div className="description text-sm text-left mt-2">
               Total Replies You Posted
             </div>
           </div>
@@ -140,31 +177,35 @@ const SystemOverview = () => {
             <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
               <p>{vehicleData.totalRepliesReceived}</p>
             </div>
-            <div className="description text-sm text-left">
+            <div className="description text-sm text-left mt-2">
               Total Replies You Received
             </div>
           </div>
         </div>
 
-        <div className="card w-52 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
-          <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
-            <p>{userOverview.totalFavorites}</p>
-          </div>
-          <div className="description text-sm text-left">
-            Your Total Favorites
+        <div className='flex flex-col gap-4'>
+          <div className="card w-52 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
+            <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
+              <p>{userOverview.totalFavorites}</p>
+            </div>
+            <div className="description text-sm text-left mt-2">
+              Your Total Favorites
+            </div>
           </div>
         </div>
 
-        <div className="card w-80 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
-          <div className="description text-lg text-left">
-            My Top 3 Most Visited Brands:
-          </div>
-          <div className="number text-5xl font-bold">
-            <ul>
-              {userOverview.topBrands?.map(([brand, count]: [string, number], index: number) => (
-                <li key={index}>{brand}: {count}</li>
-              ))}
-            </ul>
+        <div className='flex flex-col gap-4'>
+          <div className="card w-80 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
+            <div className="description text-lg text-left mb-4">
+              My Top 3 Most Visited Brands:
+            </div>
+            <div className="number text-4xl font-bold">
+              <ul>
+                {userOverview.topBrands?.map(([brand, count]: [string, number], index: number) => (
+                  <li key={index}>{brand}: {count} </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -180,39 +221,4 @@ const SystemOverview = () => {
 
 export default SystemOverview;
 
-
-
-// <div className='flex flex-col gap-4'>
-//           <div className="card w-52 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
-//             <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
-//               <p>{userOverview.averagePrice ? userOverview.averagePrice.toFixed(2) : '0.00'}</p>
-//             </div>
-//             <div className="description text-sm text-left">
-//               Average Price vehicles you've viewed
-//             </div>
-//           </div>
-
-//           <div className="card w-52 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
-//             <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
-//               <p>{userOverview.averageTorque ? userOverview.averageTorque.toFixed(2) : '0.00'}</p>
-//             </div>
-//             <div className="description text-sm text-left">
-//               Average Torque of vehicles you've viewed
-//             </div>
-//           </div>
-
-//           <div className="card w-52 h-auto bg-white text-black rounded-xl flex flex-col justify-between p-4 transition-all duration-1000 hover:bg-black hover:text-white shadow-lg">
-//             <div className="number text-5xl font-bold overflow-hidden text-ellipsis">
-//               <p>{userOverview.averageHorsepower ? userOverview.averageHorsepower.toFixed(2) : '0.00'}</p>
-//             </div>
-//             <div className="description text-sm text-left">
-//               Average Horsepower of vehicles you've viewed
-//             </div>
-//           </div>
-//         </div>
-
-
-// right now , the average price, torque and horsepower are showing as floating point numbers ..
-// i want them to be converted to integers.. 
-// also i want a small $ symbol right next to price integer, a small Nm symbol right next to integer torque and a small hp symbol right next to Integer horsepower. 
 

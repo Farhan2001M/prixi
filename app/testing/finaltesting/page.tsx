@@ -30,7 +30,7 @@ const Final = () => {
             .catch(err => {
                 console.error("Error fetching todos:", err);
             });
-    }, [1]); 
+    }, []); 
 
     // Post all todos
     const addToDoHandler = () =>{

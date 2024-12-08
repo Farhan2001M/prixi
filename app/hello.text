@@ -25,7 +25,6 @@ statistics : Object
         Tesla: 20
         Nio: 3
         Polestar: 9
-    
     totalVisitedCards : 21   
     cumulativePrice : 1321188
     averagePrice : 94370.57142857143
@@ -34,15 +33,11 @@ statistics : Object
     cumulativeTorque : 16976
     averageTorque : 1212.5714285714287
     uniqueVisitedModels : Array (13)
-        2 : "Ford_Mustang Mach E"
-        4 : "Ford_Capri"
-        5 : "Hyundai_Tuscon"
-        6 : "Ford_Tourneo"
-        7 : "Hyundai_Elantra"
-        8 : "Buggati_veryon"
-        11 : "Buggati_Chiron"
-        13 : "Buggati_Mistral"
-
+        0 : "Hyundai_Elantra"
+        1 : "Ford_Mustang Mach E"
+        2 : "Ford_Capri"
+        3 : "Hyundai_Tuscon"
+        4 : "Ford_Tourneo"
     VehicleTypesVisited : Object
         Hatchback : 8
         Pickup-Truck : 12
@@ -50,20 +45,24 @@ statistics : Object
         Coupe : 4
         Sedan : 11
         Compact: 5
-
     EngineTypesVisited : Object
         Petrol: 6
         Diesel: 5
         Electric: 3
         Hybrid: 7
-
     yearRangesVisited: Object
         2010-2015: 7
         1995-2000: 1
         2020-2025: 5
         1985-1990: 2
         2015-2020: 6
-
+    CalculatedPrices: Array (13)
+        0 : Object
+            calculated_price : 20157.121670426663
+            timestamp : "2024-12-08T19:22:35.032607"
+        1 : Object
+            calculated_price : 2557.121670426663
+            timestamp : "2024-11-08T19:12:35.032607"
 
 
 

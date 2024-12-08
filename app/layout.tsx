@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import '@mantine/charts/styles.css'; // Import Mantine chart styles globally
 
 const inter = Poppins({ weight: '400' , subsets: ["latin"] });
 

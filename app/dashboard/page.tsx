@@ -15,8 +15,8 @@ const dashboard = () => {
       <div className="h-[90vh] bg-white px-12 py-10">
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
               <BarChartHero  /> {/* Use the BarChartHero component */}
-              <DonutChartVehicleTypes  /> {/* Use the BarChartHero component */}
-              <DonutChartEngineTypes  /> {/* Use the BarChartHero component */}
+              <DonutChartVehicleTypes  /> {/* Use the DonutChartVehicleTypes component */}
+              <DonutChartEngineTypes  /> {/* Use the DonutChartEngineTypes component */}
               <HorizontalBarChartYearRanges  /> {/* Use the BarChartHero component */}
           </div>
       </div>

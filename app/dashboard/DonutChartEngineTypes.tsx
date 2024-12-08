@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { DonutChart, TooltipProps } from "../../components/tremor/DonotChart";
+import React, { useState, useEffect, useRef } from "react";
+import { Chart, registerables } from "chart.js";
+
+Chart.register(...registerables);
 
 interface EngineTypeData {
   type: string;
@@ -10,8 +12,8 @@ interface EngineTypeData {
 
 export function DonutChartEngineTypes() {
   const [data, setData] = useState<EngineTypeData[]>([]);
-  const [tooltipData, setTooltipData] = useState<TooltipProps | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     const fetchEngineTypes = async () => {
@@ -34,7 +36,7 @@ export function DonutChartEngineTypes() {
           throw new Error("Failed to fetch engine types data.");
         }
 
-        const data = await response.json(); // { engineTypes: [...], percentages: [...] }
+        const data = await response.json(); 
 
         // Transform backend data
         const transformedData = data.engineTypes.map((type: string, index: number) => ({
@@ -52,26 +54,61 @@ export function DonutChartEngineTypes() {
     fetchEngineTypes();
   }, []);
 
-  const sumValues = (arr: number[]) => arr.reduce((sum, val) => sum + val, 0);
-  const percentageFormatter = (number: number) => `${Intl.NumberFormat("us").format(number)}%`;
+  useEffect(() => {
+    if (!canvasRef.current || data.length === 0) return;
 
-  const payload = tooltipData?.payload?.[0];
-  const value = payload?.value ?? 0;
+    const ctx = canvasRef.current.getContext("2d");
+    if (!ctx) return; // Ensure ctx is valid
 
-  const formattedValue = payload
-    ? percentageFormatter(value)
-    : percentageFormatter(sumValues(data.map((item) => item.percentage)));
+    const engineTypes = data.map((item) => item.type);
+    const percentages = data.map((item) => item.percentage);
+
+    // Define the colors as per your original component
+    const colors: { [key: string]: string } = {
+      Diesel: "#FFD700",   // Yellow
+      Hybrid: "#0000FF",   // Blue
+      Electric: "#008000", // Green
+      Petrol: "#000000",   // Black
+      Unknown: "#808080",  // Gray for unknown types
+    };
+
+    // Map the colors to the types, defaulting to gray if the type is not in the map
+    const chartColors = engineTypes.map(type => colors[type] || colors["Unknown"]);
+
+    const myChart = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: engineTypes,
+        datasets: [
+          {
+            data: percentages,
+            backgroundColor: chartColors,
+            hoverBackgroundColor: chartColors,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (tooltipItem) => {
+                const value = tooltipItem.raw;
+                return `${tooltipItem.label}: ${value}%`;
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return () => {
+      myChart.destroy();
+    };
+  }, [data]);
 
   if (error) return <p className="text-red-500">{error}</p>;
   if (data.length === 0) return <p>Loading engine types data...</p>;
-
-  // Define the predefined color names available in Tremor
-  const predefinedColors: ("blue" | "emerald" | "violet" | "amber" | "gray" | "cyan" | "pink" | "lime" | "fuchsia")[] = [
-    "blue", "emerald", "violet", "amber", "gray", "cyan", "pink", "lime", "fuchsia"
-  ];
-
-  // Map the dynamic data count to the predefined color list
-  const colors = predefinedColors.slice(0, data.length);
 
   return (
     <div className="mt-7">
@@ -79,26 +116,33 @@ export function DonutChartEngineTypes() {
         Engine Types Visited
       </p>
       <p className="mt-2 w-full text-center text-xl font-semibold text-gray-900 dark:text-gray-50">
-        {formattedValue}
+        {`${Intl.NumberFormat("us").format(data.reduce((sum, item) => sum + item.percentage, 0))}%`}
       </p>
-      <DonutChart
-        data={data}
-        category="type"
-        value="percentage"
-        className="mx-auto mt-8"
-        colors={colors} // Use predefined colors
-        tooltipCallback={(props) => {
-          if (props.active) {
-            setTooltipData(props);
-          } else {
-            setTooltipData(null);
-          }
-          return null;
-        }}
-      />
+      <canvas ref={canvasRef} className="mx-auto mt-8"></canvas>
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -111,7 +155,6 @@ export function DonutChartEngineTypes() {
 // interface EngineTypeData {
 //   type: string;
 //   percentage: number;
-//   color: string;
 // }
 
 // export function DonutChartEngineTypes() {
@@ -140,7 +183,7 @@ export function DonutChartEngineTypes() {
 //           throw new Error("Failed to fetch engine types data.");
 //         }
 
-//         const data = await response.json(); // { engineTypes: [...], percentages: [...] }
+//         const data = await response.json(); 
 
 //         // Transform backend data
 //         const transformedData = data.engineTypes.map((type: string, index: number) => ({
@@ -158,7 +201,6 @@ export function DonutChartEngineTypes() {
 //     fetchEngineTypes();
 //   }, []);
 
-
 //   const sumValues = (arr: number[]) => arr.reduce((sum, val) => sum + val, 0);
 //   const percentageFormatter = (number: number) => `${Intl.NumberFormat("us").format(number)}%`;
 
@@ -171,6 +213,14 @@ export function DonutChartEngineTypes() {
 
 //   if (error) return <p className="text-red-500">{error}</p>;
 //   if (data.length === 0) return <p>Loading engine types data...</p>;
+
+//   // Define the predefined color names available in Tremor
+//   const predefinedColors: ("blue" | "emerald" | "violet" | "amber" | "gray" | "cyan" | "pink" | "lime" | "fuchsia")[] = [
+//     "blue", "emerald", "violet", "amber", "gray", "cyan", "pink", "lime", "fuchsia"
+//   ];
+  
+//   // Map the dynamic data count to the predefined color list
+//   const colors = predefinedColors.slice(0, data.length);
 
 //   return (
 //     <div className="mt-7">
@@ -185,6 +235,7 @@ export function DonutChartEngineTypes() {
 //         category="type"
 //         value="percentage"
 //         className="mx-auto mt-8"
+//         colors={colors} // Use predefined colors
 //         tooltipCallback={(props) => {
 //           if (props.active) {
 //             setTooltipData(props);
@@ -197,3 +248,6 @@ export function DonutChartEngineTypes() {
 //     </div>
 //   );
 // }
+
+
+

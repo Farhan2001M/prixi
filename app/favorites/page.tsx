@@ -40,6 +40,7 @@ const FavoriteCards: React.FC = () => {
           throw new Error("Failed to fetch detailed favorite vehicles");
         }
         const data = await response.json();
+        console.log(data)
         setFavorites(data.favorites || []);
       } catch (err) {
         console.error("Error fetching detailed favorites:", err);

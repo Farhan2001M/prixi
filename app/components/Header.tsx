@@ -106,7 +106,7 @@ const Header = () => {
           7-System Overview
         </Link>
 
-        <Link href="/generate-reports" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/generate-reports') ? 'bg-zinc-800 text-white' : ''}`}>
+        <Link href="/generateReport" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/generate-reports') ? 'bg-zinc-800 text-white' : ''}`}>
           <TbReport className="text-3xl mx-3" />
           8-Generate Reports
         </Link>

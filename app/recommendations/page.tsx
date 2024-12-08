@@ -2,7 +2,9 @@
 
 import Header from '../components/Header';
 import { Tabs, Tab, Card, CardBody } from '@nextui-org/react';
-import InterestedVehicle from '../recommendations/InterestedVehicle';  // Import the InterestedVehicle component
+import InterestedVehicle from './InterestedVehicle';  
+import BehaviouralVehicle from './BehaviouralVehicle';  
+import TrendingVehicles from './Trending&PopularVehicles';
 
 const Recommendations = () => {
   return (
@@ -13,14 +15,21 @@ const Recommendations = () => {
           <Tab title="Interest Based Recommendations">
             <Card>
               <CardBody>
-                <InterestedVehicle />  {/* Use the InterestedVehicle component */}
+                <InterestedVehicle />  
               </CardBody>
             </Card>
           </Tab>
-          <Tab title="Behavoiur Based Recommendations">
+          <Tab title="Trending Vehicle Recommendations ">
             <Card>
               <CardBody>
-                {/* Component that show recommendations based on user history */}
+                <TrendingVehicles />
+              </CardBody>
+            </Card>
+          </Tab>
+          <Tab title="Behaviour Based Recommendations">
+            <Card>
+              <CardBody>
+                <BehaviouralVehicle />  
               </CardBody>
             </Card>
           </Tab>

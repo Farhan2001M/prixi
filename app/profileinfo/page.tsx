@@ -302,12 +302,6 @@ const MyProfileInfo = () => {
     setIsEditing(false); // Exit edit mode
     setOriginalImageSrc(imageSrc); // Save the current displayed image as original
 
-    console.log("Hello");
-    console.log(firstName);
-    console.log(lastName);
-    console.log(email);
-    console.log(phoneNumber);
-
     // Show confirmation screen after successful submission
     setTimeout(() => {
       setSuccessConfirmationScreen(!SuccessConfirmationScreen);
@@ -317,7 +311,6 @@ const MyProfileInfo = () => {
       handleConfirmClick();
     }, 700);
   };
-
 
 
   {/* Success Password Change Screen Code */}
