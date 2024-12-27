@@ -142,7 +142,7 @@ const FavoriteCards: React.FC = () => {
           <img
             src="/images/oops.png" 
             alt="No favorites"
-            className="mt-8 h-80 w-auto" // Adjust the height as needed
+            className="mt-8 h-80 w-auto"
           />
         </div>
       )}

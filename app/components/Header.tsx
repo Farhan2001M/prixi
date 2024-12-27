@@ -76,44 +76,44 @@ const Header = () => {
           1-Vehicles Info
         </Link>
 
-        <Link href="/pricecalculator" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('') ? 'bg-zinc-800 text-white' : ''}`}>
+        <Link href="/pricecalculator" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/pricecalculator') ? 'bg-zinc-800 text-white' : ''}`}>
           <BsCalculator className="text-3xl mx-3" />
           2-Price Calculator
         </Link>
 
-        <Link href="/calculate-taxes" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/calculate-taxes') ? 'bg-zinc-800 text-white' : ''}`}>
+        <Link href="/taxCalculate" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/taxCalculate') ? 'bg-zinc-800 text-white' : ''}`}>
           <TbReceiptTax className="text-3xl mx-3" />
           3-Calculate Taxes
         </Link>
 
-        <Link href="/calculate-loan-financing" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/calculate-loan-financing') ? 'bg-zinc-800 text-white' : ''}`}>
+        <Link href="/loanCalculate" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/loanCalculate') ? 'bg-zinc-800 text-white' : ''}`}>
           <GiTakeMyMoney className="text-4xl mx-3" />
           4-Calculate Loan Financing
         </Link>
 
-        <Link href="/recommendations" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/get-recommendations') ? 'bg-zinc-800 text-white' : ''}`}>
+        <Link href="/recommendations" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/recommendations') ? 'bg-zinc-800 text-white' : ''}`}>
           <MdOutlineRecommend className="text-3xl mx-3" />
           5-Get Recommendations
         </Link>
 
-        <Link href="/dashboard" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/my-dashboard') ? 'bg-zinc-800 text-white' : ''}`}>
-          <LuLayoutDashboard className="text-3xl mx-3" />
+        <Link href="/dashboard" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/dashboard') ? 'bg-zinc-800 text-white' : ''}`}>
+          <AiOutlineDashboard className="text-3xl mx-3" />
           6-My Dashboard
         </Link>
 
         <Link href="/system-overview" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/system-overview') ? 'bg-zinc-800 text-white' : ''}`}>
-          <AiOutlineDashboard className="text-3xl mx-3" />
+          <LuLayoutDashboard className="text-3xl mx-3" />
           7-System Overview
         </Link>
 
-        <Link href="/generateReport" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/generate-reports') ? 'bg-zinc-800 text-white' : ''}`}>
+        {/* <Link href="/generateReport" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/generateReport') ? 'bg-zinc-800 text-white' : ''}`}>
           <TbReport className="text-3xl mx-3" />
           8-Generate Reports
-        </Link>
+        </Link> */}
 
         <Link href="/profileinfo" className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/profileinfo') ? 'bg-zinc-800 text-white' : ''}`}>
           <FaUserCog  className="text-3xl mx-3" />
-          9-Profile Settings
+          8-Profile Settings
         </Link>
 
         <Link
@@ -126,7 +126,7 @@ const Header = () => {
             localStorage.removeItem("toastShown");
             localStorage.removeItem("token");
           }}
-          className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/calculate-taxes') ? 'bg-zinc-800 text-white' : ''}`}
+          className={`flex items-center border-slate-950 border-b-2 hover:bg-zinc-800 hover:text-white py-4 text-xl font-medium ${isActive('/Never') ? 'bg-zinc-800 text-white' : ''}`}
         >
           <RiLogoutBoxLine className="text-3xl mx-3" />
           Logout

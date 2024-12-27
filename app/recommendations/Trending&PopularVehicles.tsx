@@ -90,7 +90,7 @@ const TrendingVehicles: React.FC = () => {
       {loading ? (
         <div className="gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
           {/* Display Skeleton Cards while loading */}
-          {[...Array(5)].map((_, index) => (
+          {[...Array(3)].map((_, index) => (
             <Card
               key={index}
               shadow="sm"

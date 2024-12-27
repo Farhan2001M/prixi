@@ -116,8 +116,7 @@ const Page = () => {
   }, [selectedTrim])
 
   // Check if all fields are filled
-  const isFormValid =
-    selectedMake && selectedModel && selectedTrim && miles && year
+  const isFormValid = selectedMake && selectedModel && selectedTrim && miles && year
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {

@@ -68,7 +68,7 @@ export function DonutChartEngineTypes() {
       Diesel: "#FFD700",   // Yellow
       Hybrid: "#0000FF",   // Blue
       Electric: "#008000", // Green
-      Petrol: "#000000",   // Black
+      Petrol: "#00FF00",   // Black
       Unknown: "#808080",  // Gray for unknown types
     };
 
@@ -111,14 +111,14 @@ export function DonutChartEngineTypes() {
   if (data.length === 0) return <p>Loading engine types data...</p>;
 
   return (
-    <div className="mt-7">
+    <div className="mb-3">
       <p className="text-center text-xl font-bold text-black dark:text-gray-300">
         Engine Types Visited
       </p>
       <p className="mt-2 w-full text-center text-xl font-semibold text-gray-900 dark:text-gray-50">
         {`${Intl.NumberFormat("us").format(data.reduce((sum, item) => sum + item.percentage, 0))}%`}
       </p>
-      <canvas ref={canvasRef} className="mx-auto mt-8"></canvas>
+      <canvas ref={canvasRef} className="mx-auto mt-5"></canvas>
     </div>
   );
 }

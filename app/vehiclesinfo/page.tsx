@@ -60,7 +60,7 @@ const VehiclesInfo: React.FC = () => {
         setTimeout(() => setLoading(false), 1000); // Simulate 1-second delay
       }
     };
-
+    
     fetchBrandsAndVisited();
   }, []);
 

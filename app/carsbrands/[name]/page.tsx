@@ -29,6 +29,7 @@ const MainPage = () => {
             throw new Error(`Error fetching car data: ${response.statusText}`);
           }
           const data = await response.json();
+          console.log("Fetched car models:", data.models); // Log the fetched data
           setMyData(data.models);
         } catch (err) {
           console.error('Error fetching car models:', err);
@@ -50,26 +51,42 @@ const MainPage = () => {
     setFilters(newFilters);
   };
 
+  console.log("Current filters:", filters);
+
   const filteredData = MyData.filter((car: VehicleModel) => {
     const launchPrice = car.launchPrice || 0;
-    const year = car.year || 0;
     const horsepower = car.horsepower || 0;
     const seatingCapacity = car.seatingCapacity || 0;
     const vehicleTypeMatch = filters.vehicleTypes.length === 0 || filters.vehicleTypes.some(type => car.vehicleType?.toLowerCase().includes(type.toLowerCase()));
     const modelNameMatch = car.modelName.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return (
-      launchPrice >= filters.priceRange[0] &&
-      launchPrice <= filters.priceRange[1] &&
-      vehicleTypeMatch &&
-      seatingCapacity >= filters.minSeatingCapacity &&
-      horsepower >= filters.horsepowerRange[0] &&
-      horsepower <= filters.horsepowerRange[1] &&
-      year >= filters.yearRange[0] &&
-      year <= filters.yearRange[1] &&
-      modelNameMatch
-    );
+    let isValid = true;
+
+    if (launchPrice < filters.priceRange[0] || launchPrice > filters.priceRange[1]) {
+      console.log(`Filtering out ${car.modelName}: Price (${launchPrice}) not in range ${filters.priceRange[0]} - ${filters.priceRange[1]}`);
+      isValid = false;
+    }
+    if (horsepower < filters.horsepowerRange[0] || horsepower > filters.horsepowerRange[1]) {
+      console.log(`Filtering out ${car.modelName}: Horsepower (${horsepower}) not in range ${filters.horsepowerRange[0]} - ${filters.horsepowerRange[1]}`);
+      isValid = false;
+    }
+    if (seatingCapacity < filters.minSeatingCapacity) {
+      console.log(`Filtering out ${car.modelName}: Seating capacity (${seatingCapacity}) less than minimum ${filters.minSeatingCapacity}`);
+      isValid = false;
+    }
+    if (!vehicleTypeMatch) {
+      console.log(`Filtering out ${car.modelName}: Vehicle type does not match any of the selected types`);
+      isValid = false;
+    }
+    if (!modelNameMatch) {
+      console.log(`Filtering out ${car.modelName}: Model name does not match search term "${searchTerm}"`);
+      isValid = false;
+    }
+
+    return isValid;
   });
+
+  console.log("Filtered cars:", filteredData);
 
   const handleResetFilters = () => {
     setSearchTerm('');

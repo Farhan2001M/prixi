@@ -9,13 +9,9 @@ interface ForgotPassScreenProps {
 
 const ForgotPassScreen: React.FC<ForgotPassScreenProps> = ({ show, onClick }) => {
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
-  
   const [Femail, setFEmail] = useState<string>('');
-  
   const [showOTPScreen, setShowOTPScreen] = useState<boolean>(false);
-
   const [EmailError, setEmailError] = useState('');
-
 
   useEffect(() => {
     setIsValidEmail(validateEmail(Femail));
@@ -124,6 +120,4 @@ const ForgotPassScreen: React.FC<ForgotPassScreenProps> = ({ show, onClick }) =>
 };
 
 export default ForgotPassScreen;
-
-
 

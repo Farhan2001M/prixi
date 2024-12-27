@@ -36,7 +36,7 @@ const SystemOverview = () => {
       
       <Header />
 
-      <div className="h-[90vh] bg-slate-100 px-12 py-10">
+      <div className="h-[90vh] bg-white px-12 py-10">
           
       <div className="flex gap-6 ">
         

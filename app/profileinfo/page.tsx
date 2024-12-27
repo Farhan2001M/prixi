@@ -3,7 +3,7 @@
 import Header from "../components/Header";
 import { IoEye, IoEyeOff } from 'react-icons/io5';
 import React, { useState, useEffect } from 'react';
-
+import { Button } from '@nextui-org/react';
 import { PatternFormat } from 'react-number-format';
 import { TextField } from '@mui/material';
 import ConfettiButton, { ConfettiButtonHandle } from '../components/ConfettiButton';
@@ -407,6 +407,15 @@ const MyProfileInfo = () => {
 
   const hasErrors = Object.keys(errors).some((key) => errors[key] !== '') || !isValid ;
 
+
+  // Function to trigger the download
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = '/mypdf.pdf'; // Path to the PDF in the public folder
+    link.download = 'mypdf.pdf'; // You can set a custom name for the downloaded file
+    link.click(); // Trigger the download
+  };
+
   return (
     <div className="flex flex-col">
       <Header />
@@ -692,6 +701,17 @@ Or Simply Type DELETE To Delete Your Account`}
           <div className={`fixed top-0 left-0 w-screen h-full bg-black bg-opacity-70 transition-opacity duration-1000   ${DeleteAccount ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} z-10`} onClick={toggleDeleteAccountScreen}  > </div>
 
         </div>
+
+        {/* Reset Button */}
+        <Button
+          size="lg"
+          color="warning"
+          className="absolute bottom-10 right-10"
+          onClick={handleDownload} // Trigger the download when clicked
+        >
+          Generate Report
+        </Button>
+        
       </div>
     </div>
   );
