@@ -17,10 +17,12 @@ const VehiclesInfo: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const toastShownRef = useRef(false); // Ensure toast logic runs once
 
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   useEffect(() => {
     const fetchBrandsAndVisited = async () => {
       try {
-        const brandResponse = await fetch("http://localhost:8000/get-brands-with-images");
+        const brandResponse = await fetch(`${BASE_URL}/get-brands-with-images`);
         const allBrands = await brandResponse.json();
         setBrands(allBrands);
 
@@ -31,7 +33,7 @@ const VehiclesInfo: React.FC = () => {
           return;
         }
 
-        const visitedResponse = await fetch("http://localhost:8000/get-user-visited-brands", {
+        const visitedResponse = await fetch(`${BASE_URL}/get-user-visited-brands`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -99,88 +101,4 @@ export default VehiclesInfo;
 
 
 
-
-
-// "use client";
-
-// import React, { useState, useEffect } from "react";
-// import Header from "../components/Header";
-// import BrandCard from "./Brandcard"
-// import { CustomToast , CustomToastContainer } from "../components/CustomToastService";  
-
-// interface BrandData {
-//   brandName: string;
-//   modelImages: string[];
-// }
-
-// const VehiclesInfo: React.FC = () => {
-//   const [brands, setBrands] = useState<BrandData[]>([]);
-//   const [visitedBrands, setVisitedBrands] = useState<string[]>([]);
-
-//   useEffect(() => {
-//     const fetchBrandsAndVisited = async () => {
-//       try {
-//         // Fetch all brands
-//         const brandResponse = await fetch("http://localhost:8000/get-brands-with-images");
-//         const allBrands = await brandResponse.json();
-//         setBrands(allBrands);
-  
-//         // Fetch user's visited brands
-//         const token = localStorage.getItem("token");
-//         if (!token) {
-//           console.warn("User not logged in.");
-//           return;
-//         }
-  
-//         const visitedResponse = await fetch("http://localhost:8000/get-user-visited-brands", {
-//           method: "GET",
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         });
-//         const visitedData = await visitedResponse.json();
-//         setVisitedBrands(visitedData.visitedBrands || []);
-  
-//         // Compare visited with total brands
-//         const unvisitedBrands = allBrands.filter(
-//           (brand: BrandData) => !visitedData.visitedBrands.includes(brand.brandName)
-//         );
-  
-//         if (unvisitedBrands.length > 0) {
-//           // Only show the toast if it hasn't been shown yet
-//           if (!localStorage.getItem("toastShown")) {
-//             CustomToast.success("New unvisited brands available! Check them out.");
-//             localStorage.setItem("toastShown", "true"); // Set flag to prevent it from showing again
-//           }
-//         }
-//       } catch (error) {
-//         console.error("Error fetching brands or visited data:", error);
-//       }
-//     };
-  
-//     fetchBrandsAndVisited();
-//   }, []);
-  
-
-//   return (
-//     <div className="flex flex-col">
-//       <Header />
-//       <div className="h-auto bg-gray-100 p-4">
-//         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-//           {brands.map((brand) => (
-//             <BrandCard 
-//               key={brand.brandName} 
-//               brand={brand} 
-//               isNew={!visitedBrands.includes(brand.brandName)} // Pass unvisited status
-//             />
-//           ))}
-//         </div>
-//       </div>
-//       {/* ToastContainer for notifications */}
-//       <CustomToastContainer />
-//     </div>
-//   );
-// };
-
-// export default VehiclesInfo;
 

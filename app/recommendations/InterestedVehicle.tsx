@@ -19,6 +19,8 @@ const InterestedVehicle: React.FC = () => {
   const [loaded, setLoaded] = useState<boolean>(false); // Track if data is loaded
   const router = useRouter();
 
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+
   useEffect(() => {
     const fetchRecommendations = async () => {
       const token = localStorage.getItem('token');
@@ -29,7 +31,7 @@ const InterestedVehicle: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/recommendationsbyfavorites", {
+        const response = await fetch(`${BASE_URL}/recommendationsbyfavorites`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

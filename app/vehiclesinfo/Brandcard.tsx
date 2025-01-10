@@ -13,6 +13,8 @@ interface BrandCardProps {
 const BrandCard: React.FC<BrandCardProps> = ({ brand , isNew  }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
+  
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const sliderSpeed = 4000; // 4 seconds
 
@@ -35,9 +37,7 @@ const BrandCard: React.FC<BrandCardProps> = ({ brand , isNew  }) => {
       return;
     }
     try {
-      const response = await fetch(
-        `http://localhost:8000/track-brand-visit?brandName=${encodeURIComponent(brand.brandName)}`, 
-        {
+      const response = await fetch(`${BASE_URL}/track-brand-visit?brandName=${encodeURIComponent(brand.brandName)}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
