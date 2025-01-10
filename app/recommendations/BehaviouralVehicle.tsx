@@ -61,7 +61,7 @@ const BehaviouralVehicle: React.FC = () => {
     if (loading) {
       const timer = setTimeout(() => {
         setLoading(false); // Stop loading after 1 second, even if data is loaded
-      }, 1000); // Minimum loading time of 1 second
+      }, 1800); // Minimum loading time of 1 second
 
       return () => clearTimeout(timer); // Cleanup the timer on component unmount
     }
