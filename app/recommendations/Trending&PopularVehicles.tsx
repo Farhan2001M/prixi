@@ -58,11 +58,8 @@ const TrendingVehicles: React.FC = () => {
 
   useEffect(() => {
     if (loading) {
-      const timer = setTimeout(() => {
-        setLoading(false); // Stop loading after 1 second, even if data is loaded
-      }, 1800); // Minimum loading time of 1 second
-
-      return () => clearTimeout(timer); // Cleanup the timer on component unmount
+      setLoading(false); 
+      return ; 
     }
   }, [loading]);
 
