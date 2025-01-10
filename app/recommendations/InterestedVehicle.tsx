@@ -134,12 +134,6 @@ const InterestedVehicle: React.FC = () => {
               <CardFooter className="text-small justify-between p-2">
                 <b>{item.brandName || "Brand name not available"} {item.modelName || "Model name not available"}</b>
                 <p>{item.launchPrice ? `$${item.launchPrice.toLocaleString()}` : "Coming Soon"}</p>
-                <button
-                  onClick={(e) => e.stopPropagation()} // Prevent card click
-                  className={`absolute top-2 left-2 z-10 p-1 rounded-full transition-colors duration-200 text-red-500 hover:text-gray-500`}
-                >
-                  <FaHeart className="h-8 w-8" />
-                </button>
               </CardFooter>
             </Card>
           ))}
