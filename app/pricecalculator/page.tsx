@@ -120,6 +120,8 @@ const Page = () => {
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
+
+    console.log("i run  here")
     e.preventDefault();
 
     // Prepare the data to send to the API
@@ -145,9 +147,10 @@ const Page = () => {
       const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
       // Make the POST request to the price prediction route
       const response = await fetch(`${BASE_URL}/pricepredict`, {
+        method: 'POST', // Add the HTTP method
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Add the token to the headers
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(requestData),
       });

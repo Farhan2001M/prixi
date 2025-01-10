@@ -136,7 +136,7 @@ const InterestedVehicle: React.FC = () => {
                     width="100%"
                     alt={item.modelName}
                     className="object-cover h-[240px] w-full"
-                    src={`data:image/jpeg;base64,${item.images[0]}`}
+                    src={item.images[0]}
                   />
                 ) : (
                   <div className="flex items-center justify-center h-[240px] w-full bg-gray-200">
