@@ -67,9 +67,9 @@ const BrandCard: React.FC<BrandCardProps> = ({ brand , isNew  }) => {
         {/* Background Image Slider */}
         <div className="absolute inset-0 transition-all duration-[2000ms] ease-in-out">
           {brand.modelImages.map((image, index) => (
-            <NextImage
+            <img
               key={index}
-              src={`data:image/jpeg;base64,${image}`}
+              src={image} 
               alt={`${brand.brandName} Image`}
               width={500}
               height={300}

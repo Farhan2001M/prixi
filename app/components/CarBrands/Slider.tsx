@@ -53,9 +53,7 @@ const CustomSlider: React.FC<SliderProps> = ({ brandName }) => {
               key={index}
               className="w-full h-full flex-shrink-0"
               style={{
-                backgroundImage: `url(data:image/${
-                  image.includes("png") ? "png" : "jpeg"
-                };base64,${image})`,
+                backgroundImage: `url(${image})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}

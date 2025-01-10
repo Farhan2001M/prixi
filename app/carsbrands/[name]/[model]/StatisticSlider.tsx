@@ -29,7 +29,8 @@ const Carousel: React.FC<CarouselProps> = ({ modelData , brandname }) => {
 
   // Use images from modelData or fallback to a default image
   const fallbackImage = '../../images/Cars/Tesla/Standard'; 
-  const images = modelData.images && modelData.images.length > 0 ? modelData.images.map(img => img.startsWith('data:') ? img : `data:image/jpeg;base64,${img}`) : [fallbackImage];
+  const images = modelData.images && modelData.images.length > 0 ? modelData.images : [fallbackImage];
+
 
   useEffect(() => {
     if (images.length > 1) {

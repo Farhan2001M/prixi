@@ -112,7 +112,7 @@ const FavoriteCards: React.FC = () => {
                     width="100%"
                     alt={item.model.modelName}
                     className="object-cover h-[240px] w-full"
-                    src={`data:image/jpeg;base64,${item.model.images[0]}`}
+                    src={item.model.images[0]} // Use the URL directly
                   />
                 ) : (
                   <div className="flex items-center justify-center h-[240px] w-full bg-gray-200">

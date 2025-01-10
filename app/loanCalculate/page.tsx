@@ -24,7 +24,7 @@ const LoanCalculatorPage = () => {
   const [totalCost, setTotalCost] = useState('$0.00');
   const [extraAmount, setExtraAmount] = useState('$0.00');
 
-  const calculateLoan = () => {
+  const calculateLoan = async () => {
     
     if (!vehiclePrice || !downPayment || !loanTerm || !interestRate) {
       // If any field is missing, show the custom error toast
@@ -66,6 +66,50 @@ const LoanCalculatorPage = () => {
     const totalCostValue = price + extraPaidAmount; // Total cost is vehicle price + interest paid
     setTotalCost(`$${totalCostValue.toFixed(2)}`);
     setExtraAmount(`$${extraPaidAmount.toFixed(2)}`);
+
+    // Save the calculated loan data to the backend
+    await saveCalculatedLoan({
+      vehiclePrice: price,
+      downPayment: down,
+      loanTerm: term,
+      interestRate: rate,
+      loanAmount,
+      monthlyPayment,
+      totalLoanAmount,
+      extraPaidAmount,
+      totalCost: totalCostValue,
+    });
+  };
+
+  const saveCalculatedLoan = async (loanData: any) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        console.warn('User not logged in.');
+        return;
+    }
+
+    try {
+        const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+        const response = await fetch(`${BASE_URL}/saveloan`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                ...loanData,
+                timestamp: new Date().toISOString(),
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save loan data');
+        }
+
+        console.log('Loan data saved successfully');
+    } catch (err) {
+        console.error('Error saving loan data:', err);
+    }
   };
 
   const handleReset = () => {

@@ -8,7 +8,7 @@ import { FaHeart } from "react-icons/fa";
 interface TrendingVehicle {
   brandName: string;
   modelName: string;
-  image?: string[];
+  image?: string;
   launchPrice?: number;
 }
 
@@ -134,7 +134,7 @@ const TrendingVehicles: React.FC = () => {
                     width="100%"
                     alt={item.modelName}
                     className="object-cover h-[240px] w-full"
-                    src={`data:image/jpeg;base64,${item.image}`}  // Assumes item.image is a valid Base64 string
+                    src={item.image}  // Assumes item.image is a valid Base64 string
                   />
                 ) : (
                   <div className="flex items-center justify-center h-[240px] w-full bg-gray-200">
