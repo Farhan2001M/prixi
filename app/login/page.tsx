@@ -80,14 +80,25 @@ const Myloginpage = () => {
       try {
         // Construct the query string with email and password
         const query = new URLSearchParams({ email, password }).toString();
-    
+
+        // Use the environment variable for the API base URL
+        const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
         // Send the request with query parameters
-        const response = await fetch(`http://localhost:8000/login?${query}`, {
+        const response = await fetch(`${BASE_URL}/login?${query}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
             },
         });
+    
+        // // Send the request with query parameters
+        // const response = await fetch(`http://localhost:8000/login?${query}`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Accept': 'application/json',
+        //     },
+        // });
     
         // Check if the response was not OK (error cases)
         if (!response.ok) {

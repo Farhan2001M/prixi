@@ -1,6 +1,7 @@
 import React, { useState, useEffect , useRef } from 'react';
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
+import { CustomToast, CustomToastContainer } from "../../../components/CustomToastService";
 
 interface Comment {
   commentId: string;
@@ -202,6 +203,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
 
   const postComment = async () => {
     if (commentText == ""){
+      CustomToast.error("Empty comment cannot be posted.😥");
       console.log("empty comment cannot be posted")
       return
     }
@@ -236,7 +238,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
 
   const postAnonymousComment = async () => {
     if (commentText == "") {
-      console.log("empty comment cannot be posted");
+      CustomToast.error("Empty Anonymous comment cannot be posted.😥");
       return;
     }
     const response = await fetch(`http://localhost:8000/post-anonymous-comment/${brandName}/${modelName}`, {
@@ -271,6 +273,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
     });
     if (response.ok) {
       fetchComments(); // Refresh the comments after successful deletion
+      CustomToast.success("Comment Deleted Successfully.😋");
     } else if (response.status === 403) {
       console.error('You can only delete your own comments.');
     } else {
@@ -329,11 +332,14 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
     if (response.ok) {
       setEditingCommentText(''); // Clear the editing text
       setEditingCommentId(null);
+      
       fetchComments(); // Refresh comments after editing
+      CustomToast.success("Comment Edited Successfully.😋");
+
     } else if (response.status === 403) {
       console.error('You can only edit your own comments.');
     } else {
-      console.error('Error editing comment');
+      CustomToast.error("Comment text needs to be changed before saving Successfully.🙂");
     }
   };
 
@@ -393,6 +399,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       setReplyingCommentId(null);
       setReplyText('');
       fetchComments(); // Refresh comments after posting reply
+      CustomToast.success("Reply Posted Successfully.😋");
     } else {
       console.error('Error posting reply');
     }
@@ -413,6 +420,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
   
     if (response.ok) {
       fetchComments(); // Refresh comments after successful deletion
+      CustomToast.success("Reply Deleted Successfully.😋");
     } else if (response.status === 403) {
       console.error('You can only delete your own replies.');
     } else {
@@ -468,8 +476,9 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
         setEditingReplyText(''); // Clear the editing text
         setEditingReplyId(null);
         fetchComments(); // Refresh comments after editing
+        CustomToast.success("Reply Edited Successfully.😋");
     } else {
-        console.error('Error editing reply');
+        CustomToast.error("Reply text needs to be changed before saving Successfully.🙂");
     }
   };
 
@@ -543,31 +552,34 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       <h3 className="text-2xl font-semibold mb-4">Comments</h3>
   
       {/* Sorting Buttons */}
-      <div className="flex justify-between mb-4">
-        <div className="flex space-x-4">
+      <div className="flex justify-center mb-4 w-full">
+        <div className="flex w-full  space-x-4">
+          {/* Left Button - "Most Replied" */}
           <button
             onClick={sortByReplies}
-            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-200"
+            className="flex-1 px-4 py-2 text-base font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-200"
           >
             {sortingMode === 'top-comments' && sortOrder === 'asc'
-              ? 'Show Top Comments (Descending)'
-              : 'Show Top Comments (Ascending)'}
+              ? 'Show Most Replied Comments (Descending)'
+              : 'Show Most Replied Comments (Ascending)'}
           </button>
-  
-          <button
-            onClick={sortByLikes}
-            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-200"
-          >
-            {sortingMode === 'most-loved' && sortOrder === 'asc'
-              ? 'Show Most Loved Comments (Descending)'
-              : 'Show Most Loved Comments (Ascending)'}
-          </button>
-  
+
+          {/* Center Button - "Reset View" */}
           <button
             onClick={resetView}
-            className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded hover:bg-red-700 transition duration-200"
+            className="min-w-64 px-6 py-2 text-base font-medium text-white bg-red-600 rounded hover:bg-red-700 transition duration-200"
           >
             Reset View
+          </button>
+
+          {/* Right Button - "Most Liked" */}
+          <button
+            onClick={sortByLikes}
+            className="flex-1 px-4 py-2 text-base font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-200"
+          >
+            {sortingMode === 'most-loved' && sortOrder === 'asc'
+              ? 'Show Most Liked Comments 💖 (Descending)'
+              : 'Show Most Liked Comments 💖 (Ascending)'}
           </button>
         </div>
       </div>
@@ -618,14 +630,14 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
         <button
           onMouseDown={() => (buttonClicked.current = true)} // Set flag on button press
           onClick={postComment}
-          className="w-full py-2 text-sm font-medium text-white bg-green-600 rounded hover:bg-green-700 transition duration-200"
+          className="w-full py-2 text-base font-medium text-white bg-green-600 rounded hover:bg-green-700 transition duration-200"
         >
           Post Comment
         </button>
         <button
           onMouseDown={() => (buttonClicked.current = true)} // Set flag on button press
           onClick={postAnonymousComment}
-          className="w-full py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-200"
+          className="w-full py-2 text-base font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition duration-200"
         >
           Post Anonymously
         </button>
@@ -842,6 +854,9 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       ) : (
         <p className="text-center text-gray-500">No anonymous comments yet.</p>
       )}
+
+      {/* ToastContainer for notifications */}
+      <CustomToastContainer />
 
     </div>
   );
