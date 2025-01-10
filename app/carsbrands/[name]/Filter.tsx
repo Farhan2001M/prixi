@@ -160,7 +160,7 @@ const PriceRange: React.FC<PriceRangeProps> = ({ onFiltersChange, brandName , se
                   />
 
                   {/* Year Range Slider */}
-                  <Slider
+                  {/* <Slider
                     label="Year Range"
                     step={1}
                     minValue={1980}
@@ -169,10 +169,10 @@ const PriceRange: React.FC<PriceRangeProps> = ({ onFiltersChange, brandName , se
                     formatOptions={{ style: "decimal" }}
                     className="max-w-md"
                     onChange={(val) => setYearRange(val as number[])} // Casting to number[]
-                  />
+                  /> */}
 
                   {/* Vehicle Type Select */}
-                  <Select
+                  {/* <Select
                     size={"lg"}
                     labelPlacement="outside"
                     variant={"bordered"}
@@ -189,7 +189,7 @@ const PriceRange: React.FC<PriceRangeProps> = ({ onFiltersChange, brandName , se
                       .map((type) => (
                         <SelectItem key={type}>{type}</SelectItem>
                       ))}
-                  </Select>
+                  </Select> */}
 
                   {/* Seating Capacity Slider */}
                   <Slider
