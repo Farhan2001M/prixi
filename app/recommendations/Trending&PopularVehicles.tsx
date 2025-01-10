@@ -28,7 +28,8 @@ const TrendingVehicles: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/trending-vehicles", {
+        const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+        const response = await fetch(`${BASE_URL}/trending-vehicles`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

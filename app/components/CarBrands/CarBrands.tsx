@@ -12,11 +12,13 @@ const CarBrands: React.FC = () => {
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const response = await fetch('http://localhost:8000/get-car-brands');
+        const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+        const response = await fetch(`${BASE_URL}/get-car-brands`);
         const data = await response.json();
         setBrands(data);
       } catch (error) {
         console.error('Error fetching car brands:', error);
+        // Handle the error (e.g., display an error message, set a loading state)
       }
     };
     fetchBrands();

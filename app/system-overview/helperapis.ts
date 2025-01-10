@@ -1,6 +1,7 @@
 export const fetchUserOverview = async (token: string) => {
     try {
-      const response = await fetch('http://localhost:8000/user-overview', {
+      const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+      const response = await fetch(`${BASE_URL}/user-overview`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -19,7 +20,8 @@ export const fetchUserOverview = async (token: string) => {
   
 export const fetchUserOverviewDetail = async (token: string) => {
     try {
-      const response = await fetch('http://localhost:8000/user-data-summary', {
+      const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+      const response = await fetch(`${BASE_URL}/user-data-summary`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

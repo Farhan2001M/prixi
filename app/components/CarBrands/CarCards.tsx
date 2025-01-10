@@ -14,6 +14,8 @@ const Cards: React.FC<CardsProps> = ({ filter, brandname }) => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+
   useEffect(() => {
     // Fetch user's favorite vehicles on load
     const fetchFavorites = async () => {
@@ -24,7 +26,7 @@ const Cards: React.FC<CardsProps> = ({ filter, brandname }) => {
       }
       
       try {
-        const response = await fetch(`http://localhost:8000/favorites`, {
+        const response = await fetch(`${BASE_URL}/favorites`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -56,7 +58,7 @@ const Cards: React.FC<CardsProps> = ({ filter, brandname }) => {
     }
 
     const isFavorited = favorites.includes(modelName);
-    const apiUrl = isFavorited ? "http://localhost:8000/favorites/remove" : "http://localhost:8000/favorites/add";
+    const apiUrl = isFavorited ? `${BASE_URL}/favorites/remove` : `${BASE_URL}/favorites/add`;
   
     try {
       const response = await fetch(apiUrl, {
@@ -92,7 +94,7 @@ const Cards: React.FC<CardsProps> = ({ filter, brandname }) => {
     }
     // Track the visit in the backend
     try {
-      await fetch("http://localhost:8000/track-model-visit", {
+      await fetch(`${BASE_URL}/track-model-visit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -142,9 +142,9 @@ const Page = () => {
     }
 
     try {
+      const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
       // Make the POST request to the price prediction route
-      const response = await fetch('http://localhost:8000/pricepredict', {
-        method: 'POST',
+      const response = await fetch(`${BASE_URL}/pricepredict`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`, // Add the token to the headers

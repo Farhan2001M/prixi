@@ -6,7 +6,7 @@ const TestComponent: React.FC = () => {
  
   return (
     <>
-
+      {/* 127.0.0.1:8000 */}
       {/* Daisy UI library Components Usage Testing, no need to create files,
       just intall it using ' npm i -D daisyui@latest ' and start using components code, 
       only just add """ require('daisyui'),  """ in the plugins in tailwind.config.ts file*/}

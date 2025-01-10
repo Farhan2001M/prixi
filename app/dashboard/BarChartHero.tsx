@@ -12,6 +12,8 @@ export const BarChartHero: React.FC = () => {
   const [chartData, setChartData] = useState<{ date: string; Visits: number }[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+
   useEffect(() => {
     const fetchBrandVisits = async () => {
       const token = localStorage.getItem("token");
@@ -21,7 +23,7 @@ export const BarChartHero: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/brand-visits-chart", {
+        const response = await fetch(`${BASE_URL}/brand-visits-chart`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -14,8 +14,8 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
   const [showPasswordChangeScreen, setShowPasswordChangeScreen] = useState<boolean>(false);
   const otpRef = useRef<{ clearOtp: () => void }>(null); // Create a ref for OtpInput
   const [OTPError, setOTPError] = useState('');
-
   
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
 
   const handleRequestOTP = async () => {
     setOTPError('');
@@ -23,7 +23,7 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
       otpRef.current.clearOtp(); // Clear the OTP when requesting a new one
     }
     try {
-      const response = await fetch('http://localhost:8000/forgot-password', {
+      const response = await fetch(`${BASE_URL}/forgot-password`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const OTPScreen: React.FC<OTPScreenProps> = ({ visible, onClick, Femail }) => {
 
     try {
         // Make a request to the FastAPI validate_otp endpoint
-        const response = await fetch('http://localhost:8000/validate-otp', {
+        const response = await fetch(`${BASE_URL}/validate-otp`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

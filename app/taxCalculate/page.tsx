@@ -158,7 +158,8 @@ const TaxCalculatorPage = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/savetax', {
+      const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+      const response = await fetch(`${BASE_URL}/savetax`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

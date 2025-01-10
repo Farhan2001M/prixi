@@ -106,7 +106,8 @@ const PasswordChangeScreen: React.FC<PasswordChangeScreenProps> = ({ visible , o
     };
   
     try {
-      const response = await fetch('http://localhost:8000/change-password', { // Replace with your actual backend URL
+      const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+      const response = await fetch(`${BASE_URL}/change-password`, { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -92,13 +92,6 @@ const Myloginpage = () => {
             },
         });
     
-        // // Send the request with query parameters
-        // const response = await fetch(`http://localhost:8000/login?${query}`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //     },
-        // });
     
         // Check if the response was not OK (error cases)
         if (!response.ok) {
@@ -140,66 +133,6 @@ const Myloginpage = () => {
           const deniedSound = new Audio('/sounds/denied.wav');
           deniedSound.play();
       }
-
-      
-        //     try {
-        //       // Construct the query string with email and password
-        //       const query = new URLSearchParams({ email, password }).toString();
-        
-        //       // Send the request with query parameters
-        //       const response = await fetch(`http://localhost:8000/login?${query}`, {
-        //         method: 'POST',
-        //         headers: {
-        //           'Accept': 'application/json',
-        //         },
-        //       });
-        
-        //       const data:any = await response.json();
-
-        //       console.log(data);
-        //       console.log(data.message)
-
-        //       if (response.ok) {
-
-        //         // if (data.token) {
-        //         //   console.log(data)
-        //         //   console.log(data.token)
-        //         //   console.log(data.user)
-                  
-        //         //   localStorage.setItem('token', data.token); // Store the token securely
-        //         //   router.push('/screen1'); // Redirect to another page
-
-        //         // } else {
-        //         //     console.error('Unexpected response:', data);
-        //         // }
-
-
-                
-        //         // if (data.message === "Email not registered , Bad Request.") {
-        //         //   setEmailError('Email not registered..!');
-        //         // } 
-        //         // if (data.message ===  "Invalid password"){
-        //         //   setPasswordError('Invalid password.');
-        //         //   // return { email: data.message };
-        //         // }
-        //         // if (data.message ===  "Login successfull"){
-        //         //   setEmailError('');
-        //         //   setPasswordError('');
-        //         //   console.log('Login successful:', data );
-        //         //   router.push('/screen1');
-        //         // }
-
-
-              
-        //       } else {
-        //         console.error('Login failed :', data.detail);
-        //       }
-        //     } catch (error) {
-        //       console.error('An error occurred:', error);
-        //       // Handle network errors or other unexpected issues
-        //     }
-  
-
 
     }
   };

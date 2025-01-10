@@ -30,7 +30,8 @@ const PriceRange: React.FC<PriceRangeProps> = ({ onFiltersChange, brandName , se
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/get-car-brand/${brandName}`);
+        const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+        const response = await fetch(`${BASE_URL}/get-car-brand/${brandName}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch data for brand: ${brandName}`);
         }

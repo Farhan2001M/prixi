@@ -24,7 +24,9 @@ interface AnonymousComment {
 }
 
 const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
-  
+
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+
   const [useremail, setuseremail] = useState<string>(''); // Input for a new useremail
   const [commentText, setCommentText] = useState<string>(''); // Input for a new comment
   const [editingCommentText, setEditingCommentText] = useState<string>(''); // Input for editing a comment
@@ -99,7 +101,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
     if (!token) return;
 
     try {
-        const response = await fetch('http://localhost:8000/user-image', {
+        const response = await fetch(`${BASE_URL}/user-image`, { 
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -126,7 +128,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
         return;
     }
     try {
-        const response = await fetch('http://localhost:8000/user/email', {
+        const response = await fetch(`${BASE_URL}/user/email`, { 
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -151,7 +153,6 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
   }, []); // Empty dependency array ensures this runs once on component mount
 
 
-
   useEffect(() => {
     fetchComments();
     fetchAnonymousComments();
@@ -159,7 +160,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/get-comments/${brandName}/${modelName}`);
+      const response = await fetch(`${BASE_URL}/get-comments/${brandName}/${modelName}`);
       const data = await response.json();
       setComments(data);
     } catch (err) {
@@ -169,7 +170,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
 
   const fetchAnonymousComments = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/get-anonymous-comments/${brandName}/${modelName}`);
+      const response = await fetch(`${BASE_URL}/get-anonymous-comments/${brandName}/${modelName}`);
       const data: { anonymousComments: AnonymousComment[] } = await response.json(); // Explicitly type the response
       setAnonymousComments(data.anonymousComments); // Update state
     } catch (err) {
@@ -184,7 +185,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
         return null;
     }
 
-    const response = await fetch('http://localhost:8000/user-image', {
+    const response = await fetch(`${BASE_URL}/user-image`, { 
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -217,7 +218,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       console.error('You do not have an image. Please upload one before posting a comment.');
       return;
     }
-    const response = await fetch(`http://localhost:8000/post-comment/${brandName}/${modelName}`, {
+    const response = await fetch(`${BASE_URL}/post-comment/${brandName}/${modelName}`, { 
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -241,7 +242,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       CustomToast.error("Empty Anonymous comment cannot be posted.😥");
       return;
     }
-    const response = await fetch(`http://localhost:8000/post-anonymous-comment/${brandName}/${modelName}`, {
+    const response = await fetch(`${BASE_URL}/post-anonymous-comment/${brandName}/${modelName}`, { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -265,7 +266,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       console.error('You need to be logged in to delete a comment.');
       return;
     }
-    const response = await fetch(`http://localhost:8000/delete-comment/${brandName}/${modelName}/${commentId}`, {
+    const response = await fetch(`${BASE_URL}/delete-comment/${brandName}/${modelName}/${commentId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`, // Send the token for user authentication
@@ -288,7 +289,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       return;
     }
     // Check ownership before allowing edit
-    const response = await fetch(`http://localhost:8000/check-comment-owner/${brandName}/${modelName}/${commentId}`, {
+    const response = await fetch(`${BASE_URL}/check-comment-owner/${brandName}/${modelName}/${commentId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -321,7 +322,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       console.error('You need to be logged in to edit a comment.');
       return;
     }
-    const response = await fetch(`http://localhost:8000/edit-comment/${brandName}/${modelName}/${commentId}`, {
+    const response = await fetch(`${BASE_URL}/edit-comment/${brandName}/${modelName}/${commentId}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -351,7 +352,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       return;
     }
 
-    const response = await fetch(`http://localhost:8000/check-comment-owner/${brandName}/${modelName}/${commentId}`, {
+    const response = await fetch(`${BASE_URL}/check-comment-owner/${brandName}/${modelName}/${commentId}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -386,7 +387,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       return;
     }
 
-    const response = await fetch(`http://localhost:8000/post-reply/${brandName}/${modelName}/${commentId}`, {
+    const response = await fetch(`${BASE_URL}/post-reply/${brandName}/${modelName}/${commentId}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -411,7 +412,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
       console.error('You need to be logged in to delete a reply.');
       return;
     }
-    const response = await fetch(`http://localhost:8000/delete-reply/${brandName}/${modelName}/${commentId}/${replyId}`, {
+    const response = await fetch(`${BASE_URL}/delete-reply/${brandName}/${modelName}/${commentId}/${replyId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -434,7 +435,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
         console.error('You need to be logged in to edit a reply.');
         return;
     }
-    const response = await fetch(`http://localhost:8000/check-reply-owner/${brandName}/${modelName}/${commentId}/${replyId}`, {
+    const response = await fetch(`${BASE_URL}/check-reply-owner/${brandName}/${modelName}/${commentId}/${replyId}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -464,7 +465,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
         console.error('You need to be logged in to save a reply edit.');
         return;
     }
-    const response = await fetch(`http://localhost:8000/edit-reply/${brandName}/${modelName}/${commentId}/${replyId}`, {
+    const response = await fetch(`${BASE_URL}/edit-reply/${brandName}/${modelName}/${commentId}/${replyId}`, {
         method: 'PUT',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -489,7 +490,7 @@ const MyComments: React.FC<MyCommentsProps> = ({ brandName, modelName }) => {
         return;
     }
 
-    const response = await fetch(`http://localhost:8000/like-comment/${brandName}/${modelName}/${commentId}`, {
+    const response = await fetch(`${BASE_URL}/like-comment/${brandName}/${modelName}/${commentId}`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,

@@ -12,6 +12,8 @@ export const HorizontalBarChartYearRanges: React.FC = () => {
   const [chartData, setChartData] = useState<YearRangeData[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+
   useEffect(() => {
     const fetchYearRanges = async () => {
       const token = localStorage.getItem("token");
@@ -21,7 +23,7 @@ export const HorizontalBarChartYearRanges: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/year-ranges-chart", {
+        const response = await fetch(`${BASE_URL}/year-ranges-chart`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

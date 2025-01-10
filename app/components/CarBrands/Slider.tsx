@@ -10,13 +10,11 @@ const CustomSlider: React.FC<SliderProps> = ({ brandName }) => {
   const [images, setImages] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  // Fetch images from the backend
   useEffect(() => {
     const fetchBrandImages = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/get-brand-images/${brandName}`
-        );
+        const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+        const response = await fetch(`${BASE_URL}/get-brand-images/${brandName}`); 
         if (!response.ok) {
           throw new Error(`Failed to fetch brand images: ${response.statusText}`);
         }

@@ -26,6 +26,8 @@ export function DonutChartVehicleTypes() {
   const [error, setError] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+
   useEffect(() => {
     const fetchVehicleTypes = async () => {
       const token = localStorage.getItem("token");
@@ -35,7 +37,7 @@ export function DonutChartVehicleTypes() {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/vehicle-types-donut", {
+        const response = await fetch(`${BASE_URL}/vehicle-types-donut`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

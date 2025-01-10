@@ -23,7 +23,8 @@ const SpecPage = () => {
     const fetchData = async () => {
       if (brandname && modelName) {
         try {
-          const response = await fetch(`http://localhost:8000/get-brand-model/${brandname}/${modelName}`);
+          const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+          const response = await fetch(`${BASE_URL}/get-brand-model/${brandname}/${modelName}`);
           if (!response.ok) {
             throw new Error(`Error fetching data: ${response.statusText}`);
           }

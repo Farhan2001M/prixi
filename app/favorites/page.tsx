@@ -20,6 +20,8 @@ const FavoriteCards: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+
   useEffect(() => {
     const fetchDetailedFavorites = async () => {
       const token = localStorage.getItem('token');
@@ -29,7 +31,7 @@ const FavoriteCards: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/favorites/details", {
+        const response = await fetch(`${BASE_URL}/favorites/details`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -60,7 +62,7 @@ const FavoriteCards: React.FC = () => {
     if (!token) return;
 
     try {
-      const response = await fetch("http://localhost:8000/favorites/remove", {
+      const response = await fetch(`${BASE_URL}/favorites/remove`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +77,7 @@ const FavoriteCards: React.FC = () => {
       if (!response.ok) {
         throw new Error("Failed to remove favorite vehicle");
       }
-
+      
       setFavorites(favorites.filter(fav => !(fav.brandName === brandName && fav.model?.modelName === modelName)));
     } catch (err) {
       console.error("Error removing favorite:", err);

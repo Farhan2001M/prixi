@@ -26,12 +26,14 @@ const MyProfileInfo = () => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [genImageSrc, setGenImageSrc] = useState<string | null>(null); // Store GenImage separately
   const [originalImageSrc, setOriginalImageSrc] = useState<string | null>(null);
+
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
   
   // Fetch both images initially
   const fetchUserImage = async () => {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://127.0.0.1:8000/user-image', {
+        const response = await fetch(`${BASE_URL}/user-image`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
@@ -60,7 +62,7 @@ const MyProfileInfo = () => {
 
   const fetchUserData = async () => {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://127.0.0.1:8000/getfulluserinfo', {
+    const response = await fetch(`${BASE_URL}/getfulluserinfo`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -92,7 +94,7 @@ const MyProfileInfo = () => {
       const formData = new FormData();
       formData.append('image', file);
       const token = localStorage.getItem('token');
-      const response = await fetch('http://127.0.0.1:8000/upload-image', {
+      const response = await fetch(`${BASE_URL}/upload-image`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -107,28 +109,6 @@ const MyProfileInfo = () => {
     }
   };
 
-  // const handleImageRemove = async () => {
-  //   const token = localStorage.getItem('token');
-  //   const response = await fetch('http://127.0.0.1:8000/remove-image', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Authorization': `Bearer ${token}`,
-  //     },
-  //   });
-    
-  //   if (response.ok) {
-  //     // Re-fetch the user image, which will return the initials image by default if no custom image is available
-  //     fetchUserImage();
-  //   } else {
-  //     console.error("Failed to remove image");
-  //   }
-  // };
-
-  
-
-
-
-
   const handleCancel = () => {
     setIsEditing(false);
     setErrors({}); // Clear errors if any
@@ -136,10 +116,6 @@ const MyProfileInfo = () => {
     setImageSrc(originalImageSrc);
     fetchUserData();
   };
-
-
-
-
 
   {/* Edit Image Functionality */}
   const [isEditing, setIsEditing] = useState(false);
@@ -287,7 +263,7 @@ const MyProfileInfo = () => {
     if (token) {
         // Only remove image from the backend if GenImage is currently displayed
         if (imageSrc === genImageSrc) {
-            await fetch('http://127.0.0.1:8000/remove-image', {
+            await fetch(`${BASE_URL}/remove-image`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -328,7 +304,7 @@ const MyProfileInfo = () => {
   
   const fetchDataForAccountDeletion = async () => {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://127.0.0.1:8000/profileinfo', {
+    const response = await fetch(`${BASE_URL}/profileinfo`, {
         headers: {
             'Authorization': `Bearer ${token}`,
         },
@@ -342,7 +318,7 @@ const MyProfileInfo = () => {
       console.log(data.user)
 
       //Delete User Permanently
-      const deleteResponse = await fetch('http://127.0.0.1:8000/deleteuser', { method: 'DELETE', headers: {     'Authorization': `Bearer ${token}`, }, });
+      const deleteResponse = await fetch(`${BASE_URL}/deleteuser`, { method: 'DELETE', headers: {     'Authorization': `Bearer ${token}`, }, });
       if (deleteResponse.ok) { console.log('User data deleted successfully'); } else { const errorDetails = await deleteResponse.json(); console.log('Failed to delete user data', errorDetails); }
 
     } else {
@@ -352,22 +328,22 @@ const MyProfileInfo = () => {
 
   const updateDetails = async (token: string, firstName: string, lastName: string, phoneNumber: string) => {
     try {
-        const response = await fetch('http://127.0.0.1:8000/updateuser', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({ firstName, lastName, phoneNumber }),
-        });
+      const response = await fetch(`${BASE_URL}/updateuser`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ firstName, lastName, phoneNumber }),
+      });
 
-        if (response.ok) {
-            console.log("User details updated successfully");
-        } else {
-            console.log("Failed to update user details");
-        }
+      if (response.ok) {
+        console.log("User details updated successfully");
+      } else {
+        console.log("Failed to update user details");
+      }
     } catch (error) {
-        console.error("Error updating user details", error);
+      console.error("Error updating user details", error);
     }
   };
 

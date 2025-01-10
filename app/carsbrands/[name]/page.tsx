@@ -20,11 +20,14 @@ const MainPage = () => {
   const pathParts = pathname.split('/');
   const BrandName = pathParts[pathParts.length - 1];
 
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; 
+
+
   useEffect(() => {
     const fetchCarModels = async () => {
       if (BrandName) {
         try {
-          const response = await fetch(`http://localhost:8000/get-car-brand/${BrandName}`);
+          const response = await fetch(`${BASE_URL}/get-car-brand/${BrandName}`);
           if (!response.ok) {
             throw new Error(`Error fetching car data: ${response.statusText}`);
           }
@@ -103,7 +106,7 @@ const MainPage = () => {
     setShowHistory(true); // Show the history dropdown
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://127.0.0.1:8000/getsearchhistory", {
+      const response = await fetch(`${BASE_URL}/getsearchhistory`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -124,7 +127,7 @@ const MainPage = () => {
       setShowHistory(false);
       try {
         const token = localStorage.getItem("token");
-        await fetch("http://127.0.0.1:8000/updatesearchhistory", {
+        await fetch(`${BASE_URL}/updatesearchhistory`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -154,12 +157,10 @@ const MainPage = () => {
   const handleDeleteSearch = async (term: string) => {
     try {
       const token = localStorage.getItem("token");
-
       // Mark as deleting
       setIsDeleting(true);
-  
       // Call the backend to remove the search term
-      const response = await fetch(`http://127.0.0.1:8000/removesearchhistory/${term}`, {
+      const response = await fetch(`${BASE_URL}/removesearchhistory/${term}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
