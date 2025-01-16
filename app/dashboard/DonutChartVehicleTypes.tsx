@@ -126,9 +126,7 @@ export function DonutChartVehicleTypes() {
       <p className="text-center text-xl font-bold text-black dark:text-gray-300">
         Vehicle Types Visited
       </p>
-      <p className="mt-2 w-full text-center text-3xl font-semibold text-gray-900 dark:text-gray-50">
-        {formattedValue}
-      </p>
+      
       <canvas ref={canvasRef} className="mx-auto mt-8"></canvas>
     </div>
   );

@@ -62,15 +62,21 @@ export const BarChartHero: React.FC = () => {
   }
 
   return (
-    <BarChart
-      className="h-80"
-      data={chartData}
-      index="date"
-      categories={["Visits"]}
-      valueFormatter={(number: number) =>
-        `${Intl.NumberFormat("us").format(number).toString()} visits`
-      }
-      onValueChange={(v) => console.log(v)}
-    />
+    <div className="flex flex-col items-center">
+      <p className="text-center text-xl font-bold text-black dark:text-gray-300">
+        Brands Visited
+      </p>
+      <BarChart
+        className="h-80"
+        data={chartData}
+        index="date"
+        categories={["Visits"]}
+        valueFormatter={(number: number) =>
+          `${Intl.NumberFormat("us").format(number).toString()} visits`
+        }
+        onValueChange={(v) => console.log(v)}
+        showLegend={false}  
+      />
+    </div>
   );
 };

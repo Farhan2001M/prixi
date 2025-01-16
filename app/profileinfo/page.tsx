@@ -678,12 +678,11 @@ Or Simply Type DELETE To Delete Your Account`}
 
         </div>
 
-        Reset Button
         <Button
           size="lg"
           color="warning"
           className="absolute bottom-10 right-10"
-          onClick={handleDownload} // Trigger the download when clicked
+          onClick={handleDownload} 
         >
           Generate Report
         </Button>

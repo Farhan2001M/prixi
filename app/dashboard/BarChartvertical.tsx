@@ -62,16 +62,22 @@ export const HorizontalBarChartYearRanges: React.FC = () => {
   }
 
   return (
-    <BarChart
-      className="h-80"
-      data={chartData}
-      index="yearRange" // Y-axis label
-      categories={["visits"]} // X-axis value
-      yAxisWidth={100} // Adjust width for year ranges
-      layout="vertical" // Horizontal bar chart
-      valueFormatter={(number: number) =>
-        `${Intl.NumberFormat("us").format(number)} visits`
-      }
-    />
+    <div className="flex flex-col items-center">
+      <p className="text-center text-xl font-bold text-black dark:text-gray-300">
+        Model's Years Visited
+      </p>
+      <BarChart
+        className="h-80"
+        data={chartData}
+        index="yearRange" // Y-axis label
+        categories={["visits"]} // X-axis value
+        yAxisWidth={100} // Adjust width for year ranges
+        layout="vertical" // Horizontal bar chart
+        showLegend={false}  
+        valueFormatter={(number: number) =>
+          `${Intl.NumberFormat("us").format(number)} visits`
+        }
+      />
+    </div>
   );
 };
