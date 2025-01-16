@@ -64,7 +64,7 @@ export const HorizontalBarChartYearRanges: React.FC = () => {
   return (
     <div className="flex flex-col items-center">
       <p className="text-center text-xl font-bold text-black dark:text-gray-300">
-        Model's Years Visited
+        Model&apos;s Years Visited
       </p>
       <BarChart
         className="h-80"
