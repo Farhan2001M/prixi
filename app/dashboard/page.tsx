@@ -8,8 +8,10 @@ import { DonutChartVehicleTypes } from './DonutChartVehicleTypes'; // Import the
 import { DonutChartEngineTypes } from './DonutChartEngineTypes'; // Import the BarChartHero component
 import { Button } from '@nextui-org/react';
 
-// Use the "require" statement if you don't want to create a declaration file
-const html2pdf = require('html2pdf.js');
+import dynamic from 'next/dynamic';
+
+// Dynamically import html2pdf.js with ssr: false to ensure it's used only on the client-side
+const html2pdf = dynamic(() => import('html2pdf.js').then((mod) => mod.default), { ssr: false });
 
 const dashboard = () => {
   
@@ -17,13 +19,14 @@ const dashboard = () => {
   const handleDownload = () => {
     const element = document.getElementById("report-content"); // Get the container with all the charts
 
-    if (element) {
+    if (element && html2pdf) {
       const options = {
         filename: 'charts-report.pdf', // Customize the file name
         html2canvas: { scale: 2 }, // Optional: adjust the scale for higher quality PDF
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }, // Customize PDF format
       };
-      html2pdf().from(element).set(options).save(); // Generate and save the PDF
+      // Cast html2pdf to any to avoid the TypeScript error
+      (html2pdf as any).from(element).set(options).save(); // Generate and save the PDF
     }
   };
 
