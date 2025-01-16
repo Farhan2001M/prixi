@@ -678,7 +678,7 @@ Or Simply Type DELETE To Delete Your Account`}
 
         </div>
 
-        {/* Reset Button */}
+        Reset Button
         <Button
           size="lg"
           color="warning"

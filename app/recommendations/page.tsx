@@ -12,13 +12,7 @@ const Recommendations = () => {
       <Header />
       <div className="h-[90vh] bg-white px-12 py-10">
         <Tabs aria-label="Options" size="lg">
-          {/* <Tab title="Interest Based Recommendations">
-            <Card>
-              <CardBody>
-                <InterestedVehicle />  
-              </CardBody>
-            </Card>
-          </Tab> */}
+          
           <Tab title="Trending Vehicle Recommendations ">
             <Card>
               <CardBody>
@@ -26,6 +20,7 @@ const Recommendations = () => {
               </CardBody>
             </Card>
           </Tab>
+          
           <Tab title="Behaviour Based Recommendations">
             <Card>
               <CardBody>
@@ -33,6 +28,15 @@ const Recommendations = () => {
               </CardBody>
             </Card>
           </Tab>
+
+          <Tab title="Interest Based Recommendations">
+            <Card>
+              <CardBody>
+                <InterestedVehicle />  
+              </CardBody>
+            </Card>
+          </Tab>
+
         </Tabs>
       </div>
     </div>
