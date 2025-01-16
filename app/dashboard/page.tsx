@@ -9,7 +9,7 @@ import { Button } from '@nextui-org/react';
 
 let html2pdf: any;
 
-const dashboard = () => {
+const Dashboard = () => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const dashboard = () => {
   );
 };
 
-export default dashboard;
+export default Dashboard;
 
 
 
